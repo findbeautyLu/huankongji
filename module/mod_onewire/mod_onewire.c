@@ -151,7 +151,7 @@ void uart_receive_scan(void)
 			delayTime--;
 			if(delayTime == 0)
 			{
-				if(uart5_rx_count < 70)//60)//一次接受的最大缓存lzh
+				if(uart5_rx_count < UART5_MAX_LEN)//60)//一次接受的最大缓存lzh
 				{
 					flag = 1;
 					for(i = 0;i < uart5_rx_count;i++)

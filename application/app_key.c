@@ -452,6 +452,7 @@ uint16_t get_485value(uint16_t adress)
 			else if(ptSysPara->poweroff == POWEROFF_DIS_ON)
 			{
 				re_cmd = MREGADDRESS_SYS_POWER_ON_CMD;
+				//ptSysPara->poweronflag = 1;
 			}
 			break;
 		 } 		
@@ -588,7 +589,7 @@ void app_key_main_control()
 	}
 	else if((PUSH_DOWN | PUSH_CONTINUE) & mod_keyOperation(KEY_POWEROFF,0xffff,0xffff))
 	{//关机
-		keychangeflag = POWER;
+		//keychangeflag = POWER;
 	}
 	else if((PUSH_DOWN | PUSH_CONTINUE) & mod_keyOperation(KEY_TEMP_ADD,3000,200))
 	{//温度 -
@@ -668,9 +669,9 @@ void app_key_main_control()
 				break;
 		case POWER:
 				ptSysPara->updataflag = BN_TRUE;
-				
 				adress = MRegaddr_NewairControlW;
 				break;
+				
 		default: break;
 	}
 	
@@ -1419,7 +1420,8 @@ void app_key_update(systemRunStatus_t _in_sysRunStatus)
 		case SYS_STATUS_POWER_OFF:        							;     				break;
 		case SYS_STATUS_SCREEN_SAVER:								;	 	 			break;
 		case SYS_STATUS_RUN_MODE:           app_key_main_control();
-											app_key_fanset();break;
+											app_key_fanset();
+											break;
 		case SYS_STATUS_SETTING:         	app_key_setting_choose();     				break;     
 		case SYS_STATUS_TIMING_WEEK: 		app_key_timing_page_week();	  				break;
 		case SYS_STATUS_TIMING_INTERVAL:	app_key_timing_page_time_interval();     	break;
@@ -1437,7 +1439,7 @@ void app_key_update(systemRunStatus_t _in_sysRunStatus)
 	//临时//清除故障
 	if(PUSH_DOWN & mod_keyOperation(KEY_RESET,0xffff,0xffff))
 	{
-		APP_oneWire_send_485_data(MREGADDRESS_SYS_FAULT_RESET_BYTE,0x003f);
+		//APP_oneWire_send_485_data(MREGADDRESS_SYS_FAULT_RESET_BYTE,0x003f);
 	}
 }
 
@@ -1471,7 +1473,7 @@ void app_key_scanTask(void)
 		ptSysPara->updataflag = BN_TRUE;
     }  
 	
-	value_temp = keynumber;
+	value_temp = ptSysPara->count;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);	
 	WriteDGUS(0x5120,timebuf,2);

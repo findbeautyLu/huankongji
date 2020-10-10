@@ -82,7 +82,7 @@ void app_con_gotoFac(void)
 	s_sysPara.fanset_param.low_param	= 0;
 	s_sysPara.fanset_param.mid_param	= 0;
 	s_sysPara.fanset_param.high_param	= 0;
-	
+	s_sysPara.poweronflag				= 0;
 	keynumber_1.key_sign.trigger_sign_lock		= 0;
 	keynumber_1.key_sign.trigger_sign_timecount	= 0;
 	keynumber_1.key_sign.trigger_sign			= 0;
@@ -306,12 +306,20 @@ void app_circular_switch(void)
 	}
 	else
 	{
-		if(period > 2000)
+		if(period > 1000)
 		{
-			
 			lastSystemMsTime = GetSysTickMillisecond(); 
-			ptSysPara->updataflag = 1;
+			ptSysPara->count++;
+			
+			if(ptSysPara->count > 600)
+			{
+				ptSysPara->count = 0;
+				APP_oneWire_send_485_data(MRegaddr_Aircod_Mode,get_485value(MRegaddr_Aircod_Mode));
+			}
 
+			//APP_oneWire_send_485_data(MRegaddr_Aircod_Mode,get_485value(MRegaddr_Aircod_Mode));
+
+			
 			if(ptSysPara->fanset_param.motor_type == 0)//新风
 			{
 				if(ptSysPara->fanset_param.low_param == 0 && ptSysPara->read_244B_LOW_PWM < 100)

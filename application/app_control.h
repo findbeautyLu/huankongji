@@ -38,8 +38,8 @@
 
 #define HUMIDITY_MIN				45
 #define	HUMIDITY_MAX				65
-#define TEMP_MIN				   50
-#define	TEMP_MAX				   350
+#define TEMP_MIN				   160
+#define	TEMP_MAX				   300
 
 #define MODE_INIT					MODE_DIS_MIN
 #define HUMIDITY_SET_INIT			55		
@@ -259,6 +259,8 @@ typedef struct
 typedef struct
 {    
 	systemRunStatus_t sys_runstatus;
+	uint16_t count;
+	uint8_t poweronflag;
 	uint8_t communicationflag;
 	uint8_t keydownflag;
 	uint8_t updataflag;

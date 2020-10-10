@@ -127,6 +127,7 @@ void processWriteHoldingRegData(unsigned short regAddress,unsigned short regData
 		case MRegaddr_Aircod_Mode:
 			if(modbusSendLock == 0)
 			{
+				if(ptSysPara->poweronflag == 0)
 				ptSysPara->mode = regData;
 			}
 			break;
@@ -786,7 +787,6 @@ void APP_oneWire_task(void)
 					{ 
 						mod_oneWire_send_frame(ptGetMemory->buffer,ptGetMemory->frameLength);
 						MP_memPool_free(ptGetMemory);	
-						ptSysPara->debugdata1 = ptGetMemory->busyFlag;
 						lastTick = GetSysTickMillisecond();
 						idleStatus = 1;
 						Pub_softTimer_set_event(&oneWireSendDelay,200);
