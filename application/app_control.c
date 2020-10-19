@@ -223,7 +223,7 @@ void app_into_screen_saver(void)
 		if(period >= BACK_SCREEN_SAVER_TIME)
 		{
 			lastSystemMsTime = GetSysTickMillisecond(); 
-			ptSysPara->page_number = 25;
+			//ptSysPara->page_number = 25;
 		}
 	}
 }
@@ -308,17 +308,10 @@ void app_circular_switch(void)
 	{
 		if(period > 1000)
 		{
+			ptSysPara->updataflag = 1;
 			lastSystemMsTime = GetSysTickMillisecond(); 
-			ptSysPara->count++;
-			
-			if(ptSysPara->count > 600)
-			{
-				ptSysPara->count = 0;
-				APP_oneWire_send_485_data(MRegaddr_Aircod_Mode,get_485value(MRegaddr_Aircod_Mode));
-			}
-
+			//ptSysPara->count++;
 			//APP_oneWire_send_485_data(MRegaddr_Aircod_Mode,get_485value(MRegaddr_Aircod_Mode));
-
 			
 			if(ptSysPara->fanset_param.motor_type == 0)//新风
 			{
@@ -356,6 +349,12 @@ void app_circular_switch(void)
 			}
 		}
 	}
+
+	/*if(ptSysPara->count > 300)
+	{
+		ptSysPara->count = 0;
+		APP_oneWire_send_485_data(MRegaddr_Aircod_Mode,get_485value(MRegaddr_Aircod_Mode));
+	}*/
 }
 
 uint8_t app_control_scanTask(void)

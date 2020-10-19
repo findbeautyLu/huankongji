@@ -658,9 +658,12 @@ void app_key_main_control()
 				adress = MRegaddr_Aircod_SetHumidity;
 				break;
 		case TEMP:				
-				ptSysPara->updataflag = BN_TRUE;
-				keyOperation(ddr,DATA_KEEP,10,TEMP_MAX,TEMP_MIN,&ptSysPara->temp_set);
-				adress = MRegaddr_Aircod_SetTemp;
+				if(ptSysPara->mode != 4)
+				{
+					ptSysPara->updataflag = BN_TRUE;
+					keyOperation(ddr,DATA_KEEP,10,TEMP_MAX,TEMP_MIN,&ptSysPara->temp_set);
+					adress = MRegaddr_Aircod_SetTemp;
+				}
 				break;
 		case WIND:		
 				ptSysPara->updataflag = BN_TRUE;
