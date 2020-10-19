@@ -4,6 +4,7 @@
 //------------------------------E N D-------------------------------------------
 #include ".\SnailDataTypedef.h"
 
+#define MAX_KEY_GROUP					2
 
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //组合键
@@ -172,10 +173,28 @@
 #define REG_PAGE62_FANSET_BAUDRATE_UP				0x58B7
 #define REG_PAGE62_FANSET_BAUDRATE_DOWN				0x58B8
 
-
-
-
-
+//按键遵循从左到右，自上而下的方式排序扫描
+#define REG_PAGE1_KEY0_ADRESS		0x5900
+#define REG_PAGE1_KEY1_ADRESS		0x5901
+#define REG_PAGE1_KEY2_ADRESS		0x5902
+#define REG_PAGE1_KEY3_ADRESS		0x5903
+#define REG_PAGE1_KEY4_ADRESS		0x5904
+#define REG_PAGE1_KEY5_ADRESS		0x5905
+#define REG_PAGE1_KEY6_ADRESS		0x5906
+#define REG_PAGE1_KEY7_ADRESS		0x5907
+#define REG_PAGE1_KEY8_ADRESS		0x5908
+#define REG_PAGE1_KEY9_ADRESS		0x5909
+#define REG_PAGE1_KEY10_ADRESS		0x5910
+#define REG_PAGE1_KEY11_ADRESS		0x5911
+#define REG_PAGE1_KEY12_ADRESS		0x5912
+#define REG_PAGE1_KEY13_ADRESS		0x5913
+#define REG_PAGE1_KEY14_ADRESS		0x5914
+#define REG_PAGE1_KEY15_ADRESS		0x5915
+#define REG_PAGE1_KEY16_ADRESS		0x5916
+#define REG_PAGE1_KEY17_ADRESS		0x5917
+#define REG_PAGE1_KEY18_ADRESS		0x5918
+#define REG_PAGE1_KEY19_ADRESS		0x5919
+#define REG_PAGE1_KEY20_ADRESS		0x5920
 
 
 
@@ -209,6 +228,8 @@ void keyscan_fanset(INT16U *out_key_number);
 
 
 INT16U* bsp_key_init(void);
+
+extern unsigned int get_key2_bsp_array[MAX_KEY_GROUP];
 #endif
 
 //-----------------------BSP_Keyboard.h--END------------------------------------

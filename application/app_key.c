@@ -1458,11 +1458,20 @@ void app_key_scanTask(void)
 	static uint16_t time = 0;
 	static unsigned int first_key_del = 0;
 	unsigned int value_temp = 0;
+	static key_sign_1_t key_sign;
 	
 	ptSysPara =  controler_getSysParaPt();
 
 	mod_key_scanTask(GetSysTickMillisecond());	 
+
+	//new
 	
+	if(mde_getkey_event(&key_sign))
+	{//有按键按下
+		
+	}
+
+	//end
 	if(mod_key_scantask1(&ptSysPara->key_fanset_param))
 	{
 		key_trigger = 1;
@@ -1511,6 +1520,8 @@ void app_key_scanTask(void)
 	
 }
 //****************************按键任务******************************************
+
+
 //++++++++++++++++++++++++++++++++end+++++++++++++++++++++++++++++++++++++++++++
 
 

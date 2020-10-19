@@ -408,7 +408,133 @@ keyActionType_t mod_keyOperation(INT16U keyNum,INT16U fristValid_ms,INT16U conti
 }
 
 
+//更新接口
 
 
+void mde_cfg(key_sign_1_t *out_key,unsigned int i)
+{
+	//按键数据初始化，相关数据清零，长按或短按的时间设置
+	out_key->key_down_lock = 0;
+	out_key->key_down_longlock = 0;
+	out_key->key_up_lock = 0;
+	out_key->key_event_timecount = 0;
+	out_key->key_down_sign = 0;
+	out_key->in_longtime = 5000;
+	out_key->in_continuetime = 500;
+	out_key->getkey2_bsp = &get_key2_bsp_array[i];
+}
 
+unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_data,unsigned int group_number)
+{
+	unsigned char i = 0;
+	unsigned char key_state = 0;
+	
+	if(in_process_data == 0)
+	{
+		key_state = 0;
+	}
+	else
+	{
+		for(i = (16 * group_number); i < (16 * group_number + 16); i++)//这边需要验证，多页还没验证
+		{
+			if(in_process_data & (0x0001 << i))
+			{
+				//小于16个键值已验证通过，按下 按下触发，长按，连击，抬起触发，抬起等状态显示
+				//若大于50个数据，已处理，待验证
+				break;
+			}
+		}	
+		key_state = i * 4 + KEY_STATE;//触发 按键按下状态，将状态return出去
+	}
+	
+	if(in_process_data == 0)//没有按键触发
+	{
+		if(out_key->key_up_lock == 0)
+		{
+			out_key->key_down_lock = 0;
+			out_key->key_down_longlock = 0;
+			out_key->key_event_timecount =0;	
+			out_key->key_down_sign = 0;
+		}
+		else
+		{
+			if(++out_key->key_event_timecount > 5)
+			{
+				out_key->key_up_lock = 0;
+				out_key->key_down_sign = (i * 4 + KEY_UP);//触发 抬起，仅按下时第一次抬起有效
+			}
+		}
+	}
+	else 
+	{
+		out_key->key_up_lock = 1;
+		if(out_key->key_down_lock == 0)
+		{
+			if(++out_key->key_event_timecount > 5)
+			{
+				out_key->key_down_lock = 1;
+				out_key->key_event_timecount = 0;
+				out_key->key_down_sign = (i * 4 + KEY_DOWN);//触发 按下，一次按下仅触发一次
+			}
+		}
+		else if(out_key->key_down_longlock == 0)
+		{
+			if(++out_key->key_event_timecount > out_key->in_longtime)
+			{
+				out_key->key_down_longlock = 1;
+				out_key->key_event_timecount = 0;
+				out_key->key_down_sign = (i * 4 + LONG_KEY);//触发 长按
+			}		
+		}
+		else if(out_key->key_down_longlock == 1)//连击触发一定是按下状态且长按触发之后
+		{
+			if(++out_key->key_event_timecount > out_key->in_continuetime)
+			{
+				out_key->key_event_timecount = 0;
+				out_key->key_down_sign = (i * 4 + CONTINUE);//触发 连击
+			}
+			else
+			{
+				out_key->key_down_sign = 0;
+			}
+		}
+	}		
+	//ON_KEY_EVENT = 0,
+	//KEY_STATE,//1 
+	
+	//key_state = i * 4 + KEY_STATE; 1 5 9 ~ ~ ~ 可追寻具体哪个按键处于按下状态
+	
+	return key_state;//返回按下或者松手的状态
+}
+
+unsigned char mde_getkey_event(key_sign_1_t *out_key)
+{
+	static unsigned char init_byte = 1;
+	static unsigned int keynumber[MAX_KEY_GROUP];//从bsp得到数据按键缓存
+	
+	unsigned char kaystate = 0;
+	unsigned int i = 0;
+	
+	if(1 == init_byte)
+	{
+		init_byte = 0;
+		for(; i < MAX_KEY_GROUP; i++)
+		{
+			mde_cfg(out_key+i,i);
+		}
+	}
+	else
+	{
+		for(; i < MAX_KEY_GROUP; i++)
+		{
+			(out_key+i)->getkey2_bsp(&keynumber[i]);
+			kaystate = mde_filter_keysign(out_key+i,keynumber[i],i);//获取到的state可做显示参数
+			break;
+		}
+	}
+	//0 没有按键触发			
+	//非0 有触发 具体数据由按键值+1定义 
+	
+	return kaystate;
+}
 

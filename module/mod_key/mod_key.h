@@ -21,6 +21,7 @@
 #define  NOCONTINUE       0xffff  */
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //**************************按键状态类型****************************************
+
 typedef enum
 {
     PUSH_NONE       = 0x00,
@@ -28,6 +29,17 @@ typedef enum
     PUSH_UP         = 0x02,
     PUSH_CONTINUE   = 0X04,
 }keyActionType_t;
+
+typedef enum
+{
+	ON_KEY_EVENT = 0,
+	KEY_STATE,//1当前状态
+	KEY_DOWN,//2第一次按下
+	LONG_KEY,//3
+	CONTINUE,//4
+	KEY_UP,//5
+}key_event_t;
+
 //------------------------------E N D-------------------------------------------
 typedef union
 {
@@ -39,6 +51,19 @@ typedef union
 		unsigned int trigger_sign:16;
 	}key_sign;
 }key_sign_t;
+
+typedef struct
+{
+	unsigned int key_down_lock:1;
+	unsigned int key_down_longlock:1;
+	unsigned int key_up_lock:1;
+	unsigned int key_event_timecount:13;//计数范围 0~8192  理想是放在1ms的中断扫描，若直接在主循环中，则该计数数据应该提取出来放到1ms的循环中自加
+	unsigned int key_down_sign:16;
+	unsigned int in_longtime:16;
+	unsigned int in_continuetime:16;
+	unsigned int (*getkey2_bsp)(unsigned int *read_keynumber);
+
+}key_sign_1_t;
 
 typedef struct
 {
@@ -115,6 +140,12 @@ void mod_key_scanTask(INT16U milliscond);
 //出口: KeyRetValue_Def类型的按键状态
 
 keyActionType_t mod_keyOperation(INT16U keyNum,INT16U fristValid_ms,INT16U continueValid_ms);
+
+unsigned char mde_getkey_event(key_sign_1_t *out_key);
+
+
+
+
 //------------------------------E N D-------------------------------------------
 #endif
 

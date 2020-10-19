@@ -178,6 +178,66 @@ void keyscan_fanset(INT16U *out_key_number)
 	return keybuf;
 }*/
 
+//计划bsp层将所有函数封装进一个数组作为接口出去供mde层调用
+//mde层的 mde_cfg()将变量数据和bsp层关联起来供app层调用
+
+
+void keyscan_1(INT16U *out_key_number)
+{
+	uint8_t i;
+	INT16U keyline = 0;
+	INT16U keyadress[] = {	REG_PAGE1_KEY0_ADRESS  ,
+	 						REG_PAGE1_KEY1_ADRESS  ,
+	 						REG_PAGE1_KEY2_ADRESS  ,
+	 						REG_PAGE1_KEY3_ADRESS  ,
+	 						REG_PAGE1_KEY4_ADRESS  ,
+	 						REG_PAGE1_KEY5_ADRESS  ,
+	 						REG_PAGE1_KEY6_ADRESS  ,
+	 						REG_PAGE1_KEY7_ADRESS  ,
+	 						REG_PAGE1_KEY8_ADRESS  ,
+	 						REG_PAGE1_KEY9_ADRESS  ,
+	 						REG_PAGE1_KEY10_ADRESS ,
+	 						REG_PAGE1_KEY11_ADRESS ,
+	 						REG_PAGE1_KEY12_ADRESS ,
+	 						REG_PAGE1_KEY13_ADRESS ,
+	 						REG_PAGE1_KEY14_ADRESS ,
+	 						REG_PAGE1_KEY15_ADRESS
+	 						};
+	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
+	{
+		if(getkey(keyadress[i],2))
+		{
+			keyline |= (KeyAloneBit0 << i);
+			break;
+		}
+	}
+
+	*out_key_number = keyline;
+}
+
+void keyscan_2(INT16U *out_key_number)
+{
+	uint8_t i;
+	INT16U keyline = 0;
+	INT16U keyadress[] = {	REG_PAGE1_KEY16_ADRESS ,
+							REG_PAGE1_KEY17_ADRESS ,
+							REG_PAGE1_KEY18_ADRESS ,
+							REG_PAGE1_KEY19_ADRESS ,
+							REG_PAGE1_KEY20_ADRESS
+	 						};
+	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
+	{
+		if(getkey(keyadress[i],2))
+		{
+			keyline |= (KeyAloneBit0 << i);
+			break;
+		}
+	}
+
+	*out_key_number = keyline;
+}
+
+unsigned int get_key2_bsp_array[MAX_KEY_GROUP] ={keyscan_1,keyscan_2};
 
 
 //-----------------------BSP_Keyboard.c--END------------------------------------
