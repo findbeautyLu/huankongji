@@ -12,6 +12,16 @@ void app_dis(uint16_t adress, uint16_t dat)
 	WriteDGUS(adress,writebuf,2);
 }
 
+void app_dis_1(uint16_t adress, uint16_t offset_dat, uint16_t dat)
+{
+	uint8_t writebuf[] = {0, 0};
+	uint16_t datbuf = dat + offset_dat;
+	writebuf[0] = (uint8_t)(datbuf>>8);
+	writebuf[1] = (uint8_t)(datbuf);
+	WriteDGUS(adress, writebuf, 2);	
+}
+
+
 void app_dis_error(uint16_t errordata)
 {
 	uint8_t i;
@@ -74,16 +84,94 @@ void app_dis_powOffMode(void)
 {
 
 }
+void get_dis_bit(uint16_t *disbit)
+{
+	uint8_t i = 0;
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
 
+	if(ptSysPara->airmode ==)
+	{
+		*(disbit + i) = 1;
+	}
+
+}
+
+void init_dismes(disdata_t *dismes)
+{
+	uint16_t i = 0;
+	uint16_t j = 0;
+	uint16_t init_sys_state = GREEN_SAVER;
+	uint16_t init_sys_adress = REG_GREEN_SAVER_START_ADRESS;
+	uint16_t init_sys_endadress[] = {REG_GREEN_SAVER_START_ADRESS,REG_GREEN_SAVER_START_ADRESS};
+	
+	for(; i < DIS_MAX_LEN; i++)
+	{
+		if(i == 0)
+		{
+			dismes->dis_adress = init_sys_adress;
+			dismes->sys_state = init_sys_state;
+			dismes++;
+		}
+		else
+		{
+			dismes->dis_adress = (dismes-1)->dis_adress + 1;
+			if(dismes->dis_adress > init_sys_endadress[j])//这边要做成数组的形式
+			{
+				j++;
+				init_sys_state++;
+				dismes->sys_state = init_sys_state;
+			}
+			else
+			{
+				dismes->sys_state = init_sys_state;
+				dismes++;
+			}
+		}
+	}
+}
 void app_dis_runMode(void)
 {
     SysPara_t *ptSysPara;  	
 	uint8_t readbuf[2] ={0,0};
 	uint8_t greenwind = 0;
 	int16_t modestate = 0;
+	uint16_t dis_adress[] ={0};
+	uint16_t dis_offset_dat[] ={0};
+	uint16_t i = 0;
+
+	disdata_t dismes[] = {};
+
+	
+	
 	ptSysPara =  controler_getSysParaPt();
 
 	ReadDGUS(RTC,(u8 *)&rtc_time.year,8);
+
+	get_dis_bit()
+
+	//new
+	//显示分图标显示和数字显示，图标显示是需要地址偏移，数字地址偏移为0
+		//给一个起始地址自动自加，但是若遇到间隔的地址该如何处理，某些需要给页码做一些预留
+		//
+	
+	//每次更新数据是默认刷新一次，具体显示不显示还是需要根据当前状态来判断，直接从sys变量中摘选需要显示的赋值，定时数据除外
+		//当前显示状态需赋予显示的初始地址，更新当前页的所有数据，数据需要一种类似分页的机制
+		//数字都实时更新.1s的频率
+
+
+
+	
+	//需要显示之前将所有数据读取到一个结构体里面显示，这样自加就不会乱。控制好大小 指针就不会溢出
+	for(; i < 256; i++)
+	{
+		if(*(pdisbit + i) == 1)//最后参数由指针指向结构体 地址++运算来得出显示数据的有效性
+		{
+			app_dis_1(dis_adress[i], dis_offset_dat[i]);//数字是直接显示的，图标需要显示偏移地址，没准需要分开两个函数
+		}		
+	}
+	
+	//end
 	
 	//待机界面
 	//app_dis(REG_DYNAMIC_CIRCULAR_ADRESS,ptSysPara->dynamic_circular);

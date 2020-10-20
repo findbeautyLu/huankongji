@@ -305,18 +305,35 @@
 #define REG_TIMECONTROL_POWEROFF_DOWN_TEN_ADRESS		0x6D4A
 #define REG_TIMECONTROL_POWEROFF_DOWN_ADRESS			0x6D4B
 
-/*#define REG_TIMECONTROL_WINDSPEED_UP_ADRESS				0x6D4C
-#define REG_TIMECONTROL_WINDSPEED_NOW_ADRESS			0x6D4D
-#define REG_TIMECONTROL_WINDSPEED_DOWN_ADRESS			0x6D4E
-
-#define REG_TIMECONTROL_POWEROFF_DOWN_ADRESS			0x6D50
-#define REG_TIMECONTROL_POWEROFF_DOWN_ADRESS			0x6D51
-#define REG_TIMECONTROL_POWEROFF_DOWN_ADRESS			0x6D52*/
-
-
 #define MODE_ADRESS				0x5005
 #define HUMIDITY_ADRESS			0x5006
 
+//上位机动态显示的图片地址可能需要独立出来
+#define REG_GREEN_SAVER_START_ADRESS					0x6000//屏保界面起始地址
+
+#define REG_GREEN_SAVER_END_ADRESS						0x6020//屏保界面结束地址
+
+
+typedef enum
+{
+	
+	GREEN_SAVER,
+	MAIN_CONTROL,
+	SETING_1,
+	SETING_2,
+	SETING_3,
+	SETING_4,
+	SETING_5,
+	SETING_6
+}sys_state_t;//确认当前状态，决定更新哪些数据。各各数据段的起始地址需要规划
+
+typedef struct
+{
+	uint16_t sys_state;
+	uint16_t dis_adress;
+	uint16_t dis_dat;
+	uint16_t offset_dis_dat;
+}disdata_t;
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //Task
 //名称: app_dis_sacnTask
