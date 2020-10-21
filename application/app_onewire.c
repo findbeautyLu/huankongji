@@ -727,17 +727,7 @@ void APP_oneWire_read_485_data(u16 address,u16 len)
 }
 
 void APP_oneWire_task(void)
-{//在线或者掉线不影响混水功能
-	//开机
-	//FA 06 24 00 00 01 57 71
-	//关机
-	//FA 06 24 00 00 02 17 70
-	//新风
-	//FA 06 24 02 00 00 37 71
-	//净化
-	//FA 06 24 02 00 01 F6 B1
-	//除湿
-	//FA 06 24 02 00 02 B6 B0
+{
   	SysPara_t *ptSysPara;  
 	static u8 oneWire = 0;
 	static u16 lastTick = 0;

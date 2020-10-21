@@ -18,7 +18,6 @@
 #define __MOD_ONE_WIRE_H__  
 /*============================ INCLUDES ======================================*/
 /*============================ MACROS ========================================*/
-
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/ 
 /*============================ GLOBAL VARIABLES ==============================*/
@@ -42,5 +41,22 @@ bit mod_oneWire_receive_frame(unsigned char *_out_buff,unsigned short *_out_len)
 //入口：*_out_remotePadData，结构体
 //出口:true 有收到数据，  false 无数据
 //void mod_oneWire_get_data(unsigned char *_out_Buffer, unsigned short _in_usAddress,unsigned short _in_usNRegs, unsigned char _in_eMode);
+
+typedef enum 
+{
+    mRtuS_master_none       = 0x00,
+    mRtuS_master_complete   = 0x01,
+    mRtuS_master_timeout    = 0x02,
+    mRtuS_master_poterr     = 0x03,
+}mRtu_master_status_def;
+
+
+
+
+
+
+
+
+
 #endif
 /* EOF */

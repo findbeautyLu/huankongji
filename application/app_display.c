@@ -84,52 +84,7 @@ void app_dis_powOffMode(void)
 {
 
 }
-void get_dis_bit(uint16_t *disbit)
-{
-	uint8_t i = 0;
-	SysPara_t *ptSysPara;  
-	ptSysPara =  controler_getSysParaPt();
 
-	if(ptSysPara->airmode ==)
-	{
-		*(disbit + i) = 1;
-	}
-
-}
-
-void init_dismes(disdata_t *dismes)
-{
-	uint16_t i = 0;
-	uint16_t j = 0;
-	uint16_t init_sys_state = GREEN_SAVER;
-	uint16_t init_sys_adress = REG_GREEN_SAVER_START_ADRESS;
-	uint16_t init_sys_endadress[] = {REG_GREEN_SAVER_START_ADRESS,REG_GREEN_SAVER_START_ADRESS};
-	
-	for(; i < DIS_MAX_LEN; i++)
-	{
-		if(i == 0)
-		{
-			dismes->dis_adress = init_sys_adress;
-			dismes->sys_state = init_sys_state;
-			dismes++;
-		}
-		else
-		{
-			dismes->dis_adress = (dismes-1)->dis_adress + 1;
-			if(dismes->dis_adress > init_sys_endadress[j])//这边要做成数组的形式
-			{
-				j++;
-				init_sys_state++;
-				dismes->sys_state = init_sys_state;
-			}
-			else
-			{
-				dismes->sys_state = init_sys_state;
-				dismes++;
-			}
-		}
-	}
-}
 void app_dis_runMode(void)
 {
     SysPara_t *ptSysPara;  	
@@ -140,7 +95,7 @@ void app_dis_runMode(void)
 	uint16_t dis_offset_dat[] ={0};
 	uint16_t i = 0;
 
-	disdata_t dismes[] = {};
+	//disdata_t dismes[] = {};
 
 	
 	
@@ -148,7 +103,7 @@ void app_dis_runMode(void)
 
 	ReadDGUS(RTC,(u8 *)&rtc_time.year,8);
 
-	get_dis_bit()
+	//get_dis_bit()
 
 	//new
 	//显示分图标显示和数字显示，图标显示是需要地址偏移，数字地址偏移为0
@@ -163,13 +118,13 @@ void app_dis_runMode(void)
 
 	
 	//需要显示之前将所有数据读取到一个结构体里面显示，这样自加就不会乱。控制好大小 指针就不会溢出
-	for(; i < 256; i++)
-	{
-		if(*(pdisbit + i) == 1)//最后参数由指针指向结构体 地址++运算来得出显示数据的有效性
-		{
-			app_dis_1(dis_adress[i], dis_offset_dat[i]);//数字是直接显示的，图标需要显示偏移地址，没准需要分开两个函数
-		}		
-	}
+	//for(; i < 256; i++)
+	//{
+		//if(*(pdisbit + i) == 1)//最后参数由指针指向结构体 地址++运算来得出显示数据的有效性
+		//{
+		//	app_dis_1(dis_adress[i], dis_offset_dat[i]);//数字是直接显示的，图标需要显示偏移地址，没准需要分开两个函数
+		//}		
+	//}
 	
 	//end
 	
@@ -978,6 +933,19 @@ void app_display_updata(systemRunStatus_t sysRunStatus)
     }      
 	
 }
+
+const uint16_t dis_page_adress_offset[DIS_NUMBER][3] =
+{
+	REG_DIS_PAGENUMBER,		REG_DIS_ADRESS,	REG_DIS_OFFSET,	
+	//在建立一个获取写入数据的数组，基本显示数据这块就完成了，
+	//显示数组的索引和这边的索引应一一对应，哪怕是强制赋值获取sys里面的状态
+};
+
+//定义后初始化0，定时从sys里面的元素直接获得需要的元素，直接赋值，不是规则的数据，无法通过指针访问
+uint16_t dis_dis_data[DIS_NUMBER] =
+{
+	REG_DIS_PAGENUMBER, REG_DIS_PAGENUMBER,
+};
 
 void app_display_scanTask(void)
 {         

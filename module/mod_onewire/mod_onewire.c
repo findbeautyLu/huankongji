@@ -195,6 +195,217 @@ void mod_oneWire_task(void)
 	uart_receive_scan();  
 }
 
+//new start 20201021
+typedef enum
+{
+    mmRunS_idle             = 0x00,
+    mmRunS_transmit_str,
+    mmRunS_transmit_35T,
+    mmRunS_transmit_data,
+    mmRunS_transmit_stop,    
+    mmRunS_transmit_end,
+    mmRunS_receive_wait,
+    mmRunS_receive_data,
+    mmRunS_receive_end,
+}modbus_master_runState_def;
+
+//modbus操作结构体
+//-----------------------------------------------------------------------------
+typedef struct
+{
+   // mRtu_parameter_def  mRtu_parameter;
+    mRtu_master_status_def      mmRtu_status;
+    modbus_master_runState_def  mmoo_runStutus;
+
+    unsigned char  receive_buff[256];
+    unsigned char  rev_index;
+    unsigned char  transmit_buff[256];
+    unsigned char  transmit_length;
+    unsigned char  transmit_index;
+    timerClock_def timer_revTimeOut;
+
+    unsigned int readReg_addr;
+    unsigned char readReg_length;
+    unsigned int writeReg_addr;
+    unsigned char writeReg_length;
+
+    unsigned char (*pull_receive_byte)(unsigned char *out_rByte);
+    unsigned char (*push_transmit_byte)(unsigned char in_tByte);
+	
+    unsigned char (*pull_busFree)(unsigned char t_char_dis);
+    void (*restart_busFree_timer)(void);
+	
+    void (*phy_into_receive)(void);
+    void (*phy_into_transmit_status)(void);
+	
+    unsigned char (*pull_transmit_complete)(void);
+}modbus_master_oper_def;
+
+static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_mm_oper);
+
+static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
+{
+	unsigned char push_succeed;
+	unsigned char  receive_byte;
+    //pbc_timerMillRun_task(&mix_mm_oper->timer_revTimeOut);
+    /*switch(mix_mm_oper->mmoo_runStutus)
+    {
+        case mmRunS_idle:
+        {
+            break;
+        }
+        case mmRunS_transmit_str:
+        {
+            mix_mm_oper->phy_into_transmit_status();
+            mix_mm_oper->restart_busFree_timer();
+            mix_mm_oper->mmoo_runStutus = mmRunS_transmit_35T;
+            break;
+        }
+        case mmRunS_transmit_35T:
+        {
+            if(mix_mm_oper->pull_busFree(35))
+            {
+                mix_mm_oper->mmoo_runStutus = mmRunS_transmit_data;
+                mix_mm_oper->transmit_index = 0;
+            }
+            break;
+        }
+        case mmRunS_transmit_data:
+        {
+            if(mix_mm_oper->transmit_length != 0)
+            {
+                while(1)
+                {
+                    push_succeed = mix_mm_oper->push_transmit_byte(mix_mm_oper->transmit_buff[mix_mm_oper->transmit_index]);
+                    if(push_succeed)
+                    {
+                        mix_mm_oper->transmit_index ++;
+                        mix_mm_oper->transmit_length --;
+                        if(0 == mix_mm_oper->transmit_length)
+                        {
+                            mix_mm_oper->mmoo_runStutus = mmRunS_transmit_stop;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        case mmRunS_transmit_stop:
+        {
+            if(mix_mm_oper->pull_transmit_complete())
+            {
+                mix_mm_oper->restart_busFree_timer();
+                mix_mm_oper->mmoo_runStutus = mmRunS_transmit_end;
+            }
+            break;
+        }
+        case mmRunS_transmit_end:
+        {
+            if(mix_mm_oper->pull_busFree(25)) //标准3.5T，使用2.5T的结束符，放宽检测条件
+            {
+                mix_mm_oper->phy_into_receive();
+                mix_mm_oper->mmoo_runStutus = mmRunS_receive_wait;//转入接收等待，设置超时
+                pbc_reload_timerClock(&mix_mm_oper->timer_revTimeOut,100); //100ms timeout
+            }
+            break;
+        }
+        case mmRunS_receive_wait:
+        {
+            if(mix_mm_oper->pull_receive_byte(&receive_byte))
+            {
+                mix_mm_oper->receive_buff[0] = receive_byte;
+                mix_mm_oper->rev_index = 1;
+                mix_mm_oper->mmoo_runStutus = mmRunS_receive_data;
+                mix_mm_oper->restart_busFree_timer();
+            }
+            else if(pbc_pull_timerIsCompleted(&mix_mm_oper->timer_revTimeOut))
+            {
+                mix_mm_oper->mmRtu_status = mRtuS_master_timeout;  //超时
+                mix_mm_oper->mmoo_runStutus = mmRunS_idle;
+            }
+            break;
+        }
+        case mmRunS_receive_data:
+        {
+            while(1)
+            {
+                if(mix_mm_oper->pull_receive_byte(&receive_byte))
+                {
+                    mix_mm_oper->receive_buff[mix_mm_oper->rev_index] = receive_byte;
+                    mix_mm_oper->rev_index ++;
+                    mix_mm_oper->restart_busFree_timer();
+                }
+                else
+                {
+                    if(mix_mm_oper->pull_busFree(20))  //标准3.5T,检测2.0T视为报文完成
+                    {
+                        if(modbus_master_receive_protocol(mix_mm_oper))
+                        {
+                            mix_mm_oper->mmRtu_status = mRtuS_master_complete;
+                            mix_mm_oper->mmoo_runStutus = mmRunS_idle;
+                        }
+                        else
+                        {
+                            mix_mm_oper->mmRtu_status = mRtuS_master_poterr; 
+                            mix_mm_oper->mmoo_runStutus = mmRunS_idle;  //产生接收错误
+                        }
+                    }
+                    break; 
+                }
+            }
+            break;
+        }
+
+        default:
+        {
+            mix_mm_oper->mmoo_runStutus = mmRunS_idle;
+            break;
+        }
+    }*/
+}
+
+//+++++++++++++++++++++++++++++++solid++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#define max_solid    1
+//--------------------------------------------------------------------------------------------------------------------------
+static modbus_master_oper_def modbus_master_solid[max_solid];
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+static void modbus_master_solid_cfg(void)
+{
+//--------------------------------------------------------------------------------------------------------------------------
+    //bsp_uart5_cfg();
+    /*modbus_master_solid[0].pull_receive_byte = bsp_pull_oneByte_uart5_rxd;
+    modbus_master_solid[0].push_transmit_byte = bsp_push_oneByte_uart5_txd;
+    modbus_master_solid[0].pull_busFree = bsp_uart5_busFree;
+    modbus_master_solid[0].restart_busFree_timer = bsp_restart_tim4;
+    modbus_master_solid[0].phy_into_receive = bps_uart5_into_receive;
+    modbus_master_solid[0].phy_into_transmit_status = bps_uart5_into_transmit;
+    modbus_master_solid[0].pull_transmit_complete =bsp_pull_uart5_txd_cmp;*/
+//---------------------------------------------------------------------------------------------------------------------------
+}
+
+void mde_mrtu_master_task(void)
+{
+	unsigned char i;
+	static unsigned char cfged = 0;
+	if(cfged)
+	{
+        
+        for(i = 0;i < max_solid;i ++)
+        {
+            modbus_master_oop_task(&modbus_master_solid[i]);
+        }
+	}
+	else
+	{
+		cfged = 1;
+		modbus_master_solid_cfg();
+	}
+}
 //------------------------------E N D-------------------------------------------
 
 /* EOF */
