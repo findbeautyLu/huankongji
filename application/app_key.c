@@ -171,6 +171,46 @@
 #define KEY_FANSET_BAUDRATE_UP_PAGE62				KeyAloneBit14
 #define KEY_FANSET_BAUDRATE_DOWN_PAGE62				KeyAloneBit15
 
+#define	KEY_NUMBER_POWER 				0
+#define	KEY_NUMBER_POWEROFF				1
+#define	KEY_NUMBER_TEMP_ADD				2
+#define	KEY_NUMBER_TEMP_SUB				3
+#define	KEY_NUMBER_HUMIDITY_ADD			4
+#define	KEY_NUMBER_HUMIDITY_SUB			5
+#define	KEY_NUMBER_MODE					6
+#define	KEY_NUMBER_SET_UP_STATE			7
+#define	KEY_NUMBER_WIND_SPEED			8
+#define	KEY_NUMBER_POWEROFF_SURE		9
+#define	KEY_NUMBER_POWEROFF_CANCEL		10
+
+#define KEY_TYPE_NUMBER					5
+#define	KEY_SERVICE_POWER_NULL					(0)
+#define	KEY_SERVICE_POWER_STATE					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_SERVICE_POWER_FIRST_DOWN			(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_SERVICE_POWER_LONG					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_SERVICE_CONTINUE					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_SERVICE_POWER_UP					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_UP)
+												
+#define	KEY_NUMBER_POWEROFF_NULL				(0)
+#define	KEY_NUMBER_POWEROFF_STATE				(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_POWEROFF_FIRST_DOWN			(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_POWEROFF_LONG				(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_POWEROFF_CONTINUE			(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_POWEROFF_UP					(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_UP)												
+												
+#define	KEY_NUMBER_TEMP_ADD_NULL				(0)
+#define	KEY_NUMBER_TEMP_ADD_STATE				(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_TEMP_ADD_FIRST_DOWN			(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_TEMP_ADD_LONG				(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_TEMP_ADD_CONTINUE			(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_TEMP_ADD_UP					(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_UP)	
+
+#define	KEY_NUMBER_TEMP_SUB_NULL				(0)
+#define	KEY_NUMBER_TEMP_SUB_STATE				(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_TEMP_SUB_FIRST_DOWN			(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_TEMP_SUB_LONG				(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_TEMP_SUB_CONTINUE			(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_TEMP_SUB_UP					(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_UP)	
 
 
 
@@ -186,6 +226,7 @@
 #define DATA_LOOP                 BN_TRUE
 #define DATA_KEEP                 BN_FALSE
 
+
 typedef enum
 {
 	MODE = 1,
@@ -198,6 +239,8 @@ typedef enum
 	TEMP,
 	WINDSTATUS,
 }x_t;
+
+
 
 
 //Task
@@ -1457,18 +1500,79 @@ void app_key_scanTask(void)
 	static uint16_t keycount = 0;
 	static uint16_t time = 0;
 	static unsigned int first_key_del = 0;
+	static unsigned int debug[2] ={0,0};
 	unsigned int value_temp = 0;
-	static key_sign_1_t key_sign;
+	unsigned char keytype_size = sizeof(key_sign_1_t);
+
+	unsigned int keytype_state = 0;
+	static key_sign_1_t key_sign_new[MAX_KEY_GROUP];
 	
 	ptSysPara =  controler_getSysParaPt();
 
 	mod_key_scanTask(GetSysTickMillisecond());	 
 
 	//new
-	
-	if(mde_getkey_event(&key_sign))
+	keytype_state = mde_getkey_event(&key_sign_new);
+	if(1)
 	{//有按键按下
+		//keytype_state = 1;
 		
+		switch(key_sign_new[0].key_down_sign)
+		{
+			case KEY_NUMBER_TEMP_ADD_FIRST_DOWN:
+					debug[0] = 10;
+					break;
+
+			case KEY_NUMBER_TEMP_ADD_LONG:
+					debug[0] = 20;
+					break;
+
+			case KEY_NUMBER_TEMP_ADD_CONTINUE:
+					if(debug[0] < 30)
+					{
+						debug[0] = 30;
+					}
+					else
+					{
+						debug[0]++;
+					}
+					
+					break;
+
+			case KEY_NUMBER_TEMP_ADD_UP:
+					debug[0] = 100;
+					break;
+
+			case KEY_NUMBER_TEMP_SUB_FIRST_DOWN:
+					debug[1] = 10;
+					break;
+
+			case KEY_NUMBER_TEMP_SUB_LONG:
+					debug[1] = 20;
+					break;
+
+			case KEY_NUMBER_TEMP_SUB_CONTINUE:
+					if(debug[1] < 30)
+					{
+						debug[1] = 30;
+					}
+					else
+					{
+						debug[1]++;
+					}
+					break;
+
+			case KEY_NUMBER_TEMP_SUB_UP:
+					debug[1] = 101;
+					break;
+
+			default: break;
+		}
+		
+	}
+	else
+	{
+		//keytype_state = 0xff;
 	}
 
 	//end
@@ -1485,25 +1589,25 @@ void app_key_scanTask(void)
 		ptSysPara->updataflag = BN_TRUE;
     }  
 	
-	value_temp = ptSysPara->count;
+	value_temp = key_sign_new[0].key_down_sign;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);	
 	WriteDGUS(0x5120,timebuf,2);
 	
-	value_temp = ptSysPara->read_244B_LOW_PWM;
+	value_temp = keytype_state;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
-	WriteDGUS(0x5140,timebuf,2);
+	WriteDGUS(0x5121,timebuf,2);
 
-	value_temp = ptSysPara->read_244C_MID_PWM;
+	value_temp = debug[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
-	WriteDGUS(0x5150,timebuf,2);
+	WriteDGUS(0x5122,timebuf,2);
 	
-	value_temp = ptSysPara->read_244D_HIGH_PWM;
+	value_temp = debug[1];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
-	WriteDGUS(0x5160,timebuf,2);
+	WriteDGUS(0x5123,timebuf,2);
 	
 	//ReadDGUS(0x14,timebuf,2);//读取当前页
 	//WriteDGUS(WATCH6_WINDOW,timebuf,2);

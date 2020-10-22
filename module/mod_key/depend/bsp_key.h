@@ -4,7 +4,13 @@
 //------------------------------E N D-------------------------------------------
 #include ".\SnailDataTypedef.h"
 
-#define MAX_KEY_GROUP					2
+#define MAX_KEY_GROUP					1
+
+typedef struct
+{
+	unsigned int (*bsp_scan)(unsigned int *read_keynumber);
+}bsp_keyscan_function_t;
+
 
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //组合键
@@ -229,7 +235,9 @@ void keyscan_fanset(INT16U *out_key_number);
 
 INT16U* bsp_key_init(void);
 
-extern unsigned int get_key2_bsp_array[MAX_KEY_GROUP];
+void keyscan_1(INT16U *out_key_number);
+
+extern bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP];
 #endif
 
 //-----------------------BSP_Keyboard.h--END------------------------------------

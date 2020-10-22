@@ -804,11 +804,7 @@ void APP_oneWire_task(void)
 		
 		if(Pub_softTimer_get_event_and_clear(&oneWireReceiveDelay,GetSysTickMillisecond()))
 		{
-			/*receiveCount++;
-			if(receiveCount >= 5)
-			{
-			receiveCount = 0;
-			}*/
+
 		}
 		if(Pub_softTimer_get_event_and_clear(&oneWireSendDelay,GetSysTickMillisecond()))
 		{

@@ -141,7 +141,7 @@ void mod_key_scanTask(INT16U milliscond);
 
 keyActionType_t mod_keyOperation(INT16U keyNum,INT16U fristValid_ms,INT16U continueValid_ms);
 
-unsigned char mde_getkey_event(key_sign_1_t *out_key);
+unsigned int mde_getkey_event(key_sign_1_t *out_key);
 
 
 

@@ -411,7 +411,7 @@ keyActionType_t mod_keyOperation(INT16U keyNum,INT16U fristValid_ms,INT16U conti
 //更新接口
 
 
-void mde_cfg(key_sign_1_t *out_key,unsigned int i)
+void mde_cfg(key_sign_1_t *out_key)
 {
 	//按键数据初始化，相关数据清零，长按或短按的时间设置
 	out_key->key_down_lock = 0;
@@ -421,13 +421,14 @@ void mde_cfg(key_sign_1_t *out_key,unsigned int i)
 	out_key->key_down_sign = 0;
 	out_key->in_longtime = 5000;
 	out_key->in_continuetime = 500;
-	out_key->getkey2_bsp = &get_key2_bsp_array[i];
+	//out_key->getkey2_bsp = keyscan_1;//get_key2_bsp_array[i].bsp_scan;
 }
 
 unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_data,unsigned int group_number)
 {
 	unsigned char i = 0;
 	unsigned char key_state = 0;
+	static unsigned int down_key_number = 0;
 	
 	if(in_process_data == 0)
 	{
@@ -444,7 +445,7 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 				break;
 			}
 		}	
-		key_state = i * 4 + KEY_STATE;//触发 按键按下状态，将状态return出去
+		key_state = i * 5 + KEY_STATE;//触发 按键按下状态，将状态return出去
 	}
 	
 	if(in_process_data == 0)//没有按键触发
@@ -455,13 +456,15 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 			out_key->key_down_longlock = 0;
 			out_key->key_event_timecount =0;	
 			out_key->key_down_sign = 0;
+			down_key_number = 0;
 		}
 		else
 		{
 			if(++out_key->key_event_timecount > 5)
 			{
 				out_key->key_up_lock = 0;
-				out_key->key_down_sign = (i * 4 + KEY_UP);//触发 抬起，仅按下时第一次抬起有效
+				out_key->key_down_sign = (down_key_number + KEY_UP);//触发 抬起，仅按下时第一次抬起有效
+				down_key_number = 0;
 			}
 		}
 	}
@@ -474,7 +477,8 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 			{
 				out_key->key_down_lock = 1;
 				out_key->key_event_timecount = 0;
-				out_key->key_down_sign = (i * 4 + KEY_DOWN);//触发 按下，一次按下仅触发一次
+				out_key->key_down_sign = (i * 5 + KEY_DOWN);//触发 按下，一次按下仅触发一次
+				down_key_number = i * 5;
 			}
 		}
 		else if(out_key->key_down_longlock == 0)
@@ -483,7 +487,7 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 			{
 				out_key->key_down_longlock = 1;
 				out_key->key_event_timecount = 0;
-				out_key->key_down_sign = (i * 4 + LONG_KEY);//触发 长按
+				out_key->key_down_sign = (i * 5 + LONG_KEY);//触发 长按
 			}		
 		}
 		else if(out_key->key_down_longlock == 1)//连击触发一定是按下状态且长按触发之后
@@ -491,7 +495,7 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 			if(++out_key->key_event_timecount > out_key->in_continuetime)
 			{
 				out_key->key_event_timecount = 0;
-				out_key->key_down_sign = (i * 4 + CONTINUE);//触发 连击
+				out_key->key_down_sign = (i * 5 + CONTINUE);//触发 连击
 			}
 			else
 			{
@@ -507,34 +511,37 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 	return key_state;//返回按下或者松手的状态
 }
 
-unsigned char mde_getkey_event(key_sign_1_t *out_key)
+unsigned int mde_getkey_event(key_sign_1_t *out_key)
 {
-	static unsigned char init_byte = 1;
-	static unsigned int keynumber[MAX_KEY_GROUP];//从bsp得到数据按键缓存
+	static unsigned char init_byte = 0;
+	unsigned int keystate = 0;
 	
-	unsigned char kaystate = 0;
 	unsigned int i = 0;
+	unsigned int j = 0;
+	unsigned int adress = 0;
+	unsigned int keynumber[MAX_KEY_GROUP] = {0};//从bsp得到数据按键缓存
 	
-	if(1 == init_byte)
+	
+	if(init_byte)
 	{
-		init_byte = 0;
-		for(; i < MAX_KEY_GROUP; i++)
+		for(j = 0; j < MAX_KEY_GROUP; j++)
 		{
-			mde_cfg(out_key+i,i);
+			out_key[j].getkey2_bsp(&keynumber[j]);
+			keystate = mde_filter_keysign(&out_key[j],keynumber[j],j);//获取到的state可做显示参数
 		}
 	}
 	else
 	{
-		for(; i < MAX_KEY_GROUP; i++)
+		for(i = 0; i < MAX_KEY_GROUP; i++)
 		{
-			(out_key+i)->getkey2_bsp(&keynumber[i]);
-			kaystate = mde_filter_keysign(out_key+i,keynumber[i],i);//获取到的state可做显示参数
-			break;
+			mde_cfg(&out_key[i]);
+			out_key[0].getkey2_bsp = keyscan_1;//理论上函数地址放数组里面是可以的，但是cfg放进去之后i数值乱了，暂时做个问题点
 		}
+		init_byte = 1;
 	}
 	//0 没有按键触发			
 	//非0 有触发 具体数据由按键值+1定义 
 	
-	return kaystate;
+	return keystate;
 }
 

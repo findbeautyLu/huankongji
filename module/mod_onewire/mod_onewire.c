@@ -211,7 +211,7 @@ typedef enum
 
 //modbus操作结构体
 //-----------------------------------------------------------------------------
-typedef struct
+/*typedef struct
 {
    // mRtu_parameter_def  mRtu_parameter;
     mRtu_master_status_def      mmRtu_status;
@@ -222,7 +222,7 @@ typedef struct
     unsigned char  transmit_buff[256];
     unsigned char  transmit_length;
     unsigned char  transmit_index;
-    timerClock_def timer_revTimeOut;
+    //timerClock_def timer_revTimeOut;
 
     unsigned int readReg_addr;
     unsigned char readReg_length;
@@ -248,7 +248,7 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
 	unsigned char push_succeed;
 	unsigned char  receive_byte;
     //pbc_timerMillRun_task(&mix_mm_oper->timer_revTimeOut);
-    /*switch(mix_mm_oper->mmoo_runStutus)
+    switch(mix_mm_oper->mmoo_runStutus)
     {
         case mmRunS_idle:
         {
@@ -366,13 +366,13 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
             mix_mm_oper->mmoo_runStutus = mmRunS_idle;
             break;
         }
-    }*/
-}
+    }
+}*/
 
 //+++++++++++++++++++++++++++++++solid++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#define max_solid    1
+//#define max_solid    1
 //--------------------------------------------------------------------------------------------------------------------------
-static modbus_master_oper_def modbus_master_solid[max_solid];
+//static modbus_master_oper_def modbus_master_solid[max_solid];
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static void modbus_master_solid_cfg(void)
 {
@@ -388,7 +388,7 @@ static void modbus_master_solid_cfg(void)
 //---------------------------------------------------------------------------------------------------------------------------
 }
 
-void mde_mrtu_master_task(void)
+/*void mde_mrtu_master_task(void)
 {
 	unsigned char i;
 	static unsigned char cfged = 0;
@@ -405,7 +405,7 @@ void mde_mrtu_master_task(void)
 		cfged = 1;
 		modbus_master_solid_cfg();
 	}
-}
+}*/
 //------------------------------E N D-------------------------------------------
 
 /* EOF */
