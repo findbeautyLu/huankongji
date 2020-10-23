@@ -1536,7 +1536,6 @@ void app_key_scanTask(void)
 					{
 						debug[0]++;
 					}
-					
 					break;
 
 			case KEY_NUMBER_TEMP_ADD_UP:
@@ -1569,10 +1568,6 @@ void app_key_scanTask(void)
 			default: break;
 		}
 		
-	}
-	else
-	{
-		//keytype_state = 0xff;
 	}
 
 	//end

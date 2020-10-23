@@ -309,17 +309,15 @@
 #define HUMIDITY_ADRESS			0x5006
 
 //上位机动态显示的图片地址可能需要独立出来
-#define REG_GREEN_SAVER_START_ADRESS					0x6000//屏保界面起始地址
-
-#define REG_GREEN_SAVER_END_ADRESS						0x6020//屏保界面结束地址
 //20201021
 //地址 + 当前页 + 偏移 直接由宏定义完成，定义一个二维数组确定所有的显示变量。数组等待
 #define DIS_NUMBER										10//暂定10，后续实例化确定数据量后在更改
 
 
-#define REG_DIS_ADRESS									0x6000
-#define REG_DIS_OFFSET									152
-#define REG_DIS_PAGENUMBER								1
+#define REG_DIS_NUMBER_ADRESS							0x6000
+#define REG_DIS_NUMBER_OFFSET							0
+
+#define REG_DIS_PAGENUMBER_PAGE_29						25//页面切换还未做，临时测试下实例程序
 
 
 typedef enum

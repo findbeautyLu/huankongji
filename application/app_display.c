@@ -625,281 +625,11 @@ void app_dis_factory(void)
 
 void app_dis_more_message(void)
 {
-	SysPara_t *ptSysPara;	
-	ptSysPara =  controler_getSysParaPt();
-	//固定显示
-	app_dis(REG_MORE_KEY_MESSAGE,38);
-	app_dis(REG_MORE_PROTECE_MESSAGE,21);
-	app_dis(REG_MORE_FAULT_MESSAGE,22);
-	app_dis(REG_MORE_STATE_MESSAGE,40);
-	app_dis(REG_MORE_INWIND_TEMP_ADRESS,35);
-	app_dis(REG_MORE_LOWTEMP_TEMP_ADRESS,36);
-	app_dis(REG_MORE_HIGHTEMP_TEMP_ADRESS,37);
-	app_dis(REG_MORE_JUMP_ADRESS,39);
-	//温度显示
-	app_dis(REG_MORE_INWIND_TEMP,ptSysPara->read_2411_adress_data);
-	app_dis(REG_MORE_LOW_TEMP,ptSysPara->read_2412_adress_data);	
-	app_dis(REG_MORE_HIGH_TEMP,ptSysPara->read_2413_adress_data);
-	//保护
-	if((ptSysPara->read_240D_adress_data & 0x0001) == 0x0001)
-	{
-		app_dis(REG_MORE_DEF_PROTECE_MESSAGE,1);
-	}
-	else
-	{
-		app_dis(REG_MORE_DEF_PROTECE_MESSAGE,2);
-	}
-	
-	if((ptSysPara->read_240D_adress_data & 0x0002) == 0x0002)
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_PROTECE_MESSAGE,3);
-	}
-	else
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_PROTECE_MESSAGE,4);
-	}
 
-	if((ptSysPara->read_240D_adress_data & 0x0004) == 0x0004)
-	{
-		app_dis(REG_MORE_INWIND_TEMP_PROTECE__MESSAGE,5);
-	}
-	else
-	{
-		app_dis(REG_MORE_INWIND_TEMP_PROTECE__MESSAGE,6);
-	}
-	
-	if((ptSysPara->read_240D_adress_data & 0x0008) == 0x0008)
-	{
-		app_dis(REG_MORE_HIGH_TEMP_PROTECE_MESSAGE,7);
-	}
-	else
-	{
-		app_dis(REG_MORE_HIGH_TEMP_PROTECE_MESSAGE,8);
-	}
-	
-	if((ptSysPara->read_240D_adress_data & 0x0010) == 0x0010)
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_WARNING_PROTECE_MESSAGE,9);
-	}
-	else
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_WARNING_PROTECE_MESSAGE,10);
-	}
-	
-	if((ptSysPara->read_240E_adress_data & 0x0001) == 0x0001)
-	{
-		app_dis(REG_MORE_INWIND_SENSOR_FAULT_MESSAGE,11);
-	}
-	else
-	{
-		app_dis(REG_MORE_INWIND_SENSOR_FAULT_MESSAGE,12);
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0002) == 0x0002)
-	{
-		app_dis(REG_MORE_LOWTEMP_SENSOR_FAULT_MESSAGE,13);
-	}
-	else
-	{
-		app_dis(REG_MORE_LOWTEMP_SENSOR_FAULT_MESSAGE,14);
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0004) == 0x0004)
-	{
-		app_dis(REG_MORE_WENSHIDU_SENSOR_FAULT_MESSAGE,15);
-	}
-	else
-	{
-		app_dis(REG_MORE_WENSHIDU_SENSOR_FAULT_MESSAGE,16);
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0008) == 0x0008)
-	{
-		app_dis(REG_MORE_HIGH_SENSOR_FAULT_MESSAGE,17);
-	}
-	else
-	{
-		app_dis(REG_MORE_HIGH_SENSOR_FAULT_MESSAGE,18);
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0010) == 0x0010)
-	{
-		app_dis(REG_MORE_OUTWATCH_SENSOR_FAULT_MESSAGE,19);
-	}
-	else
-	{
-		app_dis(REG_MORE_OUTWATCH_SENSOR_FAULT_MESSAGE,20);
-	}
-	
-	if((ptSysPara->read_2415_adress_data & 0x0001) == 0x0001)
-	{
-		app_dis(REG_MORE_REC_STATE_MESSAGE,23);
-	}
-	else
-	{
-		app_dis(REG_MORE_REC_STATE_MESSAGE,24);
-	}
-
-	if((ptSysPara->read_2415_adress_data & 0x0002) == 0x0002)
-	{
-		app_dis(REG_MORE_FRE_STATE_MESSAGE,25);
-	}
-	else
-	{
-		app_dis(REG_MORE_FRE_STATE_MESSAGE,26);
-	}
-	if((ptSysPara->read_2415_adress_data & 0x0004) == 0x0004)
-	{
-		app_dis(REG_MORE_LIFT_WATCH_STATE_MESSAGE,27);
-	}
-	else
-	{
-		app_dis(REG_MORE_LIFT_WATCH_STATE_MESSAGE,28);
-	}
-	if((ptSysPara->read_2415_adress_data & 0x0008) == 0x0008)
-	{
-		app_dis(REG_MORE_WATCH_HEIGHT_STATE_MESSAGE,30);
-	}
-	else
-	{
-		app_dis(REG_MORE_WATCH_HEIGHT_STATE_MESSAGE,29);
-	}
-	if((ptSysPara->read_2415_adress_data & 0x0010) == 0x0010)
-	{
-		app_dis(REG_MORE_AC_STATE_MESSAGE,31);
-	}
-	else
-	{
-		app_dis(REG_MORE_AC_STATE_MESSAGE,32);
-	}
-	if((ptSysPara->read_2415_adress_data & 0x0020) == 0x0020)
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_STATE_MESSAGE,31);
-	}
-	else
-	{
-		app_dis(REG_MORE_LOW_PRESSURE_STATE_MESSAGE,32);
-	}
 }
 void app_dis_fault(void)
 {
-	SysPara_t *ptSysPara;	
-	uint16_t error1 = 0; 
-	uint16_t error2 = 0;
-	uint16_t error3 = 0;
-	uint16_t error4 = 0;
-	uint16_t error5 = 0;
-	uint16_t error6 = 0;
-	uint16_t error7 = 0;
 	
-	ptSysPara =  controler_getSysParaPt();
-	if(ptSysPara->communicationflag > 60)//控制面板通讯 60s
-	{
-		error1 = 1;
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0008) == 0x0008)//高温盘管故障18
-	{
-		error2 = 2;
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0002) == 0x0002)//蒸发温度故障(低温盘管故障17)
-	{
-		error3 = 3;
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0010) == 0x0010)//排水故障//22
-	{
-		error4 = 4;
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0004) == 0x0004)//温湿度传感器故障20
-	{
-		error5 = 5;
-	}
-	if((ptSysPara->read_240E_adress_data & 0x0001) == 0x0001)//进风温度故障19
-	{
-		error6 = 6;
-	}
-	if((ptSysPara->read_240D_adress_data & 0x0010) == 0x0010)//低压保护开启13 关闭14
-	{
-		error7 = 7;
-	}
-
-	app_dis(REG_FAULT_COMMUNICATION,error1);
-	app_dis(REG_FAULT_HIGH_NTC,error2);
-	app_dis(REG_FAULT_LOW_NTC,error3);
-	app_dis(REG_FAULT_OUT_WATCH,error4);
-	app_dis(REG_FAULT_WENSHIDU,error5);
-	app_dis(REG_FAULT_INWIND_NTC,error6);
-	app_dis(REG_FAULT_LOW_PRESS_PROTECT,error7);
-
-	//设备状态值
-
-	if((ptSysPara->read_2415_adress_data & 0x0010) == 0x0010)
-	{
-		app_dis(REG_DEBUG_AC,1);
-	}
-	else
-	{
-		app_dis(REG_DEBUG_AC,2);
-	}
-	if(ptSysPara->read_2406_adress_data == 0x0000)//风机关3 低4 中5 高6 
-	{
-		app_dis(REG_DEBUG_FAN,3);	
-	}
-	else if(ptSysPara->read_2406_adress_data == 0x0001)
-	{
-		app_dis(REG_DEBUG_FAN,4);	
-	}
-	else if(ptSysPara->read_2406_adress_data == 0x0002)
-	{
-		app_dis(REG_DEBUG_FAN,5);	
-	}
-	else if(ptSysPara->read_2406_adress_data == 0x0003)
-	{
-		app_dis(REG_DEBUG_FAN,6);	
-	}
-	
-	if((ptSysPara->read_2415_adress_data & 0x0200) == 0)//新风阀开启7 关闭8
-	{
-		app_dis(REG_DEBUG_FRE,8);
-	}
-	else if((ptSysPara->read_2415_adress_data & 0x0002) == 0x0002)
-	{
-		app_dis(REG_DEBUG_FRE,7);
-	}
-	
-	if((ptSysPara->read_2415_adress_data & 0x0001) == 0)//内循环开启9 关闭10
-	{
-		app_dis(REG_DEBUG_REC,10);
-	}
-	else if((ptSysPara->read_2415_adress_data & 0x0001) == 0x0001)
-	{
-		app_dis(REG_DEBUG_REC,9);
-	}
-	
-	if((ptSysPara->read_240D_adress_data & 0x0010) == 0x0010)//低压保护开启13 关闭14
-	{
-		app_dis(REG_DEBUG_LOW_PRESS_PROTECT,13);
-	}
-	else
-	{
-		app_dis(REG_DEBUG_LOW_PRESS_PROTECT,14);
-	}
-	
-	if((ptSysPara->read_2415_adress_data & 0x0004) == 0)//提水泵 开启11 关闭12
-	{
-		app_dis(REG_DEBUG_TISHUIBENG_PROTECT,12);
-	}
-	else
-	{
-		app_dis(REG_DEBUG_TISHUIBENG_PROTECT,11);
-	}
-
-	if((ptSysPara->read_240D_adress_data & 0x0001) == 0x0001)//化霜保护 开启15 关闭16
-	{
-		app_dis(REG_DEBUG_HUASHUANG_PROTECT,15);
-	}
-	else
-	{
-		app_dis(REG_DEBUG_HUASHUANG_PROTECT,16);
-	}
-	//更多信息
-
-	app_dis_more_message();
 }
 
 void app_dis_about(void)
@@ -936,7 +666,7 @@ void app_display_updata(systemRunStatus_t sysRunStatus)
 
 const uint16_t dis_page_adress_offset[DIS_NUMBER][3] =
 {
-	REG_DIS_PAGENUMBER,		REG_DIS_ADRESS,	REG_DIS_OFFSET,	
+	REG_DIS_PAGENUMBER_PAGE_29,		REG_DIS_NUMBER_ADRESS,	REG_DIS_NUMBER_OFFSET
 	//在建立一个获取写入数据的数组，基本显示数据这块就完成了，
 	//显示数组的索引和这边的索引应一一对应，哪怕是强制赋值获取sys里面的状态
 };
@@ -944,13 +674,17 @@ const uint16_t dis_page_adress_offset[DIS_NUMBER][3] =
 //定义后初始化0，定时从sys里面的元素直接获得需要的元素，直接赋值，不是规则的数据，无法通过指针访问
 uint16_t dis_dis_data[DIS_NUMBER] =
 {
-	REG_DIS_PAGENUMBER, REG_DIS_PAGENUMBER,
+	0, 0
 };
 
 void app_display_scanTask(void)
 {         
     SysPara_t *ptSysPara;  
     static unsigned char initFlag = false;
+	uint16_t i = 0;
+	
+	uint8_t timebuf[2] ={0,0};
+	unsigned int value_temp = 0;
 	
 	ptSysPara =  controler_getSysParaPt();
 
@@ -964,7 +698,30 @@ void app_display_scanTask(void)
     {
         ptSysPara->updataflag = false;
         app_display_updata(ptSysPara->sys_runstatus); 
+
+		dis_dis_data[0] = ptSysPara->temp_set/10;
+		//每次进来都要从数据中获得最新数据，需不需要更新后面决定
+		for(; i < 10; i++)
+		{
+			if(ptSysPara->page_number == dis_page_adress_offset[i][0])
+			{
+				//更新数据
+				app_dis(dis_page_adress_offset[i][1],dis_dis_data[i]+dis_page_adress_offset[i][2]);
+			}
+		}
     }
+
+	value_temp = dis_dis_data[0];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5124,timebuf,2);
+
+	value_temp = ptSysPara->page_number;
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5125,timebuf,2);
+
+	
 }
 //------------------------------E N D-------------------------------------------
 

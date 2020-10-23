@@ -359,11 +359,6 @@ void app_circular_switch(void)
 
 uint8_t app_control_scanTask(void)
 {
-    /*app_control_scan_measTemp();//更新测量温度
-    APP_control_update_system();//状态更新
-    APP_control_timeOutEvent_scan();//超时时间扫描
-    app_control_updata_500ms_Blink();//闪动事件发送
-    app_control_updata_tempoffset();//实际温度-设置温度获取温度相差等级*/
 	if(app_power_control())
 	{
 		app_page_switch();//切换页面
