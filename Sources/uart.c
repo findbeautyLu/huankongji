@@ -243,12 +243,15 @@ void Uart5Init(void)
 }
 /*****************************************************************************
 串口5发送字节*/
-void Uart5SendByte(uint8_t dat)
+uint8_t Uart5SendByte(uint8_t dat)
 {
   SBUF3_TX = dat;    
   while((SCON3T&0x01) == 0); 
   SCON3T &= 0xFE;
+
+  return 1;
 }
+
 /*****************************************************************************
 串口5发送字符串*/
 void Uart5SendStr(uint8_t *pstr,uint8_t strlen)
@@ -267,19 +270,39 @@ void Uart5SendStr(uint8_t *pstr,uint8_t strlen)
     pstr++;
   }  
 	P1MDOUT |= 0x01;//P1.0
-	controlIo=0;
+	//controlIo=0;
 	SCON3R |= (0x80);
 	ES3R=1;
 }
+
+void bsp_uart5_into_receive(void)
+{
+	//P1.0拉高 关闭接收使能
+	P1MDOUT &= (~0x01);//P1.0
+	SCON3R &= (~0x80);
+	ES3R=0;
+}
+
+void bsp_uart5_into_transmit(void)
+{
+	//P1.0拉低 开启接收使能
+	P1MDOUT |= 0x01;//P1.0
+	//controlIo=0;
+	SCON3R |= (0x80);
+	ES3R=1;
+}
+
 /*****************************************************************************
 串口5发送中断*/
 void UART5_TX_ISR_PC(void)    interrupt 12
-{ 
+{
+
 }
 /*****************************************************************************
 串口5接收中断*/
 #define DELAY_RX    5
 u8 delayTime = 0;
+
 
 void UART5_RX_ISR_PC(void)    interrupt 13
 {

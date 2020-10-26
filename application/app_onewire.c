@@ -725,7 +725,22 @@ void APP_oneWire_read_485_data(u16 address,u16 len)
 		}
 		MP_memPool_free( ptGetMemory);     
 }
+void app_onrwire_task1(void)
+{
+	static u16 lastTick = 0;
+	
+    SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+	
+	mde_mrtu_master_task(GetSysTickMillisecond());
 
+	if((GetSysTickMillisecond() - lastTick) >= 2000)
+	{
+		lastTick = GetSysTickMillisecond();
+		ptSysPara->debugcount++;
+		mde_mRtu_master_cmd0x03_transmit(0,0xfa,0x1000,0x0003);
+	}
+}
 void APP_oneWire_task(void)
 {
   	SysPara_t *ptSysPara;  

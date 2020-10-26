@@ -17,6 +17,8 @@
 /*****************************************************************************
 全局变量*/
 uint16_t timecount;
+uint16_t uart5timecount;
+
 uint16_t SystickCount;
 
 
@@ -37,6 +39,8 @@ void T0_ISR_PC(void)    interrupt 1
 	TL0=T1MS;
 	if(timecount > 0)
 		timecount--;
+
+	uart5timecount++;
 	SystickCount++;
 	WDT_RST();
 	EA=1;

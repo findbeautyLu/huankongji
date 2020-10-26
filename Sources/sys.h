@@ -132,8 +132,8 @@ void system_parm_init(void);
 void init_rtc(void);
 void rdtime(void);
 void set_rtc(unsigned char year,unsigned char month,unsigned char day,unsigned char hour,unsigned char minute);
-
-
+uint8_t bsp_uart5_busfree(uint8_t freetime);
+void bsp_uart5_restart_timecount(void);
 
 
 

@@ -25,6 +25,8 @@
 
 
 extern unsigned int timecount;
+extern unsigned int uart5timecount;
+
 /*****************************************************************************
 对外函数声明*/
 

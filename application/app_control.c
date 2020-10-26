@@ -49,6 +49,7 @@ SysPara_t * controler_getSysParaPt(void)
 
 void app_con_gotoFac(void)
 {
+	s_sysPara.debugcount = 0;
 	s_sysPara.sys_runstatus             = SYS_STATUS_RUN_MODE;
 	s_sysPara.mode 						= MODE_INIT;
 	s_sysPara.humidity_set 				= HUMIDITY_SET_INIT;

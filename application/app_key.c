@@ -1603,20 +1603,65 @@ void app_key_scanTask(void)
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5123,timebuf,2);
+
+
+	value_temp = ptSysPara->debugcount;
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5126,timebuf,2);
+
 	
+	value_temp = modbus_master_solid[0].mmoo_runStutus;
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5127,timebuf,2);
 	//ReadDGUS(0x14,timebuf,2);//读取当前页
 	//WriteDGUS(WATCH6_WINDOW,timebuf,2);
 
+	value_temp = modbus_master_solid[0].transmit_buff[0];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5128,timebuf,2);
 	
-	if(timecount == 0)
-	{
-		timecount = 200;
-	}
-	else
-	{
-		time = timecount;
-	}
+	value_temp = modbus_master_solid[0].transmit_buff[1];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5129,timebuf,2);
 	
+	value_temp = modbus_master_solid[0].transmit_buff[2];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512A,timebuf,2);
+
+	value_temp = modbus_master_solid[0].transmit_buff[3];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512B,timebuf,2);
+	
+	value_temp = modbus_master_solid[0].transmit_buff[4];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512c,timebuf,2);
+
+	value_temp = modbus_master_solid[0].transmit_buff[5];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512D,timebuf,2);
+
+	value_temp = modbus_master_solid[0].transmit_buff[6];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512E,timebuf,2);
+
+	value_temp = modbus_master_solid[0].transmit_buff[7];
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x512F,timebuf,2);
+
+	value_temp = statecount;//modbus_master_solid[0].transmit_length;
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5130,timebuf,2);
 }
 //****************************按键任务******************************************
 

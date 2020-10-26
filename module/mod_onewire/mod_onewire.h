@@ -18,8 +18,62 @@
 #define __MOD_ONE_WIRE_H__  
 /*============================ INCLUDES ======================================*/
 /*============================ MACROS ========================================*/
+#define max_solid    1
+
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/ 
+typedef enum 
+{
+    mRtuS_master_none       = 0x00,
+    mRtuS_master_complete   = 0x01,
+    mRtuS_master_timeout    = 0x02,
+    mRtuS_master_poterr     = 0x03,
+}mRtu_master_status_def;
+
+typedef enum
+{
+    mmRunS_idle             = 0x00,
+    mmRunS_transmit_str,
+    mmRunS_transmit_35T,
+    mmRunS_transmit_data,
+    mmRunS_transmit_stop,    
+    mmRunS_transmit_end,
+    mmRunS_receive_wait,
+    mmRunS_receive_data,
+    mmRunS_receive_end,
+}modbus_master_runState_def;
+
+typedef struct
+{
+   // mRtu_parameter_def  mRtu_parameter;
+    mRtu_master_status_def      mmRtu_status;
+    modbus_master_runState_def  mmoo_runStutus;
+
+    unsigned char  receive_buff[256];
+    unsigned char  rev_index;
+    unsigned char  transmit_buff[256];
+    unsigned char  transmit_length;
+    unsigned char  transmit_index;
+    //timerClock_def timer_revTimeOut;
+
+    unsigned int readReg_addr;
+    unsigned char readReg_length;
+    unsigned int writeReg_addr;
+    unsigned char writeReg_length;
+
+    unsigned char (*pull_receive_byte)(unsigned char *out_rByte);
+    unsigned char (*push_transmit_byte)(unsigned char in_tByte);
+    void (*push_transmit_str)(unsigned char *in_tByte,unsigned char len);
+	
+    unsigned char (*pull_busFree)(unsigned char t_char_dis);
+    void (*restart_busFree_timer)(void);
+	
+    void (*phy_into_receive)(void);
+    void (*phy_into_transmit_status)(void);
+	
+    unsigned char (*pull_transmit_complete)(void);
+}modbus_master_oper_def;
+
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 /*============================ PROTOTYPES ====================================*/
@@ -35,6 +89,9 @@ void mod_oneWire_task(void);
 //出口:true 数据可以正常发送， false 数据忙，需要等待再发
 void mod_oneWire_send_frame(unsigned char *_in_buff,unsigned short _in_len);//发送数据
 bit mod_oneWire_receive_frame(unsigned char *_out_buff,unsigned short *_out_len);//获取数据
+
+void mde_mrtu_master_task(unsigned int systimecount);
+
 //------------------------------------------------------------------------------
 //名称:模块单线接收帧
 //说明：按modbus格式接收数据，应用层调用
@@ -42,15 +99,12 @@ bit mod_oneWire_receive_frame(unsigned char *_out_buff,unsigned short *_out_len)
 //出口:true 有收到数据，  false 无数据
 //void mod_oneWire_get_data(unsigned char *_out_Buffer, unsigned short _in_usAddress,unsigned short _in_usNRegs, unsigned char _in_eMode);
 
-typedef enum 
-{
-    mRtuS_master_none       = 0x00,
-    mRtuS_master_complete   = 0x01,
-    mRtuS_master_timeout    = 0x02,
-    mRtuS_master_poterr     = 0x03,
-}mRtu_master_status_def;
 
 
+void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length);
+
+extern modbus_master_oper_def modbus_master_solid[max_solid];
+extern unsigned int statecount;
 
 
 

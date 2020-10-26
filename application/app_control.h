@@ -259,6 +259,7 @@ typedef struct
 typedef struct
 {    
 	systemRunStatus_t sys_runstatus;
+	uint16_t debugcount;
 	uint16_t count;
 	uint8_t poweronflag;
 	uint8_t communicationflag;

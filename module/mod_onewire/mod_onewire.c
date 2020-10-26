@@ -51,91 +51,6 @@ void mod_oneWire_send_frame(unsigned char *_in_buff,unsigned short _in_len)
 }
 
 
-#define FIFO_STATUS_IDLE       0x01
-#define FIFO_STATUS_ADD        0x02
-#define FIFO_STATUS_COMMAND    0x03
-#define FIFO_STATUS_DATA       0x04
-#define ADDRESS                0x01
-#define SIGNAL_READ            0x03
-#define SIGNAL_WRITE           0x06
-#define MUTIL_WRITE            0x10
-
-/*unsigned char validBuffer[50];
-void onewire_get_frame_from_ringBuff(void)
-{
-		static unsigned char fifoStatus = FIFO_STATUS_IDLE;
-    switch(fifoStatus)
-    {
-        case FIFO_STATUS_IDLE:
-        {
-            if(ringBuffer_items_counter(&uartRxFifo))
-            {              
-                ringBuffer_read(&uartRxFifo,&validBuffer[0],1);
-                if(validBuffer[0] == ADDRESS)
-                {
-                    fifoStatus = FIFO_STATUS_ADD;
-                }
-            }                  
-            break;
-        }
-        case FIFO_STATUS_ADD:
-        {
-            if(ringBuffer_items_counter(&uartRxFifo))
-            {
-                ringBuffer_read(&uartRxFifo,&validBuffer[1],1);
-                if((validBuffer[1] == SIGNAL_READ)||
-									(validBuffer[1] == SIGNAL_WRITE||
-								  (validBuffer[1] == MUTIL_WRITE)))
-                {
-                    fifoStatus = FIFO_STATUS_COMMAND;
-                }
-                else
-                {
-                    fifoStatus = FIFO_STATUS_IDLE;
-                }
-            }
-            else
-            {
-                fifoStatus = FIFO_STATUS_IDLE;
-            }
-            break;
-        }
-        case FIFO_STATUS_COMMAND:
-        {
-            if(ringBuffer_items_counter(&uartRxFifo))
-            {    
-							  if(validBuffer[1] == SIGNAL_READ)
-							  {
-										ringBuffer_read(&uartRxFifo,&validBuffer[2],1);
-										if(ringBuffer_items_counter(&uartRxFifo)>= (validBuffer[2]+2))
-										{
-												ringBuffer_read(&uartRxFifo,&validBuffer[3],(validBuffer[2]+2));
-												oneWireHal.receivedDataFlag = 1;
-										}
-								}
-								else
-							  {
-										if(ringBuffer_items_counter(&uartRxFifo)>= 6)
-									  {
-												ringBuffer_read(&uartRxFifo,&validBuffer[2],6); 
-											  oneWireHal.receivedDataFlag = 1;										
-										}
-								}
-            }
-            else
-            {
-                fifoStatus = FIFO_STATUS_IDLE;
-            }
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-}*/
-
-
 u8 idata tempBuff[100];
 u8 flag = 0;
 u8 rxLen = 0;
@@ -165,6 +80,7 @@ void uart_receive_scan(void)
 		}
 	}
 }
+ 
 
 bit mod_oneWire_receive_frame(unsigned char *_out_buff,unsigned short *_out_len)
 {
@@ -187,6 +103,30 @@ bit mod_oneWire_receive_frame(unsigned char *_out_buff,unsigned short *_out_len)
 }
 
 
+
+//Uart5SendStr(mix_mm_oper->transmit_buff,modbus_master_solid[0].sendcompele);
+//stop
+
+uint8_t Uart5ReceiveByte(uint8_t *out_rx_data)
+{
+	static uint8_t start_adress = 0;
+	uint8_t re_back;
+	if(start_adress >= uart5_rx_count)
+	{
+		start_adress = 0;
+		uart5_rx_count = 0;
+		re_back = 0;
+	}
+	else
+	{
+		*out_rx_data = Uart5_Rx[start_adress];
+		start_adress++;
+		re_back = 1;
+	}
+
+	return re_back;
+}
+
 #define READ    0x00
 #define WRITE   0x01
 #define ADD     0x01
@@ -195,56 +135,24 @@ void mod_oneWire_task(void)
 	uart_receive_scan();  
 }
 
+
+
+
 //new start 20201021
-typedef enum
-{
-    mmRunS_idle             = 0x00,
-    mmRunS_transmit_str,
-    mmRunS_transmit_35T,
-    mmRunS_transmit_data,
-    mmRunS_transmit_stop,    
-    mmRunS_transmit_end,
-    mmRunS_receive_wait,
-    mmRunS_receive_data,
-    mmRunS_receive_end,
-}modbus_master_runState_def;
+
+	
+
 
 //modbus操作结构体
 //-----------------------------------------------------------------------------
-/*typedef struct
-{
-   // mRtu_parameter_def  mRtu_parameter;
-    mRtu_master_status_def      mmRtu_status;
-    modbus_master_runState_def  mmoo_runStutus;
 
-    unsigned char  receive_buff[256];
-    unsigned char  rev_index;
-    unsigned char  transmit_buff[256];
-    unsigned char  transmit_length;
-    unsigned char  transmit_index;
-    //timerClock_def timer_revTimeOut;
-
-    unsigned int readReg_addr;
-    unsigned char readReg_length;
-    unsigned int writeReg_addr;
-    unsigned char writeReg_length;
-
-    unsigned char (*pull_receive_byte)(unsigned char *out_rByte);
-    unsigned char (*push_transmit_byte)(unsigned char in_tByte);
-	
-    unsigned char (*pull_busFree)(unsigned char t_char_dis);
-    void (*restart_busFree_timer)(void);
-	
-    void (*phy_into_receive)(void);
-    void (*phy_into_transmit_status)(void);
-	
-    unsigned char (*pull_transmit_complete)(void);
-}modbus_master_oper_def;
 
 static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_mm_oper);
 
-static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
+static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned int runtimecount)
 {
+	static unsigned int lasttimecount = 0;
+	static unsigned int difftimecount = 0;
 	unsigned char push_succeed;
 	unsigned char  receive_byte;
     //pbc_timerMillRun_task(&mix_mm_oper->timer_revTimeOut);
@@ -275,7 +183,7 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
             if(mix_mm_oper->transmit_length != 0)
             {
                 while(1)
-                {
+                {							
                     push_succeed = mix_mm_oper->push_transmit_byte(mix_mm_oper->transmit_buff[mix_mm_oper->transmit_index]);
                     if(push_succeed)
                     {
@@ -283,7 +191,9 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
                         mix_mm_oper->transmit_length --;
                         if(0 == mix_mm_oper->transmit_length)
                         {
+           					//mix_mm_oper->push_transmit_str(mix_mm_oper->transmit_buff,mix_mm_oper->transmit_index);//死等发送
                             mix_mm_oper->mmoo_runStutus = mmRunS_transmit_stop;
+							statecount++;
                             break;
                         }
                     }
@@ -293,10 +203,13 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
                     }
                 }
             }
+
+			
             break;
         }
         case mmRunS_transmit_stop:
         {
+        	statecount = mmRunS_transmit_end;
             if(mix_mm_oper->pull_transmit_complete())
             {
                 mix_mm_oper->restart_busFree_timer();
@@ -310,12 +223,14 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
             {
                 mix_mm_oper->phy_into_receive();
                 mix_mm_oper->mmoo_runStutus = mmRunS_receive_wait;//转入接收等待，设置超时
-                pbc_reload_timerClock(&mix_mm_oper->timer_revTimeOut,100); //100ms timeout
+                lasttimecount = runtimecount;
+                //pbc_reload_timerClock(&mix_mm_oper->timer_revTimeOut,100); //100ms timeout
             }
             break;
         }
         case mmRunS_receive_wait:
         {
+        	difftimecount = runtimecount - lasttimecount;
             if(mix_mm_oper->pull_receive_byte(&receive_byte))
             {
                 mix_mm_oper->receive_buff[0] = receive_byte;
@@ -323,7 +238,7 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
                 mix_mm_oper->mmoo_runStutus = mmRunS_receive_data;
                 mix_mm_oper->restart_busFree_timer();
             }
-            else if(pbc_pull_timerIsCompleted(&mix_mm_oper->timer_revTimeOut))
+            else if(difftimecount > 100)//(pbc_pull_timerIsCompleted(&mix_mm_oper->timer_revTimeOut))
             {
                 mix_mm_oper->mmRtu_status = mRtuS_master_timeout;  //超时
                 mix_mm_oper->mmoo_runStutus = mmRunS_idle;
@@ -367,37 +282,63 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper)
             break;
         }
     }
-}*/
+}
 
 //+++++++++++++++++++++++++++++++solid++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //#define max_solid    1
 //--------------------------------------------------------------------------------------------------------------------------
-//static modbus_master_oper_def modbus_master_solid[max_solid];
+modbus_master_oper_def modbus_master_solid[max_solid];
+uint16_t statecount = 0;
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+uint8_t Uart5TransferByte(uint8_t out_tx_data)
+{
+	modbus_master_solid[0].transmit_buff[modbus_master_solid[0].transmit_index] = out_tx_data;
+	return 1;
+}
+
+unsigned char bsp_pull_uart5_txd_cmp(void)
+{
+	if(modbus_master_solid[0].mmoo_runStutus == mmRunS_transmit_stop)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 static void modbus_master_solid_cfg(void)
 {
 //--------------------------------------------------------------------------------------------------------------------------
     //bsp_uart5_cfg();
-    /*modbus_master_solid[0].pull_receive_byte = bsp_pull_oneByte_uart5_rxd;
-    modbus_master_solid[0].push_transmit_byte = bsp_push_oneByte_uart5_txd;
-    modbus_master_solid[0].pull_busFree = bsp_uart5_busFree;
-    modbus_master_solid[0].restart_busFree_timer = bsp_restart_tim4;
-    modbus_master_solid[0].phy_into_receive = bps_uart5_into_receive;
-    modbus_master_solid[0].phy_into_transmit_status = bps_uart5_into_transmit;
-    modbus_master_solid[0].pull_transmit_complete =bsp_pull_uart5_txd_cmp;*/
+    modbus_master_solid[0].pull_receive_byte = Uart5ReceiveByte;
+    modbus_master_solid[0].push_transmit_byte = Uart5TransferByte;
+	modbus_master_solid[0].push_transmit_str = Uart5SendStr;
+    modbus_master_solid[0].pull_busFree = bsp_uart5_busfree;//发送和接收数据的延迟
+    modbus_master_solid[0].restart_busFree_timer = bsp_uart5_restart_timecount;//清空延迟计数
+    modbus_master_solid[0].phy_into_receive = bsp_uart5_into_receive;//硬件层的拉高拉低，下同
+    modbus_master_solid[0].phy_into_transmit_status = bsp_uart5_into_transmit;
+    modbus_master_solid[0].pull_transmit_complete =bsp_pull_uart5_txd_cmp;//临时通过编译
+    modbus_master_solid[0].mmoo_runStutus = mmRunS_idle;
 //---------------------------------------------------------------------------------------------------------------------------
 }
 
-/*void mde_mrtu_master_task(void)
+void mde_mrtu_master_task(unsigned int systimecount)
 {
 	unsigned char i;
 	static unsigned char cfged = 0;
 	if(cfged)
 	{
-        
+        //Uart5SendStr(&modbus_master_solid[0].transmit_buff[0],8);
         for(i = 0;i < max_solid;i ++)
         {
-            modbus_master_oop_task(&modbus_master_solid[i]);
+            modbus_master_oop_task(&modbus_master_solid[0],systimecount);
+			
+			modbus_master_solid[0].push_transmit_str(modbus_master_solid[0].transmit_buff,modbus_master_solid[0].transmit_index);
+
         }
 	}
 	else
@@ -405,7 +346,31 @@ static void modbus_master_solid_cfg(void)
 		cfged = 1;
 		modbus_master_solid_cfg();
 	}
-}*/
+}
+
+static void append_crc_to_message(modbus_master_oper_def* mix_mm_oper)
+{
+    unsigned char crc_value[2];
+        
+    Crc16CalculateOfByte(&mix_mm_oper->transmit_buff[0],(unsigned int)mix_mm_oper->transmit_length,&crc_value[0]);//crc
+    mix_mm_oper->transmit_buff[mix_mm_oper->transmit_length] = crc_value[1];
+    mix_mm_oper->transmit_buff[mix_mm_oper->transmit_length+1] = crc_value[0];
+    mix_mm_oper->transmit_length += 2;
+}
+
+void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length)
+{
+    modbus_master_solid[in_solidNum].transmit_buff[0] = in_slave_addr;
+    modbus_master_solid[in_solidNum].transmit_buff[1] = 0x03;
+    modbus_master_solid[in_solidNum].transmit_buff[2] = (unsigned char)(in_reg_addr >> 8);
+    modbus_master_solid[in_solidNum].transmit_buff[3] = (unsigned char)(in_reg_addr);
+    modbus_master_solid[in_solidNum].transmit_buff[4] = (unsigned char)(in_reg_length >> 8);
+    modbus_master_solid[in_solidNum].transmit_buff[5] = (unsigned char)(in_reg_length);
+    modbus_master_solid[in_solidNum].transmit_length = 6;
+    append_crc_to_message(&modbus_master_solid[in_solidNum]);
+    modbus_master_solid[in_solidNum].mmoo_runStutus = mmRunS_transmit_str;
+}
+
 //------------------------------E N D-------------------------------------------
 
 /* EOF */

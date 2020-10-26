@@ -27,4 +27,7 @@
 对外函数声明*/
 uint16_t crc16table(uint8_t *ptr, uint16_t len);
 
+//另一种方式，原理一样
+uint16_t Crc16_calculate(uint8_t* _In_ptr,uint16_t _In_len);
+void Crc16CalculateOfByte(uint8_t* _In_ptr,uint16_t _In_len,uint8_t* _Out_CrcValue);
 #endif

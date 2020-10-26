@@ -44,6 +44,7 @@ extern u8 delayTime;
 /*****************************************************************************
 对外函数声明*/
 void InitUart(void);
+uint8_t Uart5SendByte(uint8_t dat);
 
 void Uart2Init(void);
 void Uart2SendByte(uint8_t dat);
@@ -58,5 +59,10 @@ void Uart4SendStr(uint8_t *pstr,uint8_t strlen);
 void Uart5Init(void);
 void Uart5Init(void);
 void Uart5SendStr(uint8_t *pstr,uint8_t strlen);
+
+
+void bsp_uart5_into_receive(void);
+void bsp_uart5_into_transmit(void);
+
 
 #endif

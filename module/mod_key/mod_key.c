@@ -421,7 +421,7 @@ void mde_cfg(key_sign_1_t *out_key)
 	out_key->key_down_sign = 0;
 	out_key->in_longtime = 5000;
 	out_key->in_continuetime = 500;
-	//out_key->getkey2_bsp = keyscan_1;//get_key2_bsp_array[i].bsp_scan;
+	//out_key->getkey2_bsp = keyscan_1;get_key2_bsp_array[i].bsp_scan;
 }
 
 unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_data,unsigned int group_number)

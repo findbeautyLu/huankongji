@@ -41,7 +41,8 @@ void main(void)
 		{
 			app_key_scanTask();
 			app_display_scanTask();
-			APP_oneWire_task();
+			//APP_oneWire_task();
+			app_onrwire_task1();
 		}
 	}
 }

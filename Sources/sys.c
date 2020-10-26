@@ -129,6 +129,23 @@ void delay_ms(u16 n)
     while(timecount);   
 }
 
+uint8_t bsp_uart5_busfree(uint8_t freetime)
+{
+	if(uart5timecount > freetime)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void bsp_uart5_restart_timecount(void)
+{
+	uart5timecount = 0;
+}
+
 //**********************RX8130接口程序，SDA 10K上拉到3.3V**************
 //上电时运行一次initrtc()，然后0.5秒间隔运行一次rdtime()读取时间到DGUS相应系统接口
 
