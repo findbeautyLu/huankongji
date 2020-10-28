@@ -33,14 +33,14 @@ typedef enum
 typedef enum
 {
     mmRunS_idle             = 0x00,
-    mmRunS_transmit_str,
-    mmRunS_transmit_35T,
-    mmRunS_transmit_data,
-    mmRunS_transmit_stop,    
-    mmRunS_transmit_end,
-    mmRunS_receive_wait,
-    mmRunS_receive_data,
-    mmRunS_receive_end,
+    mmRunS_transmit_str,//1
+    mmRunS_transmit_35T,//2
+    mmRunS_transmit_data,//3
+    mmRunS_transmit_stop,//4 
+    mmRunS_transmit_end,//5
+    mmRunS_receive_wait,//6
+    mmRunS_receive_data,//7
+    mmRunS_receive_end,//8
 }modbus_master_runState_def;
 
 typedef struct
@@ -63,7 +63,7 @@ typedef struct
 
     unsigned char (*pull_receive_byte)(unsigned char *out_rByte);
     unsigned char (*push_transmit_byte)(unsigned char in_tByte);
-    void (*push_transmit_str)(unsigned char *in_tByte,unsigned char len);
+    void (*push_transmit_str)(unsigned char *dat,unsigned char len);
 	
     unsigned char (*pull_busFree)(unsigned char t_char_dis);
     void (*restart_busFree_timer)(void);
@@ -73,6 +73,19 @@ typedef struct
 	
     unsigned char (*pull_transmit_complete)(void);
 }modbus_master_oper_def;
+
+typedef struct
+{
+	modbus_master_runState_def runstate;
+	unsigned char  transmit_buff[256];
+    unsigned char  transmit_length;
+    unsigned char  transmit_index;
+	
+	unsigned char  receive_buff[256];
+	unsigned char  rev_index;
+
+	void (*push_transmit_str)(unsigned char *,unsigned char );
+}modbus_master_t;
 
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
@@ -104,6 +117,8 @@ void mde_mrtu_master_task(unsigned int systimecount);
 void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length);
 
 extern modbus_master_oper_def modbus_master_solid[max_solid];
+extern unsigned char modbus_master_tx[64];
+
 extern unsigned int statecount;
 
 

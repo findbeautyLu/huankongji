@@ -527,7 +527,14 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 		for(j = 0; j < MAX_KEY_GROUP; j++)
 		{
 			out_key[j].getkey2_bsp(&keynumber[j]);
-			keystate = mde_filter_keysign(&out_key[j],keynumber[j],j);//获取到的state可做显示参数
+			if(keystate = mde_filter_keysign(&out_key[j],keynumber[j],j))
+			{
+				
+			}
+			else
+			{
+				keystate = out_key[j].key_down_sign;//松手后获取一次按键键值
+			}
 		}
 	}
 	else

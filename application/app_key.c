@@ -226,6 +226,7 @@
 #define DATA_LOOP                 BN_TRUE
 #define DATA_KEEP                 BN_FALSE
 
+extern u8 idata tempBuff[100];
 
 typedef enum
 {
@@ -1512,8 +1513,8 @@ void app_key_scanTask(void)
 	mod_key_scanTask(GetSysTickMillisecond());	 
 
 	//new
-	keytype_state = mde_getkey_event(&key_sign_new);
-	if(1)
+	keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
+	if(keytype_state)
 	{//有按键按下
 		//keytype_state = 1;
 		
@@ -1628,32 +1629,32 @@ void app_key_scanTask(void)
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5129,timebuf,2);
 	
-	value_temp = modbus_master_solid[0].transmit_buff[2];
+	value_temp = modbus_master_solid[0].receive_buff[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512A,timebuf,2);
 
-	value_temp = modbus_master_solid[0].transmit_buff[3];
+	value_temp = modbus_master_solid[0].receive_buff[1];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512B,timebuf,2);
 	
-	value_temp = modbus_master_solid[0].transmit_buff[4];
+	value_temp = tempBuff[4];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512c,timebuf,2);
 
-	value_temp = modbus_master_solid[0].transmit_buff[5];
+	value_temp = tempBuff[5];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512D,timebuf,2);
 
-	value_temp = modbus_master_solid[0].transmit_buff[6];
+	value_temp = tempBuff[6];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512E,timebuf,2);
 
-	value_temp = modbus_master_solid[0].transmit_buff[7];
+	value_temp = tempBuff[7];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512F,timebuf,2);

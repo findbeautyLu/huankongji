@@ -35,7 +35,7 @@ extern uint8_t xdata Uart3_Rx[UART3_MAX_LEN];
 extern uint16_t uart4_rx_count;
 extern uint8_t xdata Uart4_Rx[UART4_MAX_LEN];
 
-#define UART5_MAX_LEN 128
+#define UART5_MAX_LEN 256
 extern uint16_t uart5_rx_count;
 extern uint8_t xdata Uart5_Rx[UART5_MAX_LEN];
 

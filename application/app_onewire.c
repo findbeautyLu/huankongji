@@ -733,7 +733,7 @@ void app_onrwire_task1(void)
 	ptSysPara =  controler_getSysParaPt();
 	
 	mde_mrtu_master_task(GetSysTickMillisecond());
-
+	mod_oneWire_task();
 	if((GetSysTickMillisecond() - lastTick) >= 2000)
 	{
 		lastTick = GetSysTickMillisecond();

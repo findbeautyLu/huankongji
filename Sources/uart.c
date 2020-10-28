@@ -38,6 +38,7 @@ uint8_t xdata Uart4_Rx[UART4_MAX_LEN];
 uint16_t uart5_rx_count=0;
 uint8_t xdata Uart5_Rx[UART5_MAX_LEN];
 
+extern uint16_t statecount;
 /*****************************************************************************
 串口2配置*/
 void Uart2Init(void)
@@ -266,6 +267,7 @@ void Uart5SendStr(uint8_t *pstr,uint8_t strlen)
   ES3R=0;
   while(strlen--)
   {
+  	//statecount++;
     Uart5SendByte(*pstr);
     pstr++;
   }  
@@ -296,7 +298,7 @@ void bsp_uart5_into_transmit(void)
 串口5发送中断*/
 void UART5_TX_ISR_PC(void)    interrupt 12
 {
-
+	
 }
 /*****************************************************************************
 串口5接收中断*/
