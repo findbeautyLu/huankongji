@@ -448,6 +448,72 @@ void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in
     modbus_master_solid[in_solidNum].mmoo_runStutus = mmRunS_transmit_str;
 }
 
+unsigned char mde_mrtu_master_cmd_stransmit(modbus_praram_t out_mde_praram)
+{
+	switch(out_mde_praram->cmd)
+	{
+		case SINGLE_READ_ONLY:
+								//从机地址
+								out_mde_praram->psendbuf[0] = 0xfa;
+								//单个读命令
+								out_mde_praram->psendbuf[1] = SINGLE_READ_ONLY;
+								//读取地址
+								out_mde_praram->psendbuf[2] = (unsigned char)(out_mde_praram->read_adress >> 8);
+								out_mde_praram->psendbuf[3] = (unsigned char)(out_mde_praram->read_adress);
+								//读取长度
+								out_mde_praram->psendbuf[4] = (unsigned char)(out_mde_praram->length >> 8);
+								out_mde_praram->psendbuf[5] = (unsigned char)(out_mde_praram->length);
+								
+								break;
+		case SINGLE_WRITER_ONLY:
+								//从机地址
+								out_mde_praram->psendbuf[0] = 0xfa;
+								//单个写命令
+								out_mde_praram->psendbuf[1] = SINGLE_WRITER_ONLY;
+								//写入地址
+								out_mde_praram->psendbuf[2] = (unsigned char)(out_mde_praram->write_adress >> 8);
+								out_mde_praram->psendbuf[3] = (unsigned char)(out_mde_praram->write_adress);
+								//写入数据
+								out_mde_praram->psendbuf[4] = (unsigned char)(out_mde_praram->write_dat >> 8);
+								out_mde_praram->psendbuf[5] = (unsigned char)(out_mde_praram->write_dat);
+								break;
+		case CONTINUE_WRITE:
+								//从机地址
+
+								//连续写命令
+
+								//写入地址
+
+								//写入数据量
+
+								//写入字节数 = 数据量 * 2
+
+								//数据H + 数据L 的数量 = (字节数)
+								break;
+		case CONTINUE_READ_WRITE:
+								//从机地址u8
+
+								//读写命令u8
+
+								//读地址u16
+
+								//读取数量u16
+
+								//写地址u16
+
+								//写数量u16
+
+								//写字节数u8
+
+								//写数据H + 数据L (u16)
+								
+								break;
+		default: break;
+	}
+	
+}
+
+
 //------------------------------E N D-------------------------------------------
 
 /* EOF */

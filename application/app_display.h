@@ -81,35 +81,6 @@
 #define REG_FANSET_LOWSPEED_ADRESS						0x6DE4
 
 
-/*#define REG_DEBUG_ADRESS_1_LINE							0x6B00
-#define REG_DEBUG_ADRESS_2_LINE							0x6B02
-#define REG_DEBUG_ADRESS_3_LINE							0x6B04
-#define REG_DEBUG_ADRESS_4_LINE							0x6B06
-#define REG_DEBUG_ADRESS_5_LINE							0x6B08
-#define REG_DEBUG_ADRESS_6_LINE							0x6B0A
-#define REG_DEBUG_ADRESS_1_COLUMN						0x6B0C
-#define REG_DEBUG_ADRESS_2_COLUMN						0x6B0E
-#define REG_DEBUG_ADRESS_3_COLUMN						0x6B34
-
-#define REG_DEBUG_DATA_1								0x6B10
-#define REG_DEBUG_DATA_2								0x6B12
-#define REG_DEBUG_DATA_3								0x6B14
-#define REG_DEBUG_DATA_4								0x6B16
-#define REG_DEBUG_DATA_5								0x6B18
-#define REG_DEBUG_DATA_6								0x6B1A
-#define REG_DEBUG_DATA_7								0x6B1C
-#define REG_DEBUG_DATA_8								0x6B1E
-#define REG_DEBUG_DATA_9								0x6B20
-#define REG_DEBUG_DATA_10								0x6B22
-#define REG_DEBUG_DATA_11								0x6B24
-#define REG_DEBUG_DATA_12								0x6B26
-#define REG_DEBUG_DATA_13								0x6B28
-#define REG_DEBUG_DATA_14								0x6B2A
-#define REG_DEBUG_DATA_15								0x6B2C
-#define REG_DEBUG_DATA_16								0x6B2E
-#define REG_DEBUG_DATA_17								0x6B30
-#define REG_DEBUG_DATA_18								0x6B32*/
-
 #define REG_DEBUG_AC									0x6B36
 #define REG_DEBUG_FAN									0x6B38
 #define REG_DEBUG_FRE									0x6B3A

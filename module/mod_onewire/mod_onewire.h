@@ -43,6 +43,7 @@ typedef enum
     mmRunS_receive_end,//8
 }modbus_master_runState_def;
 
+//有点意向把实例化的代码挪到app层，有点纠结
 typedef struct
 {
    // mRtu_parameter_def  mRtu_parameter;
@@ -87,6 +88,23 @@ typedef struct
 	void (*push_transmit_str)(unsigned char *,unsigned char );
 }modbus_master_t;
 
+typedef enum
+{
+	SINGLE_READ_ONLY = 0x03,
+	SINGLE_WRITER_ONLY = 0x06,
+	CONTINUE_WRITE = 0x10,
+	CONTINUE_READ_WRITE = 0x17,
+}modbus_cmd_t;
+
+typedef struct
+{
+	modbus_cmd_t cmd;
+	unsigned int length;
+	unsigned int read_adress;
+	unsigned int write_adress;
+	unsigned int write_dat;
+	unsigned char psendbuf[64];
+}modbus_praram_t;
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 /*============================ PROTOTYPES ====================================*/
