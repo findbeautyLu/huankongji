@@ -40,23 +40,6 @@
 #define REG_MASTER_WEEK_SUNDAY							0x610e
 
 
-#define REG_ERROR_BIT0									0x6A00
-#define REG_ERROR_BIT1									0x6A02
-#define REG_ERROR_BIT2									0x6A04
-#define REG_ERROR_BIT3									0x6A06
-#define REG_ERROR_BIT4									0x6A08
-#define REG_ERROR_BIT5									0x6A0A
-#define REG_ERROR_BIT6									0x6A0C
-#define REG_ERROR_BIT7									0x6A0E
-#define REG_ERROR_BIT8									0x6A10
-#define REG_ERROR_BIT9									0x6A12
-#define REG_ERROR_BIT10									0x6A14
-#define REG_ERROR_BIT11									0x6A16
-#define REG_ERROR_BIT12									0x6A18
-#define REG_ERROR_BIT13									0x6A1A
-#define REG_ERROR_BIT14									0x6A1C
-#define REG_ERROR_BIT15									0x6A1E
-
 //动态圆切图
 #define REG_DYNAMIC_CIRCULAR_ADRESS						0x6B00//动态圆切图
 //环控机
@@ -80,36 +63,6 @@
 #define REG_FANSET_MIDPEED_ADRESS						0x6DDE
 #define REG_FANSET_LOWSPEED_ADRESS						0x6DE4
 
-
-#define REG_DEBUG_AC									0x6B36
-#define REG_DEBUG_FAN									0x6B38
-#define REG_DEBUG_FRE									0x6B3A
-#define REG_DEBUG_REC									0x6B3C
-#define REG_DEBUG_LOW_PRESS_PROTECT						0x6B3E
-#define REG_DEBUG_TISHUIBENG_PROTECT					0x6B40
-#define REG_DEBUG_HUASHUANG_PROTECT						0x6B42
-#define REG_DEBUG_DUCT_SENSOR_ERROR						0x6B44
-#define REG_DEBUG_HIGH_SENSOR_ERROR						0x6B46
-#define REG_DEBUG_INTO_TEMP_ERROR						0x6B48
-#define REG_DEBUG_WENSHIDU_ERROR						0x6B4A
-#define REG_DEBUG_INTOWIND_TEMP_PROTECT					0x6B4C
-#define REG_DEBUG_OUT_WATER_ERROR						0x6B4E
-
-#define REG_TIME_CONTROL_WEEK_BASE						0x6B50
-#define REG_TIME_CONTROL_WEEK_1							0x6B50
-#define REG_TIME_CONTROL_WEEK_2							0x6B52
-#define REG_TIME_CONTROL_WEEK_3							0x6B54
-#define REG_TIME_CONTROL_WEEK_4							0x6B56
-#define REG_TIME_CONTROL_WEEK_5							0x6B58
-#define REG_TIME_CONTROL_WEEK_6							0x6B5A
-#define REG_TIME_CONTROL_WEEK_7							0x6B5C
-#define REG_TIME_CONTROL_TIME_1							0x6B5E
-#define REG_TIME_CONTROL_TIME_2							0x6B60
-#define REG_TIME_CONTROL_TIME_3							0x6B62
-#define REG_TIME_CONTROL_TIME_4							0x6B64
-#define REG_TIME_CONTROL_TIME_5							0x6B66
-#define REG_TIME_CONTROL_TIME_6							0x6B68
-#define REG_TIME_CONTROL_TIME_7							0x6B6A
 //星期选中绿条
 #define REG_DIS_WEEK_ADRESS 							0x6B6B
 //星期显示 7*7

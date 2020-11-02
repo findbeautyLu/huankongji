@@ -448,7 +448,7 @@ void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in
     modbus_master_solid[in_solidNum].mmoo_runStutus = mmRunS_transmit_str;
 }
 
-unsigned char mde_mrtu_master_cmd_stransmit(modbus_praram_t out_mde_praram)
+unsigned char mde_mrtu_master_cmd_stransmit(modbus_praram_t *out_mde_praram)
 {
 	switch(out_mde_praram->cmd)
 	{

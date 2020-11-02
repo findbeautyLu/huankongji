@@ -21,65 +21,6 @@ void app_dis_1(uint16_t adress, uint16_t offset_dat, uint16_t dat)
 	WriteDGUS(adress, writebuf, 2);	
 }
 
-
-void app_dis_error(uint16_t errordata)
-{
-	uint8_t i;
-	uint16_t basic_data = 0x0001;
-	uint16_t adress = 0;
-	uint16_t pic_data = 0;
-	for(i = 0; i < 16; i++)
-	{
-		switch(errordata & (basic_data << i))
-		{
-			/*case 0x0001: break;
-			case 0x0002: break;
-			case 0x0004: break;
-			case 0x0008: break;
-			case 0x0010: break;
-			case 0x0020: break;
-			case 0x0040: break;
-			case 0x0080: break;
-			case 0x0100: break;*/
-			case 0x0200: 
-						adress = REG_ERROR_BIT9; 
-						pic_data = 1;//图标序号
-						break;
-			case 0x0400: 
-						adress = REG_ERROR_BIT10; 
-						pic_data = 2;//图标序号
-						break;
-			case 0x0800: 
-						adress = REG_ERROR_BIT11; 
-						pic_data = 3;//图标序号
-						break;
-			case 0x1000: 
-						adress = REG_ERROR_BIT12; 
-						pic_data = 4;//图标序号
-						break;
-			case 0x2000: 
-						adress = REG_ERROR_BIT13; 
-						pic_data = 5;//图标序号
-						break;
-			case 0x4000: 
-						adress = REG_ERROR_BIT14; 
-						pic_data = 6;//图标序号
-						break;
-			case 0x8000: 
-						adress = REG_ERROR_BIT15; 
-						pic_data= 6;//图标序号
-						break;
-			default: break;
-		}
-		if(adress != 0)
-		{
-			app_dis(adress,pic_data);
-			adress = 0;
-			pic_data = 0;
-		}
-	}
-}
-
 void app_dis_powOffMode(void)
 {
 
@@ -103,45 +44,8 @@ void app_dis_runMode(void)
 
 	ReadDGUS(RTC,(u8 *)&rtc_time.year,8);
 
-	//get_dis_bit()
-
-	//new
-	//显示分图标显示和数字显示，图标显示是需要地址偏移，数字地址偏移为0
-		//给一个起始地址自动自加，但是若遇到间隔的地址该如何处理，某些需要给页码做一些预留
-		//
-	
-	//每次更新数据是默认刷新一次，具体显示不显示还是需要根据当前状态来判断，直接从sys变量中摘选需要显示的赋值，定时数据除外
-		//当前显示状态需赋予显示的初始地址，更新当前页的所有数据，数据需要一种类似分页的机制
-		//数字都实时更新.1s的频率
-
-
-
-	
-	//需要显示之前将所有数据读取到一个结构体里面显示，这样自加就不会乱。控制好大小 指针就不会溢出
-	//for(; i < 256; i++)
-	//{
-		//if(*(pdisbit + i) == 1)//最后参数由指针指向结构体 地址++运算来得出显示数据的有效性
-		//{
-		//	app_dis_1(dis_adress[i], dis_offset_dat[i]);//数字是直接显示的，图标需要显示偏移地址，没准需要分开两个函数
-		//}		
-	//}
-	
-	//end
-	
-	//待机界面
-	//app_dis(REG_DYNAMIC_CIRCULAR_ADRESS,ptSysPara->dynamic_circular);
-//	app_dis(REG_SCREEN_SAVER_CO2_NUMBER,ptSysPara->measure_co2);//450-2000
-//	app_dis(REG_SCREEN_SAVER_PM25_NUMBER,ptSysPara->measure_pm25);//0~999
-//	app_dis(REG_SCREEN_SAVER_HUMIDITY,ptSysPara->measure_humidity);//0~100
 	app_dis(REG_SCREEN_SAVER_TEMP,(ptSysPara->measure_temp/10));//-99~99
-	
-	//主控界面
-	
-	//app_dis(REG_MASTER_CONTROL_DIS_TIMING,ptSysPara->timer);
-	//app_dis(REG_MASTER_CONTROL_DIS_SETTING,ptSysPara->setting);
-	//app_dis(REG_MASTER_CONTROL_DIS_POWEROFF,ptSysPara->poweroff);
-	//app_dis(REG_MASRER_CONTROL_DIS_HUMUDUTY_KEYT,ptSysPara->humidity_dis_key);
-	//app_dis(REG_MASRER_CONTROL_DIS_MODE_KEYT,ptSysPara->mode_dis_key);
+
 
 	app_dis(REG_MASTER_CONTROL_DIS_MODE,ptSysPara->mode);//模式
 	app_dis(REG_MASTER_CONTROL_DIS_WINDSTATUS,ptSysPara->airmode + 8);//通风状态 
@@ -220,30 +124,13 @@ void app_dis_runMode(void)
 	app_dis(REG_FANSET_HIGHSPEED_ADRESS,ptSysPara->fanset_param.high_param);
 
 	
-	/*app_dis(REG_RTC_YEAR_ADRESS,(uint16_t)(rtc_time.year+2000));
-	app_dis(REG_RTC_MONTH_TEN_ADRESS,(uint16_t)(rtc_time.month/10));
-	app_dis(REG_RTC_MONTH_ADRESS,(uint16_t)(rtc_time.month%10));
-	app_dis(REG_RTC_DAY_TEN_ADRESS,(uint16_t)(rtc_time.day)/10);
-	app_dis(REG_RTC_DAY_ADRESS,(uint16_t)(rtc_time.day)%10);
-	app_dis(REG_RTC_HOUR_TEN_ADRESS,(uint16_t)(rtc_time.hour/10));
-	app_dis(REG_RTC_HOUR_ADRESS,(uint16_t)(rtc_time.hour%10));
-	app_dis(REG_RTC_MIN_TEN_ADRESS,(uint16_t)(rtc_time.min/10));
-	app_dis(REG_RTC_MIN_ADRESS,(uint16_t)(rtc_time.min%10));
-	app_dis(REG_RTC_CHAR1_ADRESS,134);
-	app_dis(REG_RTC_CHAR2_ADRESS,134);
-	app_dis(REG_RTC_CHAR3_ADRESS,135);*/
+
 }
 void app_display_week_select(uint16_t offset)
 {
-	app_dis(REG_TIME_CONTROL_WEEK_1, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_2, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_3, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_4, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_5, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_6, 0);
-	app_dis(REG_TIME_CONTROL_WEEK_7, 0);
-	app_dis((REG_TIME_CONTROL_WEEK_BASE + offset), 1);
-}
+
+	
+} 
 
 void app_display_week_program_type(void)
 {
@@ -343,13 +230,6 @@ void app_dis_timing_week(void)//页34 定时 显示星期数据
 	app_display_week_strip((uint16_t)ptSysPara->week_cursor);
 	
 	//时段选中控制条
-	app_dis(REG_TIME_CONTROL_TIME_1, 0);
-	app_dis(REG_TIME_CONTROL_TIME_2, 0);
-	app_dis(REG_TIME_CONTROL_TIME_3, 0);
-	app_dis(REG_TIME_CONTROL_TIME_4, 0);
-	app_dis(REG_TIME_CONTROL_TIME_5, 0);
-	app_dis(REG_TIME_CONTROL_TIME_6, 0);
-	app_dis(REG_TIME_CONTROL_TIME_7, 0);
 
 }
 
