@@ -81,7 +81,7 @@ INT8U getkey(INT16U read_addr, INT16U Len)
 	}
 }
 
-INT16U keyscan(void)
+/*INT16U keyscan(void)
 {   
 	uint8_t i;
 	INT16U keyline = 0;
@@ -98,9 +98,9 @@ INT16U keyscan(void)
 	}
 
  	return keyline;
-}
+}*/
 
-void keyscan_fanset(INT16U *out_key_number)
+/*void keyscan_fanset(INT16U *out_key_number)
 {
 	uint8_t i;
 	INT16U keyline = 0;
@@ -120,7 +120,7 @@ void keyscan_fanset(INT16U *out_key_number)
 	}
 
 	*out_key_number = keyline;
-}
+}*/
 
 //计划bsp层将所有函数封装进一个数组作为接口出去供mde层调用
 //mde层的 mde_cfg()将变量数据和bsp层关联起来供app层调用
@@ -130,18 +130,19 @@ void keyscan_1(INT16U *out_key_number)
 {
 	uint8_t i;
 	INT16U keyline = 0;
-	INT16U keyadress[] = {	REG_KEY_POWER  ,
-	 						REG_KEY_POWEROFF  ,
+	INT16U keyadress[] = {	REG_KEY_HOT_SWITCH  ,
+	 						REG_KEY_SETTING  ,
 	 						REG_KEY_TEMP_ADD  ,
 	 						REG_KEY_TEMP_SUB  ,
 	 						REG_KEY_HUMIDITY_ADD  ,
 	 						REG_KEY_HUMIDITY_SUB  ,
 	 						REG_KEY_MODE  ,
-	 						REG_KEY_SET_UP_STATE  ,
-	 						REG_KEY_WIND_SPEED  ,
-	 						REG_KEY_POWEROFF_SURE  ,
-	 						REG_KEY_POWEROFF_CANCEL ,
-	 						REG_PAGE1_KEY11_ADRESS
+	 						REG_KEY_AIR_MODE  ,
+	 						REG_KEY_WIND_SWITCH  ,
+	 						REG_KEY_POWER_ONOFF  ,
+	 						REG_KEY_POWEROFF_SURE ,
+	 						REG_KEY_POWEROFF_CANCEL,
+							REG_KEY_GOTO_GREEN_SCREEN
 	 						};
 
 	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
@@ -156,7 +157,7 @@ void keyscan_1(INT16U *out_key_number)
 	*out_key_number = keyline;
 }
 
-void keyscan_2(INT16U *out_key_number)
+/*void keyscan_2(INT16U *out_key_number)
 {
 	uint8_t i;
 	INT16U keyline = 0;
@@ -178,9 +179,9 @@ void keyscan_2(INT16U *out_key_number)
 	}
 
 	*out_key_number = keyline;
-}
+}*/
 
-bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP] ={keyscan_1};//keyscan_2
+//bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP] ={keyscan_1};//keyscan_2
 
 
 //-----------------------BSP_Keyboard.c--END------------------------------------

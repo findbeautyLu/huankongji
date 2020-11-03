@@ -171,7 +171,7 @@
 #define KEY_FANSET_BAUDRATE_UP_PAGE62				KeyAloneBit14
 #define KEY_FANSET_BAUDRATE_DOWN_PAGE62				KeyAloneBit15
 
-#define	KEY_NUMBER_POWER 				0
+/*#define	KEY_NUMBER_POWER 				0
 #define	KEY_NUMBER_POWEROFF				1
 #define	KEY_NUMBER_TEMP_ADD				2
 #define	KEY_NUMBER_TEMP_SUB				3
@@ -181,37 +181,56 @@
 #define	KEY_NUMBER_SET_UP_STATE			7
 #define	KEY_NUMBER_WIND_SPEED			8
 #define	KEY_NUMBER_POWEROFF_SURE		9
-#define	KEY_NUMBER_POWEROFF_CANCEL		10
+#define	KEY_NUMBER_POWEROFF_CANCEL		10*/
+
+#define KEY_HOT_SWITCH					0
+#define KEY_SETTING						1
+#define KEY_TEMP_ADD					2
+#define KEY_TEMP_SUB					3
+#define KEY_HUMIDITY_ADD				4
+#define KEY_HUMIDITY_SUB				5
+#define KEY_MODE						6
+#define KEY_AIR_MODE					7
+#define KEY_WIND_SWITCH					8
+#define KEY_POWER_ONOFF					9
+#define KEY_POWEROFF_SURE				10
+#define KEY_POWEROFF_CANCEL				11
+#define KEY_GOTO_GREEN_SCREEN			12
+#define KEY_POWERON						13
+
+
+
 
 #define KEY_TYPE_NUMBER					5
 #define	KEY_SERVICE_POWER_NULL					(0)
-#define	KEY_SERVICE_POWER_STATE					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_SERVICE_POWER_FIRST_DOWN			(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_SERVICE_POWER_LONG					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_SERVICE_CONTINUE					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_SERVICE_POWER_UP					(KEY_NUMBER_POWER * KEY_TYPE_NUMBER + KEY_UP)
+#define	KEY_SERVICE_POWER_STATE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_SERVICE_POWER_FIRST_DOWN			(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_SERVICE_POWER_LONG					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_SERVICE_CONTINUE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_SERVICE_POWER_UP					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_UP)
 												
 #define	KEY_NUMBER_POWEROFF_NULL				(0)
-#define	KEY_NUMBER_POWEROFF_STATE				(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_POWEROFF_FIRST_DOWN			(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_POWEROFF_LONG				(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_POWEROFF_CONTINUE			(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_POWEROFF_UP					(KEY_NUMBER_POWEROFF * KEY_TYPE_NUMBER + KEY_UP)												
+#define	KEY_NUMBER_POWEROFF_STATE				(KEY_SETTING * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_POWEROFF_FIRST_DOWN			(KEY_SETTING * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_POWEROFF_LONG				(KEY_SETTING * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_POWEROFF_CONTINUE			(KEY_SETTING * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_POWEROFF_UP					(KEY_SETTING * KEY_TYPE_NUMBER + KEY_UP)												
 												
 #define	KEY_NUMBER_TEMP_ADD_NULL				(0)
-#define	KEY_NUMBER_TEMP_ADD_STATE				(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_TEMP_ADD_FIRST_DOWN			(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_TEMP_ADD_LONG				(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_TEMP_ADD_CONTINUE			(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_TEMP_ADD_UP					(KEY_NUMBER_TEMP_ADD * KEY_TYPE_NUMBER + KEY_UP)	
+#define	KEY_NUMBER_TEMP_ADD_STATE				(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_TEMP_ADD_FIRST_DOWN			(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_TEMP_ADD_LONG				(KEY_TEMP_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_TEMP_ADD_CONTINUE			(KEY_TEMP_ADD * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_TEMP_ADD_UP					(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_UP)	
 
 #define	KEY_NUMBER_TEMP_SUB_NULL				(0)
-#define	KEY_NUMBER_TEMP_SUB_STATE				(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_TEMP_SUB_FIRST_DOWN			(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_TEMP_SUB_LONG				(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_TEMP_SUB_CONTINUE			(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_TEMP_SUB_UP					(KEY_NUMBER_TEMP_SUB * KEY_TYPE_NUMBER + KEY_UP)	
+#define	KEY_NUMBER_TEMP_SUB_STATE				(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_NUMBER_TEMP_SUB_FIRST_DOWN			(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_NUMBER_TEMP_SUB_LONG				(KEY_TEMP_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_NUMBER_TEMP_SUB_CONTINUE			(KEY_TEMP_SUB * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_NUMBER_TEMP_SUB_UP					(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_UP)	
 
+#define	KEY_POWER_UP							(KEY_POWERON * KEY_TYPE_NUMBER + KEY_UP)
 
 
 //------------------------------E N D-------------------------------------------
@@ -383,100 +402,10 @@ uint8_t dec_to_bcd(uint8_t process_data)
 
 void app_keyinit_jumppage(void)
 {
-	INT16U adressoffset = 0;
-	INT8U writebuf[2] ={0,0};
+	//INT16U adressoffset = 0;
+	//INT8U writebuf[2] ={0,0};
 
-	/*WriteDGUS(REG_KEY_MODE_ADD,writebuf,2);
-	WriteDGUS(REG_KEY_MODE_SUB,writebuf,2);
-	WriteDGUS(REG_KEY_HUMIDITY_ADD,writebuf,2);
-	WriteDGUS(REG_KEY_HUMIDITY_SUB,writebuf,2);
-	WriteDGUS(REG_KEY_WIND_SPEED,writebuf,2);
-	WriteDGUS(REG_KEY_TIMING,writebuf,2);
-	WriteDGUS(REG_KEY_SETTING,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF_SURE,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF_CANCEL,writebuf,2);
-	WriteDGUS(REG_KEY_POWER,writebuf,2);
-	WriteDGUS(REG_KEY_RESET,writebuf,2);
-	WriteDGUS(REG_KEY_SCREEN_SAVER,writebuf,2);
-	
-	adressoffset = REG_KEY_WEEK_CHOOSE_MONDAY;//0x5800
-	do
-	{
-		WriteDGUS(adressoffset,writebuf,2);
-		adressoffset += 2;
-	}while(adressoffset > REG_PAGE35_KEY_CANCEL);*/
-//36页面 周一 ~ 周日按键定义
 
-	//WriteDGUS(REG_KEY_POWER,writebuf,2);
-	//WriteDGUS(REG_KEY_SETTING,writebuf,2);
-	//WriteDGUS(KEY_POWEROFF,writebuf,2);
-
-		
-	//WriteDGUS(REG_KEY_MODE_ADD,writebuf,2);
-	//WriteDGUS(REG_KEY_MODE_SUB,writebuf,2);
-	WriteDGUS(REG_KEY_HUMIDITY_ADD,writebuf,2);
-	WriteDGUS(REG_KEY_HUMIDITY_SUB,writebuf,2);
-	WriteDGUS(REG_KEY_WIND_SPEED,writebuf,2);
-	//WriteDGUS(REG_KEY_TIMING,writebuf,2);
-	//WriteDGUS(REG_KEY_SETTING,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF_SURE,writebuf,2);
-	WriteDGUS(REG_KEY_POWEROFF_CANCEL,writebuf,2);
-	WriteDGUS(REG_KEY_POWER,writebuf,2);
-	WriteDGUS(REG_KEY_RESET,writebuf,2);
-	WriteDGUS(REG_KEY_OUT_SCREEN_SAVER,writebuf,2);
-	WriteDGUS(REG_KEY_INTO_SCREEN_SAVER,writebuf,2);
-	
-	//32
-	WriteDGUS(REG_KEY_WIFI,writebuf,2);
-	WriteDGUS(REG_KEY_TIME_CONTROL,writebuf,2);
-	WriteDGUS(REG_KEY_FILTER,writebuf,2);
-	WriteDGUS(REG_KEY_TIME,writebuf,2);
-	WriteDGUS(REG_KEY_FACTORY,writebuf,2);
-	WriteDGUS(REG_KEY_FAULT,writebuf,2);
-	WriteDGUS(REG_KEY_ABOUT,writebuf,2);	
-	WriteDGUS(REG_KEY_OTHER,writebuf,2);
-	WriteDGUS(REG_KEY_CANCEL_PAGE32,writebuf,2);
-
-	//34
-	WriteDGUS(REG_PAGE34_KEY_JUMP_35PAGE,writebuf,2);
-	WriteDGUS(REG_PAGE34_KEY_CANCEL,writebuf,2);
-	WriteDGUS(REG_PAGE34_KEY_WEEK_ADD,writebuf,2);
-	WriteDGUS(REG_PAGE34_KEY_WEEK_EDIT,writebuf,2);
-	//35
-	WriteDGUS(REG_PAGE35_KEY_JUMP_34PAGE,writebuf,2);
-	WriteDGUS(REG_PAGE35_KEY_CANCEL,writebuf,2);	
-	WriteDGUS(REG_PAGE35_KEY_TIME_INTERVAL_ADD,writebuf,2);
-	WriteDGUS(REG_PAGE35_KEY_TIME_INTERVAL_EDIT,writebuf,2);
-	//36
-	WriteDGUS(REG_KEY_WEEK_SURE,writebuf,2);
-	WriteDGUS(REG_KEY_WEEK_CANCEL,writebuf,2);
-
-	//42
-	WriteDGUS(REG_PAGE42_KEY_CANCEL,writebuf,2);
-	//43
-	WriteDGUS(REG_PAGE43_KEY_CANCEL,writebuf,2);
-
-	//44
-	WriteDGUS(REG_PAGE44_KEY_SURE,writebuf,2);
-	WriteDGUS(REG_PAGE44_KEY_CANCEL,writebuf,2);
-
-	//45
-	WriteDGUS(REG_PAGE45_KEY_SURE,writebuf,2);
-	WriteDGUS(REG_PAGE45_KEY_CANCEL,writebuf,2);
-
-	//46
-	WriteDGUS(REG_PAGE46_KEY_CANCEL,writebuf,2);
-	
-	//47
-	WriteDGUS(REG_PAGE47_KEY_CANCEL,writebuf,2);
-	WriteDGUS(REG_PAGE47_FACTORY,writebuf,2);	
-	//48
-	WriteDGUS(REG_PAGE48_KEY_CANCEL,writebuf,2);
-
-	//WriteDGUS(REG_PAGE61_SURE,writebuf,2);
-//	WriteDGUS(REG_PAGE61_CANCEL,writebuf,2);	
 }
 
 uint16_t get_485value(uint16_t adress)
@@ -621,7 +550,7 @@ void app_key_main_control()
 	keyActionType_t key_action;
 	uint16_t adress = 0;
 	uint8_t	keynumber_buf[2] = {0,0};
-	static uint8_t misoperationflag = 0;
+	//static uint8_t misoperationflag = 0;
 
 	ptSysPara =  controler_getSysParaPt();
 
@@ -1498,9 +1427,9 @@ void app_key_scanTask(void)
 	uint8_t timebuf[2] ={0,0};
 
 	uint16_t key_trigger = 0;
-	static uint16_t keycount = 0;
-	static uint16_t time = 0;
-	static unsigned int first_key_del = 0;
+	//static uint16_t keycount = 0;
+	//static uint16_t time = 0;
+	//static unsigned int first_key_del = 0;
 	static unsigned int debug[2] ={0,0};
 	unsigned int value_temp = 0;
 	unsigned char keytype_size = sizeof(key_sign_1_t);
@@ -1515,9 +1444,7 @@ void app_key_scanTask(void)
 	//new
 	keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
 	if(keytype_state)
-	{//有按键按下
-		//keytype_state = 1;
-		
+	{//有按键按下	
 		switch(key_sign_new[0].key_down_sign)
 		{
 			case KEY_NUMBER_TEMP_ADD_FIRST_DOWN:
@@ -1566,6 +1493,10 @@ void app_key_scanTask(void)
 					debug[1] = 101;
 					break;
 
+			case KEY_POWER_UP:
+					ptSysPara->page_number = 1;
+					break;
+
 			default: break;
 		}
 		
@@ -1595,6 +1526,7 @@ void app_key_scanTask(void)
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5121,timebuf,2);
 
+	//显示按键值
 	value_temp = debug[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
@@ -1616,8 +1548,6 @@ void app_key_scanTask(void)
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5127,timebuf,2);
-	//ReadDGUS(0x14,timebuf,2);//读取当前页
-	//WriteDGUS(WATCH6_WINDOW,timebuf,2);
 
 	value_temp = modbus_master_solid[0].transmit_buff[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
@@ -1663,6 +1593,11 @@ void app_key_scanTask(void)
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5130,timebuf,2);
+	
+	value_temp = key_sign_new[0].key_down_sign;
+	timebuf[0] = (unsigned char)(value_temp>>8);
+	timebuf[1] = (unsigned char)(value_temp);
+	WriteDGUS(0x5131,timebuf,2);
 }
 //****************************按键任务******************************************
 

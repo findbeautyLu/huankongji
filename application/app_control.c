@@ -208,7 +208,7 @@ void app_into_screen_saver(void)
 		if(period >= SCREEN_SAVER_SWITCH_TIME)
 		{
 			lastSystemMsTime = GetSysTickMillisecond(); 
-			ptSysPara->page_number = 25;	
+			ptSysPara->page_number = 29;	
 			/*if(ptSysPara->page_number == 28)
 			{
 				ptSysPara->page_number = 25;	
