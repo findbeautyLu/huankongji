@@ -436,10 +436,11 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 	}
 	else
 	{
-		for(i = (16 * group_number); i < (16 * group_number + 16); i++)//这边需要验证，多页还没验证
+		for(i = 0; i < 16; i++)//这边需要验证，多页还没验证
 		{
 			if(in_process_data & (0x0001 << i))
 			{
+				i = group_number * 16 + i;
 				//小于16个键值已验证通过，按下 按下触发，长按，连击，抬起触发，抬起等状态显示
 				//若大于50个数据，已处理，待验证
 				break;
@@ -514,12 +515,13 @@ unsigned char mde_filter_keysign(key_sign_1_t *out_key,unsigned int in_process_d
 unsigned int mde_getkey_event(key_sign_1_t *out_key)
 {
 	static unsigned char init_byte = 0;
+	static unsigned char keybumberup_value = 0;
 	unsigned int keystate = 0;
 	
 	unsigned int i = 0;
 	unsigned int j = 0;
 	unsigned int adress = 0;
-	unsigned int keynumber[MAX_KEY_GROUP] = {0};//从bsp得到数据按键缓存
+	unsigned int keynumber[MAX_KEY_GROUP] = {0,0};//从bsp得到数据按键缓存
 	
 	
 	if(init_byte)
@@ -529,11 +531,18 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 			out_key[j].getkey2_bsp(&keynumber[j]);
 			if(keystate = mde_filter_keysign(&out_key[j],keynumber[j],j))
 			{
-				
+				keybumberup_value = keystate;
+				break;
+			}
+			else if(keybumberup_value != 0)
+			{
+				keystate = keybumberup_value;//out_key[j].key_down_sign;//松手后获取一次按键键值
+				keybumberup_value = 0;
+				break;
 			}
 			else
 			{
-				keystate = out_key[j].key_down_sign;//松手后获取一次按键键值
+				;
 			}
 		}
 	}
@@ -543,6 +552,7 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 		{
 			mde_cfg(&out_key[i]);
 			out_key[0].getkey2_bsp = keyscan_1;//理论上函数地址放数组里面是可以的，但是cfg放进去之后i数值乱了，暂时做个问题点
+			out_key[1].getkey2_bsp = keyscan_2;
 		}
 		init_byte = 1;
 	}

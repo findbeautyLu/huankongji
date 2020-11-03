@@ -24,8 +24,8 @@
 
 #define KEY_POWER			 		  KeyAloneBit0
 #define KEY_POWEROFF				  KeyAloneBit1
-#define KEY_TEMP_ADD				  KeyAloneBit2
-#define KEY_TEMP_SUB				  KeyAloneBit3
+//#define KEY_TEMP_ADD				  KeyAloneBit2
+//#define KEY_TEMP_SUB				  KeyAloneBit3
 #define KEY_HUMIDITY_ADD			  KeyAloneBit4
 #define KEY_HUMIDITY_SUB			  KeyAloneBit5
 #define KEY_MODE    				  KeyAloneBit6
@@ -197,41 +197,123 @@
 #define KEY_POWEROFF_CANCEL				11
 #define KEY_GOTO_GREEN_SCREEN			12
 #define KEY_POWERON						13
+#define KEY_GREEN_CHANGE				14
+#define KEY_GOTO_MAIN_CONTROL			15
 
 
-
-
-#define KEY_TYPE_NUMBER					5
-#define	KEY_SERVICE_POWER_NULL					(0)
-#define	KEY_SERVICE_POWER_STATE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_SERVICE_POWER_FIRST_DOWN			(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_SERVICE_POWER_LONG					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_SERVICE_CONTINUE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_SERVICE_POWER_UP					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_TYPE_NUMBER							5
+#define	KEY_HOT_SWITCH_NULL						(0)
+#define	KEY_HOT_SWITCH_STATE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_HOT_SWITCH_FIRST_DOWN				(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_HOT_SWITCH_LONG						(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_HOT_SWITCH_CONTINUE					(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_HOT_SWITCH_UP						(KEY_HOT_SWITCH * KEY_TYPE_NUMBER + KEY_UP)
 												
-#define	KEY_NUMBER_POWEROFF_NULL				(0)
-#define	KEY_NUMBER_POWEROFF_STATE				(KEY_SETTING * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_POWEROFF_FIRST_DOWN			(KEY_SETTING * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_POWEROFF_LONG				(KEY_SETTING * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_POWEROFF_CONTINUE			(KEY_SETTING * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_POWEROFF_UP					(KEY_SETTING * KEY_TYPE_NUMBER + KEY_UP)												
+#define	KEY_SETTING_NULL						(0)
+#define	KEY_SETTING_STATE						(KEY_SETTING * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_SETTING_FIRST_DOWN					(KEY_SETTING * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_SETTING_LONG						(KEY_SETTING * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_SETTING_CONTINUE					(KEY_SETTING * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_SETTING_UP							(KEY_SETTING * KEY_TYPE_NUMBER + KEY_UP)												
 												
-#define	KEY_NUMBER_TEMP_ADD_NULL				(0)
-#define	KEY_NUMBER_TEMP_ADD_STATE				(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_TEMP_ADD_FIRST_DOWN			(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_TEMP_ADD_LONG				(KEY_TEMP_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_TEMP_ADD_CONTINUE			(KEY_TEMP_ADD * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_TEMP_ADD_UP					(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_UP)	
+#define	KEY_TEMP_ADD_NULL						(0)
+#define	KEY_TEMP_ADD_STATE						(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_TEMP_ADD_FIRST_DOWN					(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_TEMP_ADD_LONG						(KEY_TEMP_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_TEMP_ADD_CONTINUE					(KEY_TEMP_ADD * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_TEMP_ADD_UP							(KEY_TEMP_ADD * KEY_TYPE_NUMBER + KEY_UP)	
 
-#define	KEY_NUMBER_TEMP_SUB_NULL				(0)
-#define	KEY_NUMBER_TEMP_SUB_STATE				(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_STATE)
-#define	KEY_NUMBER_TEMP_SUB_FIRST_DOWN			(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
-#define	KEY_NUMBER_TEMP_SUB_LONG				(KEY_TEMP_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
-#define	KEY_NUMBER_TEMP_SUB_CONTINUE			(KEY_TEMP_SUB * KEY_TYPE_NUMBER + CONTINUE)
-#define	KEY_NUMBER_TEMP_SUB_UP					(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_UP)	
+#define	KEY_TEMP_SUB_NULL						(0)
+#define	KEY_TEMP_SUB_STATE						(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_TEMP_SUB_FIRST_DOWN					(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_TEMP_SUB_LONG						(KEY_TEMP_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_TEMP_SUB_CONTINUE					(KEY_TEMP_SUB * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_TEMP_SUB_UP							(KEY_TEMP_SUB * KEY_TYPE_NUMBER + KEY_UP)	
 
-#define	KEY_POWER_UP							(KEY_POWERON * KEY_TYPE_NUMBER + KEY_UP)
+#define	KEY_HUMIDITY_ADD_NULL					(0)
+#define	KEY_HUMIDITY_ADD_STATE					(KEY_HUMIDITY_ADD * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_HUMIDITY_ADD_FIRST_DOWN				(KEY_HUMIDITY_ADD * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_HUMIDITY_ADD_LONG					(KEY_HUMIDITY_ADD * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_HUMIDITY_ADD_CONTINUE				(KEY_HUMIDITY_ADD * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_HUMIDITY_ADD_UP						(KEY_HUMIDITY_ADD * KEY_TYPE_NUMBER + KEY_UP)	
 
+#define	KEY_HUMIDITY_SUB_NULL					(0)
+#define	KEY_HUMIDITY_SUB_STATE					(KEY_HUMIDITY_SUB * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_HUMIDITY_SUB_FIRST_DOWN				(KEY_HUMIDITY_SUB * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_HUMIDITY_SUB_LONG					(KEY_HUMIDITY_SUB * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_HUMIDITY_SUB_CONTINUE				(KEY_HUMIDITY_SUB * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_HUMIDITY_SUB_UP						(KEY_HUMIDITY_SUB * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_MODE_NULL							(0)
+#define	KEY_MODE_STATE							(KEY_MODE * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_MODE_FIRST_DOWN						(KEY_MODE * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_MODE_LONG							(KEY_MODE * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_MODE_CONTINUE						(KEY_MODE * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_MODE_UP								(KEY_MODE * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_AIR_MODE_NULL						(0)
+#define	KEY_AIR_MODE_STATE						(KEY_AIR_MODE * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_AIR_MODE_FIRST_DOWN					(KEY_AIR_MODE * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_AIR_MODE_LONG						(KEY_AIR_MODE * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_AIR_MODE_CONTINUE					(KEY_AIR_MODE * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_AIR_MODE_UP							(KEY_AIR_MODE * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_WIND_SWITCH_NULL					(0)
+#define	KEY_WIND_SWITCH_STATE					(KEY_WIND_SWITCH * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_WIND_SWITCH_FIRST_DOWN				(KEY_WIND_SWITCH * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_WIND_SWITCH_LONG					(KEY_WIND_SWITCH * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_WIND_SWITCH_CONTINUE				(KEY_WIND_SWITCH * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_WIND_SWITCH_UP						(KEY_WIND_SWITCH * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_POWER_ONOFF_NULL					(0)
+#define	KEY_POWER_ONOFF_STATE					(KEY_POWER_ONOFF * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_POWER_ONOFF_FIRST_DOWN				(KEY_POWER_ONOFF * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_POWER_ONOFF_LONG					(KEY_POWER_ONOFF * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_POWER_ONOFF_CONTINUE				(KEY_POWER_ONOFF * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_POWER_ONOFF_UP						(KEY_POWER_ONOFF * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_POWEROFF_SURE_NULL					(0)
+#define	KEY_POWEROFF_SURE_STATE					(KEY_POWEROFF_SURE * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_POWEROFF_SURE_FIRST_DOWN			(KEY_POWEROFF_SURE * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_POWEROFF_SURE_LONG					(KEY_POWEROFF_SURE * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_POWEROFF_SURE_CONTINUE				(KEY_POWEROFF_SURE * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_POWEROFF_SURE_UP					(KEY_POWEROFF_SURE * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_POWEROFF_CANCEL_NULL				(0)
+#define	KEY_POWEROFF_CANCEL_STATE				(KEY_POWEROFF_CANCEL * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_POWEROFF_CANCEL_FIRST_DOWN			(KEY_POWEROFF_CANCEL * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_POWEROFF_CANCEL_LONG				(KEY_POWEROFF_CANCEL * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_POWEROFF_CANCEL_CONTINUE			(KEY_POWEROFF_CANCEL * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_POWEROFF_CANCEL_UP					(KEY_POWEROFF_CANCEL * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_GOTO_GREEN_SCREEN_NULL				(0)
+#define	KEY_GOTO_GREEN_SCREEN_STATE				(KEY_GOTO_GREEN_SCREEN * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_GOTO_GREEN_SCREEN_FIRST_DOWN		(KEY_GOTO_GREEN_SCREEN * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_GOTO_GREEN_SCREEN_LONG				(KEY_GOTO_GREEN_SCREEN * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_GOTO_GREEN_SCREEN_CONTINUE			(KEY_GOTO_GREEN_SCREEN * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_GOTO_GREEN_SCREEN_UP				(KEY_GOTO_GREEN_SCREEN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_POWERON_NULL						(0)
+#define	KEY_POWERON_STATE						(KEY_POWERON * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_POWERON_FIRST_DOWN					(KEY_POWERON * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_POWERON_LONG						(KEY_POWERON * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_POWERON_CONTINUE					(KEY_POWERON * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_POWERON_UP							(KEY_POWERON * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_GREEN_CHANGE_NULL					(0)
+#define	KEY_GREEN_CHANGE_STATE					(KEY_GREEN_CHANGE * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_GREEN_CHANGE_FIRST_DOWN				(KEY_GREEN_CHANGE * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_GREEN_CHANGE_LONG					(KEY_GREEN_CHANGE * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_GREEN_CHANGE_CONTINUE				(KEY_GREEN_CHANGE * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_GREEN_CHANGE_UP						(KEY_GREEN_CHANGE * KEY_TYPE_NUMBER + KEY_UP)
+
+#define	KEY_GOTO_MAIN_CONTROL_NULL				(0)
+#define	KEY_GOTO_MAIN_CONTROL_STATE				(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + KEY_STATE)
+#define	KEY_GOTO_MAIN_CONTROL_FIRST_DOWN		(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + KEY_DOWN)
+#define	KEY_GOTO_MAIN_CONTROL_LONG				(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + LONG_KEY)	
+#define	KEY_GOTO_MAIN_CONTROL_CONTINUE			(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + CONTINUE)
+#define	KEY_GOTO_MAIN_CONTROL_UP				(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + KEY_UP)
+	
 
 //------------------------------E N D-------------------------------------------
 #define KEY_CHILD      KeyGroupBit0
@@ -402,10 +484,16 @@ uint8_t dec_to_bcd(uint8_t process_data)
 
 void app_keyinit_jumppage(void)
 {
-	//INT16U adressoffset = 0;
-	//INT8U writebuf[2] ={0,0};
+	uint8_t i;
+	INT16U reset[] ={REG_KEY_SETTING,REG_KEY_POWER_ONOFF,REG_KEY_POWEROFF_SURE,REG_KEY_POWEROFF_CANCEL,
+					 REG_KEY_GOTO_GREEN_SCREEN,REG_KEY_POWERON};
+	INT8U writebuf[2] ={0,0};
 
-
+	for(i = 0; i < (sizeof(reset)/sizeof(reset[0])); i++)
+	{
+		WriteDGUS(reset[i],writebuf,2);
+	}
+	
 }
 
 uint16_t get_485value(uint16_t adress)
@@ -544,7 +632,7 @@ void app_key_power_on(void)
 }
 void app_key_main_control()
 {
-	SysPara_t *ptSysPara;  
+	/*SysPara_t *ptSysPara;  
     int8_t keychangeflag = 0;
 	int8_t ddr = 0;
 	keyActionType_t key_action;
@@ -654,7 +742,7 @@ void app_key_main_control()
 	if(keychangeflag != 0)//进入缓存等待发送
 	{
 		APP_oneWire_send_485_data(adress,get_485value(adress));
-	}
+	}*/
 }
 
 void get_pwm_data(void)
@@ -1427,7 +1515,7 @@ void app_key_scanTask(void)
 	uint8_t timebuf[2] ={0,0};
 
 	uint16_t key_trigger = 0;
-	//static uint16_t keycount = 0;
+	static uint16_t keycount = 0;
 	//static uint16_t time = 0;
 	//static unsigned int first_key_del = 0;
 	static unsigned int debug[2] ={0,0};
@@ -1439,7 +1527,8 @@ void app_key_scanTask(void)
 	
 	ptSysPara =  controler_getSysParaPt();
 
-	mod_key_scanTask(GetSysTickMillisecond());	 
+	//keycount++;
+	//mod_key_scanTask(GetSysTickMillisecond());	 
 
 	//new
 	keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
@@ -1447,15 +1536,15 @@ void app_key_scanTask(void)
 	{//有按键按下	
 		switch(key_sign_new[0].key_down_sign)
 		{
-			case KEY_NUMBER_TEMP_ADD_FIRST_DOWN:
+			case KEY_HOT_SWITCH_FIRST_DOWN:
 					debug[0] = 10;
 					break;
 
-			case KEY_NUMBER_TEMP_ADD_LONG:
+			case KEY_HOT_SWITCH_LONG:
 					debug[0] = 20;
 					break;
 
-			case KEY_NUMBER_TEMP_ADD_CONTINUE:
+			case KEY_HOT_SWITCH_CONTINUE:
 					if(debug[0] < 30)
 					{
 						debug[0] = 30;
@@ -1466,19 +1555,19 @@ void app_key_scanTask(void)
 					}
 					break;
 
-			case KEY_NUMBER_TEMP_ADD_UP:
+			case KEY_HOT_SWITCH_UP:
 					debug[0] = 100;
 					break;
 
-			case KEY_NUMBER_TEMP_SUB_FIRST_DOWN:
+			case KEY_SETTING_FIRST_DOWN:
 					debug[1] = 10;
 					break;
 
-			case KEY_NUMBER_TEMP_SUB_LONG:
+			case KEY_SETTING_LONG:
 					debug[1] = 20;
 					break;
 
-			case KEY_NUMBER_TEMP_SUB_CONTINUE:
+			case KEY_SETTING_CONTINUE:
 					if(debug[1] < 30)
 					{
 						debug[1] = 30;
@@ -1489,21 +1578,30 @@ void app_key_scanTask(void)
 					}
 					break;
 
-			case KEY_NUMBER_TEMP_SUB_UP:
+			case KEY_SETTING_UP:
 					debug[1] = 101;
 					break;
 
-			case KEY_POWER_UP:
+			case KEY_POWERON_STATE:
 					ptSysPara->page_number = 1;
 					break;
+			case KEY_POWERON_UP:
+					ptSysPara->page_number = 1;
+					break;
+			case KEY_GREEN_CHANGE_UP://切换屏保页
+					ptSysPara->next_screen_flag = BN_TRUE;
+					break;
 
+			case KEY_GOTO_MAIN_CONTROL_UP:
+					ptSysPara->page_number = 29;
+					break;
 			default: break;
 		}
 		
 	}
 
 	//end
-	if(mod_key_scantask1(&ptSysPara->key_fanset_param))
+	/*if(mod_key_scantask1(&ptSysPara->key_fanset_param))
 	{
 		key_trigger = 1;
 	}	
@@ -1514,13 +1612,14 @@ void app_key_scanTask(void)
 
 		ptSysPara->keydownflag++;
 		ptSysPara->updataflag = BN_TRUE;
-    }  
+    }  */
 	
 	value_temp = key_sign_new[0].key_down_sign;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);	
 	WriteDGUS(0x5120,timebuf,2);
-	
+
+
 	value_temp = keytype_state;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
@@ -1584,7 +1683,11 @@ void app_key_scanTask(void)
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512E,timebuf,2);
 
-	value_temp = tempBuff[7];
+	if(keytype_state == 5)
+	{
+		keycount++;
+	}
+	value_temp = keycount;//tempBuff[7];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512F,timebuf,2);

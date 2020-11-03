@@ -333,6 +333,10 @@ typedef struct
 	uint16_t updata485control;
 
 	uint8_t debugflag;
+
+	//环控机
+	uint8_t next_screen_flag:1;
+
 	
 	uint16_t page32_keynumberup;
 	uint16_t page34_keynumberup;

@@ -4,7 +4,7 @@
 //------------------------------E N D-------------------------------------------
 #include ".\SnailDataTypedef.h"
 
-#define MAX_KEY_GROUP					1
+#define MAX_KEY_GROUP					2
 
 typedef struct
 {
@@ -47,31 +47,33 @@ typedef struct
 按键地址定义*/
 
 //主控界面
-#define REG_KEY_HOT_SWITCH				0x5500
-#define REG_KEY_SETTING					0x5501
-#define REG_KEY_TEMP_ADD				0x5502
-#define REG_KEY_TEMP_SUB				0x5503
-#define REG_KEY_HUMIDITY_ADD			0x5504
-#define REG_KEY_HUMIDITY_SUB			0x5505
-#define REG_KEY_MODE					0x5506
-#define REG_KEY_AIR_MODE				0x5507
-#define REG_KEY_WIND_SWITCH				0x5508
-#define REG_KEY_POWER_ONOFF				0x5509
-#define REG_KEY_POWEROFF_SURE			0x550A
-#define REG_KEY_POWEROFF_CANCEL			0x550B
-#define REG_KEY_GOTO_GREEN_SCREEN		0x550C
-#define REG_KEY_POWERON					0x550D
+#define REG_KEY_HOT_SWITCH				0x5700
+#define REG_KEY_SETTING					0x5701
+#define REG_KEY_TEMP_ADD				0x5702
+#define REG_KEY_TEMP_SUB				0x5703
+#define REG_KEY_HUMIDITY_ADD			0x5704
+#define REG_KEY_HUMIDITY_SUB			0x5705
+#define REG_KEY_MODE					0x5706
+#define REG_KEY_AIR_MODE				0x5707
+#define REG_KEY_WIND_SWITCH				0x5708
+#define REG_KEY_POWER_ONOFF				0x5709
+#define REG_KEY_POWEROFF_SURE			0x570A
+#define REG_KEY_POWEROFF_CANCEL			0x570B
+#define REG_KEY_GOTO_GREEN_SCREEN		0x570C
+#define REG_KEY_POWERON					0x570D
+#define REG_KEY_GREEN_CHANGE			0x570E
+#define REG_KEY_GOTO_MAIN_CONTROL		0x570F
 
 //设置界面
-#define REG_KEY_SET_WIFI				0x5510
-#define REG_KEY_SET_TIMING				0x5511
-#define REG_KEY_SET_FILTER				0x5512
-#define REG_KEY_SET_TIME				0x5513
-#define REG_KEY_SET_HIGHSET				0x5514
-#define REG_KEY_SET_AUTO				0x5515
-#define REG_KEY_SET_ABOUT				0x5516
-#define REG_KEY_SET_OTHER				0x5517
-#define REG_KEY_SET_BACK				0x5518
+#define REG_KEY_SET_WIFI				0x5710
+#define REG_KEY_SET_TIMING				0x5711
+#define REG_KEY_SET_FILTER				0x5712
+#define REG_KEY_SET_TIME				0x5713
+#define REG_KEY_SET_HIGHSET				0x5714
+#define REG_KEY_SET_AUTO				0x5715
+#define REG_KEY_SET_ABOUT				0x5716
+#define REG_KEY_SET_OTHER				0x5717
+#define REG_KEY_SET_BACK				0x5718
 
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //function
@@ -102,6 +104,7 @@ void keyscan_fanset(INT16U *out_key_number);
 INT16U* bsp_key_init(void);
 
 void keyscan_1(INT16U *out_key_number);
+void keyscan_2(INT16U *out_key_number);
 
 extern bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP];
 #endif

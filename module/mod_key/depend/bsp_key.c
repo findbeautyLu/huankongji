@@ -130,19 +130,22 @@ void keyscan_1(INT16U *out_key_number)
 {
 	uint8_t i;
 	INT16U keyline = 0;
-	INT16U keyadress[] = {	REG_KEY_HOT_SWITCH  ,
-	 						REG_KEY_SETTING  ,
-	 						REG_KEY_TEMP_ADD  ,
-	 						REG_KEY_TEMP_SUB  ,
-	 						REG_KEY_HUMIDITY_ADD  ,
-	 						REG_KEY_HUMIDITY_SUB  ,
-	 						REG_KEY_MODE  ,
-	 						REG_KEY_AIR_MODE  ,
-	 						REG_KEY_WIND_SWITCH  ,
-	 						REG_KEY_POWER_ONOFF  ,
-	 						REG_KEY_POWEROFF_SURE ,
-	 						REG_KEY_POWEROFF_CANCEL,
-							REG_KEY_GOTO_GREEN_SCREEN
+	INT16U keyadress[] = {	REG_KEY_HOT_SWITCH  	,
+	 						REG_KEY_SETTING  		,
+	 						REG_KEY_TEMP_ADD  		,
+	 						REG_KEY_TEMP_SUB  		,
+	 						REG_KEY_HUMIDITY_ADD  	,
+	 						REG_KEY_HUMIDITY_SUB  	,
+	 						REG_KEY_MODE  			,
+	 						REG_KEY_AIR_MODE  		,
+	 						REG_KEY_WIND_SWITCH  	,
+	 						REG_KEY_POWER_ONOFF  	,
+	 						REG_KEY_POWEROFF_SURE 	,
+	 						REG_KEY_POWEROFF_CANCEL	,
+							REG_KEY_GOTO_GREEN_SCREEN,
+							REG_KEY_POWERON			,
+							REG_KEY_GREEN_CHANGE	,
+							REG_KEY_GOTO_MAIN_CONTROL
 	 						};
 
 	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
@@ -157,16 +160,19 @@ void keyscan_1(INT16U *out_key_number)
 	*out_key_number = keyline;
 }
 
-/*void keyscan_2(INT16U *out_key_number)
+void keyscan_2(INT16U *out_key_number)
 {
 	uint8_t i;
 	INT16U keyline = 0;
-	INT16U keyadress[] = {	REG_PAGE62_FANSET_FANMOTOR_UP ,
-							REG_PAGE62_FANSET_FANMOTOR_DOWN ,
-							REG_PAGE62_FANSET_FANMOTOR_TYPE_UP ,
-							REG_PAGE62_FANSET_FANMOTOR_TYPE_DOWN ,
-							REG_PAGE62_FANSET_FANMOTOR_HIGHSPEED_UP,
-							REG_PAGE62_FANSET_FANMOTOR_HIGHSPEED_DOWN
+	INT16U keyadress[] = {	REG_KEY_SET_WIFI ,
+							REG_KEY_SET_TIMING ,
+							REG_KEY_SET_FILTER ,
+							REG_KEY_SET_TIME ,
+							REG_KEY_SET_HIGHSET,
+							REG_KEY_SET_AUTO,
+							REG_KEY_SET_ABOUT,
+							REG_KEY_SET_OTHER,
+							REG_KEY_SET_BACK
 	 						};
 	
 	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
@@ -179,7 +185,7 @@ void keyscan_1(INT16U *out_key_number)
 	}
 
 	*out_key_number = keyline;
-}*/
+}
 
 //bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP] ={keyscan_1};//keyscan_2
 

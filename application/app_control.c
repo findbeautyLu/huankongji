@@ -21,7 +21,7 @@
 
 #define TIME_1S				1000
 
-#define SCREEN_SAVER_SWITCH_TIME			(TIME_1S * 10)
+#define SCREEN_SAVER_SWITCH_TIME			(TIME_1S * 5)
 #define BACK_SCREEN_SAVER_TIME				(TIME_1S * 30)
 SysPara_t s_sysPara;
 
@@ -87,6 +87,7 @@ void app_con_gotoFac(void)
 	keynumber_1.key_sign.trigger_sign_lock		= 0;
 	keynumber_1.key_sign.trigger_sign_timecount	= 0;
 	keynumber_1.key_sign.trigger_sign			= 0;
+	s_sysPara.next_screen_flag			= 0;
 
 	
 }
@@ -143,6 +144,7 @@ void app_page_switch(void)
 	uint8_t now_page[4] = {0x5a,0x01,0x00,0x00};//01
 	static uint8_t currentpage = 0;
 	ptSysPara =  controler_getSysParaPt();
+	ptSysPara->page_number = 29;
 	if(ptSysPara->page_number != currentpage)//可以考虑增加一个锁,必须由开机界面才能正常页面切换
 	{
 		currentpage = ptSysPara->page_number;
@@ -205,18 +207,20 @@ void app_into_screen_saver(void)
 	}
 	else if(ptSysPara->page_number < 29 && ptSysPara->page_number >= 25)
 	{//屏保切换
-		if(period >= SCREEN_SAVER_SWITCH_TIME)
+		if(period >= SCREEN_SAVER_SWITCH_TIME || ptSysPara->next_screen_flag == BN_TRUE)
 		{
 			lastSystemMsTime = GetSysTickMillisecond(); 
-			ptSysPara->page_number = 29;	
-			/*if(ptSysPara->page_number == 28)
+			
+			ptSysPara->next_screen_flag = BN_FALSE;
+			
+			if(ptSysPara->page_number == 28)
 			{
 				ptSysPara->page_number = 25;	
 			}
 			else
 			{
 				ptSysPara->page_number ++;
-			}*/
+			}
 		}
 	}	
 	else if(ptSysPara->page_number >= 29 && ptSysPara->page_number != 46)//在非屏保界面
