@@ -82,14 +82,14 @@
 #define TIMECONTROL_EDIT_PAGE_61   			61
 //#define TIMECONTROL_TIME_EDIT
 
-#define WIFI_PAGE_42				42
+#define WIFI_PAGE_51				51
 #define TIMECONTROL_PAGE_32			32
-#define FILTER_PAGE_43				43
-#define TIME_PAGE_44				44
-#define FACTORY_PAGE_45				45
+#define FILTER_PAGE_39				39
+#define TIME_PAGE_41				41
+#define FACTORY_PAGE_43				43
 #define FAULT_PAGE_46				46
 #define ABOUT_PAGE_47				47
-#define OTHER_PAGE_48				48
+#define OTHER_PAGE_49				49
 
 #define YEAR_MAX					2050
 #define YEAR_MIN					2000
@@ -120,6 +120,7 @@ typedef enum
 	SYS_STATUS_TIME,
 	SYS_STATUS_FACTORY,
 	SYS_STATUS_FAULT,
+	SYS_STATUS_AUTO,
 	SYS_STATUS_ABOUT,
 	SYS_STATUS_OTHER,
 	

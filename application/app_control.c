@@ -144,7 +144,7 @@ void app_page_switch(void)
 	uint8_t now_page[4] = {0x5a,0x01,0x00,0x00};//01
 	static uint8_t currentpage = 0;
 	ptSysPara =  controler_getSysParaPt();
-	ptSysPara->page_number = 29;
+	//ptSysPara->page_number = 29;
 	if(ptSysPara->page_number != currentpage)//可以考虑增加一个锁,必须由开机界面才能正常页面切换
 	{
 		currentpage = ptSysPara->page_number;
@@ -158,14 +158,15 @@ void app_page_switch(void)
 			case TIMECONTROL_TIME_PAGE_35: ptSysPara->sys_runstatus = SYS_STATUS_TIMING_INTERVAL;		break;
 			case TIMECONTROL_WEEK_EDIT_PAGE_36: ptSysPara->sys_runstatus = SYS_STATUS_TIMING_WEEK_ADD;	break;
 			case TIMECONTROL_EDIT_PAGE_61: ptSysPara->sys_runstatus = SYS_STATUS_TIMING_TIMECONTROL_ADD;break;
-			case WIFI_PAGE_42: ptSysPara->sys_runstatus = SYS_STATUS_WIFI;								break;
-			case FILTER_PAGE_43: ptSysPara->sys_runstatus = SYS_STATUS_FILTER;							break;
-			case TIME_PAGE_44: ptSysPara->sys_runstatus = SYS_STATUS_TIME;								break;
-			case FACTORY_PAGE_45: ptSysPara->sys_runstatus = SYS_STATUS_FACTORY;						break;
-			case FAULT_PAGE_46: ptSysPara->sys_runstatus = SYS_STATUS_FAULT;							break;
+			case WIFI_PAGE_51: ptSysPara->sys_runstatus = SYS_STATUS_WIFI;								break;
+			case FILTER_PAGE_39: ptSysPara->sys_runstatus = SYS_STATUS_FILTER;							break;
+			case TIME_PAGE_41: ptSysPara->sys_runstatus = SYS_STATUS_TIME;								break;
+			case FACTORY_PAGE_43: ptSysPara->sys_runstatus = SYS_STATUS_FACTORY;						break;
+			//case FAULT_PAGE_46: ptSysPara->sys_runstatus = SYS_STATUS_FAULT;							break;
 			case ABOUT_PAGE_47: ptSysPara->sys_runstatus = SYS_STATUS_ABOUT;							break;
-			case OTHER_PAGE_48: ptSysPara->sys_runstatus = SYS_STATUS_OTHER;							break;
-			default: ptSysPara->sys_runstatus = SYS_STATUS_RUN_MODE;									break;			
+			case OTHER_PAGE_49: ptSysPara->sys_runstatus = SYS_STATUS_OTHER;							break;
+			default: ptSysPara->sys_runstatus = SYS_STATUS_RUN_MODE;									break;	
+			
 		}
 		app_keyinit_jumppage();
 		now_page[3] = currentpage;

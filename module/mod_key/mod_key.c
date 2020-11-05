@@ -516,6 +516,7 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 {
 	static unsigned char init_byte = 0;
 	static unsigned char keybumberup_value = 0;
+	static unsigned char keyup_page = 0;
 	unsigned int keystate = 0;
 	
 	unsigned int i = 0;
@@ -526,16 +527,22 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 	
 	if(init_byte)
 	{
-		for(j = 0; j < MAX_KEY_GROUP; j++)
+		for(; j < MAX_KEY_GROUP; j++)
 		{
+			if(keyup_page != 0)
+			{
+				j = keyup_page;
+			}
 			out_key[j].getkey2_bsp(&keynumber[j]);
 			if(keystate = mde_filter_keysign(&out_key[j],keynumber[j],j))
 			{
+				keyup_page = j;//松手检测需要锁定页码
 				keybumberup_value = keystate;
 				break;
 			}
-			else if(keybumberup_value != 0)
+			else if(keybumberup_value > keystate)
 			{
+				keyup_page = 0;
 				keystate = keybumberup_value;//out_key[j].key_down_sign;//松手后获取一次按键键值
 				keybumberup_value = 0;
 				break;

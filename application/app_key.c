@@ -313,7 +313,31 @@
 #define	KEY_GOTO_MAIN_CONTROL_LONG				(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + LONG_KEY)	
 #define	KEY_GOTO_MAIN_CONTROL_CONTINUE			(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + CONTINUE)
 #define	KEY_GOTO_MAIN_CONTROL_UP				(KEY_GOTO_MAIN_CONTROL * KEY_TYPE_NUMBER + KEY_UP)
-	
+
+#define KEY_SET_WIFI				16
+#define KEY_SET_TIMING				17
+#define KEY_SET_FILTER				18
+#define KEY_SET_TIME				19
+#define KEY_SET_HIGHSET				20
+#define KEY_SET_AUTO				21
+#define KEY_SET_ABOUT				22
+#define KEY_SET_OTHER				23
+#define KEY_SET_BACK				24
+
+#define KEY_SET_WIFI_UP							(KEY_SET_WIFI * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_TIMING_UP						(KEY_SET_TIMING * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_FILTER_UP						(KEY_SET_FILTER * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_TIME_UP							(KEY_SET_TIME * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_HIGHSET_UP						(KEY_SET_HIGHSET * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_AUTO_UP							(KEY_SET_AUTO * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_ABOUT_UP						(KEY_SET_ABOUT * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_OTHER_UP						(KEY_SET_OTHER * KEY_TYPE_NUMBER + KEY_UP)
+#define KEY_SET_BACK_UP							(KEY_SET_BACK * KEY_TYPE_NUMBER + KEY_UP)
+
+
+
+
 
 //------------------------------E N D-------------------------------------------
 #define KEY_CHILD      KeyGroupBit0
@@ -486,7 +510,10 @@ void app_keyinit_jumppage(void)
 {
 	uint8_t i;
 	INT16U reset[] ={REG_KEY_SETTING,REG_KEY_POWER_ONOFF,REG_KEY_POWEROFF_SURE,REG_KEY_POWEROFF_CANCEL,
-					 REG_KEY_GOTO_GREEN_SCREEN,REG_KEY_POWERON};
+					 REG_KEY_GOTO_GREEN_SCREEN,REG_KEY_POWERON,REG_KEY_SET_WIFI,REG_KEY_SET_TIMING,
+					 REG_KEY_SET_FILTER,REG_KEY_SET_TIME,REG_KEY_SET_HIGHSET,REG_KEY_SET_AUTO,
+					 REG_KEY_SET_ABOUT,REG_KEY_SET_OTHER,REG_KEY_SET_BACK};
+
 	INT8U writebuf[2] ={0,0};
 
 	for(i = 0; i < (sizeof(reset)/sizeof(reset[0])); i++)
@@ -1469,17 +1496,217 @@ void app_key_fault(void)
 		default: break;
 	}
 }
+//new
+void app_main_control_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+	switch(keynumber)	 
+	{
+		case KEY_HOT_SWITCH_FIRST_DOWN:
+							break;
+		
+		case KEY_HOT_SWITCH_LONG:
+				break;
 
+		case KEY_HOT_SWITCH_CONTINUE:
+				break;
 
+		case KEY_HOT_SWITCH_UP:
+				break;
 
+		case KEY_SETTING_FIRST_DOWN:
+				break;
 
+		case KEY_SETTING_LONG:
+				break;
 
+		case KEY_SETTING_CONTINUE:
 
+				break;
 
+		case KEY_SETTING_UP:
+				ptSysPara->page_number = 32;
+				break;
+
+		case KEY_POWERON_STATE:
+				break;
+		case KEY_POWERON_UP:
+				ptSysPara->page_number = 1;
+				break;
+		case KEY_GREEN_CHANGE_UP://切换屏保页
+				ptSysPara->next_screen_flag = BN_TRUE;
+				break;
+
+		case KEY_GOTO_MAIN_CONTROL_UP:
+				ptSysPara->page_number = 29;
+				break;
+		default: break;
+	}
+}
+
+void app_setting_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		case KEY_SET_WIFI_UP: ptSysPara->page_number = 51; break;
+		case KEY_SET_TIMING_UP: ptSysPara->page_number = 34; break;
+		case KEY_SET_FILTER_UP: ptSysPara->page_number = 39; break;
+		case KEY_SET_TIME_UP: ptSysPara->page_number = 41; break;
+		case KEY_SET_HIGHSET_UP: ptSysPara->page_number = 43;break;
+		case KEY_SET_AUTO_UP: ptSysPara->page_number = 45; break;
+		case KEY_SET_ABOUT_UP: ptSysPara->page_number = 47; break;
+		case KEY_SET_OTHER_UP: ptSysPara->page_number = 49; break;
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 29; break;
+		default: break;
+	}
+
+}
+
+void app_wifi_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//连接
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_timecontrol_key_service(unsigned int keynumber)//时段控制
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//切换时间编译
+		//星期+-
+		//时段+-
+		//增加
+		//编辑
+		//删除
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_filter_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//周期+-
+		//长按复位
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_settime_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//年+- 连击
+		//月+-
+		//日+-
+		//小时+-
+		//分+-
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_factory_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//数字键盘
+		//删除
+		//确认
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_auto_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//调节*4 +-
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_about_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//恢复出厂设置
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_other_key_service(unsigned int keynumber)
+{
+	SysPara_t *ptSysPara;  
+	ptSysPara =  controler_getSysParaPt();
+
+	switch(keynumber)
+	{
+		//静音
+		//常量
+		//室外信息
+		//强制制冷
+		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
+		default: break;
+	}
+}
+
+void app_key_service(unsigned int runstate,unsigned int keynumber)
+{
+	switch(runstate)	
+	{
+		case SYS_STATUS_RUN_MODE: app_main_control_key_service(keynumber); break;
+		case SYS_STATUS_SETTING: app_setting_key_service(keynumber); break;
+		case SYS_STATUS_WIFI:
+		case SYS_STATUS_TIMING_WEEK:
+		case SYS_STATUS_FILTER:
+		case SYS_STATUS_TIME:
+		case SYS_STATUS_FACTORY:
+		case SYS_STATUS_AUTO:
+		case SYS_STATUS_ABOUT:
+		case SYS_STATUS_OTHER:
+		default: break;
+
+	}
+}
 
 void app_key_update(systemRunStatus_t _in_sysRunStatus)
 {
-    switch(_in_sysRunStatus)
+    /*switch(_in_sysRunStatus)
     {               
 		case SYS_STATUS_POWER_OFF:        							;     				break;
 		case SYS_STATUS_SCREEN_SAVER:								;	 	 			break;
@@ -1499,7 +1726,7 @@ void app_key_update(systemRunStatus_t _in_sysRunStatus)
 		case SYS_STATUS_ABOUT:				app_key_about();							break;
 		case SYS_STATUS_OTHER:				app_key_other();							break;
 		default:break;
-    }       
+    }       */
 	//临时//清除故障
 	if(PUSH_DOWN & mod_keyOperation(KEY_RESET,0xffff,0xffff))
 	{
@@ -1512,6 +1739,7 @@ void app_key_update(systemRunStatus_t _in_sysRunStatus)
 void app_key_scanTask(void)
 {      
     SysPara_t *ptSysPara;  
+	uint8_t i = 0;
 	uint8_t timebuf[2] ={0,0};
 
 	uint16_t key_trigger = 0;
@@ -1531,10 +1759,25 @@ void app_key_scanTask(void)
 	//mod_key_scanTask(GetSysTickMillisecond());	 
 
 	//new
-	keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
+	//keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
+
+	if(keytype_state = mde_getkey_event(&key_sign_new))
+	{
+		for(i = 0; i < MAX_KEY_GROUP; i++)
+		{
+			
+			if(key_sign_new[i].key_down_sign != 0)
+			{
+				ptSysPara->debugdata = key_sign_new[i].key_down_sign;
+				app_key_service(ptSysPara->sys_runstatus,key_sign_new[i].key_down_sign);
+				break;
+			}
+		}
+	}
+	
 	if(keytype_state)
 	{//有按键按下	
-		switch(key_sign_new[0].key_down_sign)
+		/*switch(key_sign_new[0].key_down_sign)
 		{
 			case KEY_HOT_SWITCH_FIRST_DOWN:
 					debug[0] = 10;
@@ -1580,6 +1823,7 @@ void app_key_scanTask(void)
 
 			case KEY_SETTING_UP:
 					debug[1] = 101;
+					//ptSysPara->page_number = 32;
 					break;
 
 			case KEY_POWERON_STATE:
@@ -1596,7 +1840,7 @@ void app_key_scanTask(void)
 					ptSysPara->page_number = 29;
 					break;
 			default: break;
-		}
+		}*/
 		
 	}
 
@@ -1614,7 +1858,7 @@ void app_key_scanTask(void)
 		ptSysPara->updataflag = BN_TRUE;
     }  */
 	
-	value_temp = key_sign_new[0].key_down_sign;
+	value_temp = ptSysPara->debugdata;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);	
 	WriteDGUS(0x5120,timebuf,2);
