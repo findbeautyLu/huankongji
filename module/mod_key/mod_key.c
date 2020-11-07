@@ -183,7 +183,7 @@ unsigned int mde_getkey_event(key_sign_1_t *out_key)
 		for(i = 0; i < MAX_KEY_GROUP; i++)
 		{
 			mde_cfg(&out_key[i]);
-			out_key[0].getkey2_bsp = keyscan_1;//理论上函数地址放数组里面是可以的，但是cfg放进去之后i数值乱了，暂时做个问题点
+			out_key[0].getkey2_bsp = keyscan_1;//理论上函数地址放数组里面是可以的，但是cfg放进去之后i数值乱了，不知道哪里语法错了
 			out_key[1].getkey2_bsp = keyscan_2;
 			out_key[2].getkey2_bsp = keyscan_3;
 		}

@@ -256,6 +256,35 @@ typedef struct
 	int16_t outdoortemp;
 }fanset_t;
 
+typedef struct
+{
+	int16_t measure_temp;
+	int16_t measure_humidity;
+	int16_t measure_co2;
+	int16_t measure_pm25;
+	int16_t setup_temp;
+	int16_t setup_humidity;
+	int16_t setup_mode;
+	int16_t setup_airmode;
+	int16_t setup_fan;
+	//定时界面东西太多，暂时放一边
+	int16_t timing;
+
+	uint16_t filter_time;//理论上一直读取是没问题的
+	uint16_t password_icon;
+	uint16_t pm25_h_m;//这个四个参数什么用，暂时不知道
+	uint16_t pm25_m_l;
+	uint16_t co2_h_m;
+	uint16_t co2_m_l;
+
+	//about 显示的是ascii有点问题
+	uint16_t equipment_model;
+	uint16_t sequence_code;
+
+	
+	
+}dis_element_t;
+
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //****************************系统参数******************************************
 
@@ -366,6 +395,7 @@ typedef struct
 	uint16_t debugdata;
 	uint8_t debugdata1;
 	
+	dis_element_t display_element;
 	week_t dis_week;
 	timeset_t set_time;
 	factory_t factory;

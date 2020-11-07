@@ -1812,8 +1812,6 @@ void app_key_scanTask(void)
     SysPara_t *ptSysPara;
 	static uint16_t lastSystemMsTime = 0;
 	static uint16_t period = 0;
-
-	
 	
 	uint8_t i = 0;
 	uint8_t timebuf[2] ={0,0};
@@ -1896,22 +1894,22 @@ void app_key_scanTask(void)
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5127,timebuf,2);
 
-	value_temp = modbus_master_solid[0].transmit_buff[0];
+	value_temp = rx_onewire_dat[8].reg_dat;//modbus_master_solid[0].transmit_buff[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5128,timebuf,2);
 	
-	value_temp = modbus_master_solid[0].transmit_buff[1];
+	value_temp = rx_onewire_dat[9].reg_dat;//modbus_master_solid[0].transmit_buff[1];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5129,timebuf,2);
 	
-	value_temp = modbus_master_solid[0].receive_buff[0];
+	value_temp = rx_onewire_dat[10].reg_dat;//modbus_master_solid[0].receive_buff[0];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512A,timebuf,2);
 
-	value_temp = modbus_master_solid[0].receive_buff[1];
+	value_temp = pull_reg_dat(REG_S_ADRESS_1_OFFSET_1f);//modbus_master_solid[0].receive_buff[1];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512B,timebuf,2);

@@ -29,6 +29,15 @@
  *! \retval  
  *! \retval  
  */
+
+
+typedef struct
+{
+	unsigned char cmd;
+	unsigned char slave_adress;
+	unsigned int target_adress;
+	unsigned int len_or_dat;
+}get_dat2_app_t;
 unsigned short      usRegAddress;
 unsigned short      usRegCount;
 
@@ -185,7 +194,7 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned 
             {
                 while(1)
                 {							
-                    push_succeed = mix_mm_oper->push_transmit_byte(mix_mm_oper->transmit_buff[mix_mm_oper->transmit_index]);
+                    push_succeed = 1;//mix_mm_oper->push_transmit_byte(mix_mm_oper->transmit_buff[mix_mm_oper->transmit_index]);
 					
                     if(push_succeed)
                     {
@@ -293,6 +302,49 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned 
 modbus_master_oper_def modbus_master_solid[max_solid];
 
 unsigned char modbus_master_tx[64];
+modbus_dat_t rx_onewire_dat[READ_REG_NUMBER] ={
+	READ_REG_START_ADRESS_0 ,		0,
+	REG_S_ADRESS_0_OFFSET_1 ,		0,
+	REG_S_ADRESS_0_OFFSET_2 ,		0,
+	REG_S_ADRESS_0_OFFSET_3 ,		0,
+	REG_S_ADRESS_0_OFFSET_4 ,		0,
+	REG_S_ADRESS_0_OFFSET_5 ,		0,
+	REG_S_ADRESS_0_OFFSET_6 ,		0,
+	READ_REG_START_ADRESS_1 ,		0,
+	REG_S_ADRESS_1_OFFSET_1 ,		0,
+	REG_S_ADRESS_1_OFFSET_2 ,		0,
+	REG_S_ADRESS_1_OFFSET_3 ,		0,
+	REG_S_ADRESS_1_OFFSET_4 ,		0,
+	REG_S_ADRESS_1_OFFSET_5 ,		0,
+	REG_S_ADRESS_1_OFFSET_6 ,		0,
+	REG_S_ADRESS_1_OFFSET_7 ,		0,
+	REG_S_ADRESS_1_OFFSET_8 ,		0,
+	REG_S_ADRESS_1_OFFSET_9 ,		0,
+	REG_S_ADRESS_1_OFFSET_a ,		0,
+	REG_S_ADRESS_1_OFFSET_b ,		0,
+	REG_S_ADRESS_1_OFFSET_c ,		0,
+	REG_S_ADRESS_1_OFFSET_d ,		0,
+	REG_S_ADRESS_1_OFFSET_e ,		0,
+	REG_S_ADRESS_1_OFFSET_f ,		0,
+	REG_S_ADRESS_1_OFFSET_10,		0,
+	REG_S_ADRESS_1_OFFSET_11,		0,
+	REG_S_ADRESS_1_OFFSET_12,		0,
+	REG_S_ADRESS_1_OFFSET_13,		0,
+	REG_S_ADRESS_1_OFFSET_14,		0,
+	REG_S_ADRESS_1_OFFSET_15,		0,
+	REG_S_ADRESS_1_OFFSET_16,		0,
+	REG_S_ADRESS_1_OFFSET_17,		0,
+	REG_S_ADRESS_1_OFFSET_18,		0,
+	REG_S_ADRESS_1_OFFSET_19,		0,
+	REG_S_ADRESS_1_OFFSET_1a,		0,
+	REG_S_ADRESS_1_OFFSET_1b,		0,
+	REG_S_ADRESS_1_OFFSET_1c,		0,
+	REG_S_ADRESS_1_OFFSET_1d,		0,
+	REG_S_ADRESS_1_OFFSET_1e,		0,
+	REG_S_ADRESS_1_OFFSET_1f,		0
+
+};
+
 uint16_t statecount[5] = {0,0,0,0,0};
 
 
@@ -316,15 +368,47 @@ unsigned char bsp_pull_uart5_txd_cmp(void)
 	}
 }
 
-static void cmd_03_service(unsigned int reg_adress,unsigned int dat)
+void push_reg_dat(unsigned int reg_adress,unsigned int reg_dat)
 {
-	switch(reg_adress)
+	unsigned char i = 0;
+	if(reg_adress < MIN_REG_ADRESS || reg_adress > MAX_REG_ADRESS)
 	{
-		case MRegaddr_Aircod_FRE: break;
-		case 2: break;
-		default: break;
+		;
+	}
+	else
+	{
+		for(; i < READ_REG_NUMBER; i++)
+		{
+			if(reg_adress == rx_onewire_dat[i].reg_adress)
+			{
+				rx_onewire_dat[i].reg_dat = reg_dat;
+				break;
+			}
+		}
 	}
 }
+
+unsigned int pull_reg_dat(unsigned int reg_adress)
+{
+	unsigned char i = 0;
+	
+	if(reg_adress < MIN_REG_ADRESS || reg_adress > MAX_REG_ADRESS)
+	{
+		return 0xffff;
+	}
+	else
+	{
+		for(; i < READ_REG_NUMBER; i++)
+		{
+			if(reg_adress == rx_onewire_dat[i].reg_adress)
+			{
+				break;
+			}
+		}
+		return rx_onewire_dat[i].reg_dat;
+	}
+}
+
 static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_mm_oper)
 {
 	unsigned char i,j;
@@ -366,15 +450,12 @@ static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_
 				  //rx[3]开始地址，寄存器地址为tx[2][3].实长度为接收长度len-5
 				  
 				  	reg_adress = (mix_mm_oper->transmit_buff[2] << 8) + mix_mm_oper->transmit_buff[3];
-					for(i = 0,j = 3; i < rd_length-5; i++)
+					for(i = 0,j = 3; i < rd_length-5; i++)//5: 返回地址 返回命令 返回字节数 CRC0 CRC1
 					{
 						reg_dat = (mix_mm_oper->receive_buff[j] << 8) + mix_mm_oper->receive_buff[j+1];//3,4 5,6
-						cmd_03_service(reg_adress + i,reg_dat);
+						push_reg_dat(reg_adress + i,reg_dat);
 						j += 2;
 					}
-				  
-				  
-				  
                 }
                 else if(0x06 == mix_mm_oper->receive_buff[1])
                 {
@@ -416,7 +497,7 @@ static void modbus_master_solid_cfg(void)
 //--------------------------------------------------------------------------------------------------------------------------
     //bsp_uart5_cfg();
     modbus_master_solid[0].pull_receive_byte = Uart5ReceiveByte;
-    modbus_master_solid[0].push_transmit_byte = Uart5TransferByte;
+    //modbus_master_solid[0].push_transmit_byte = Uart5TransferByte;
 	modbus_master_solid[0].push_transmit_str = Uart5SendStr;
     modbus_master_solid[0].pull_busFree = bsp_uart5_busfree;//发送和接收数据的延迟
     modbus_master_solid[0].restart_busFree_timer = bsp_uart5_restart_timecount;//清空延迟计数
@@ -468,34 +549,41 @@ void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in
     modbus_master_solid[in_solidNum].mmoo_runStutus = mmRunS_transmit_str;
 }
 
-void mde_mrtu_master_cmd_stransmit(modbus_praram_t *out_mde_praram)
+void mde_mrtu_master_cmd_stransmit(modbus_master_oper_def *out_mde_praram,get_dat2_app_t *in_target_parame)
 {
-	switch(out_mde_praram->cmd)
+	
+	switch(in_target_parame->cmd)
 	{
 		case SINGLE_READ_ONLY:
 								//从机地址
-								out_mde_praram->psendbuf[0] = 0xfa;
+								out_mde_praram->transmit_buff[0] = in_target_parame->slave_adress;
 								//单个读命令
-								out_mde_praram->psendbuf[1] = SINGLE_READ_ONLY;
+								out_mde_praram->transmit_buff[1] = in_target_parame->cmd;
 								//读取地址
-								out_mde_praram->psendbuf[2] = (unsigned char)(out_mde_praram->read_adress >> 8);
-								out_mde_praram->psendbuf[3] = (unsigned char)(out_mde_praram->read_adress);
+								out_mde_praram->transmit_buff[2] = (unsigned char)((in_target_parame->target_adress) >> 8);
+								out_mde_praram->transmit_buff[3] = (unsigned char)(in_target_parame->target_adress);
 								//读取长度
-								out_mde_praram->psendbuf[4] = (unsigned char)(out_mde_praram->length >> 8);
-								out_mde_praram->psendbuf[5] = (unsigned char)(out_mde_praram->length);
-								
+								out_mde_praram->transmit_buff[4] = (unsigned char)((in_target_parame->len_or_dat) >> 8);
+								out_mde_praram->transmit_buff[5] = (unsigned char)(in_target_parame->len_or_dat);
+								out_mde_praram->transmit_length = 6;
+								append_crc_to_message(out_mde_praram);
+								out_mde_praram->mmoo_runStutus = mmRunS_transmit_str;
 								break;
 		case SINGLE_WRITER_ONLY:
 								//从机地址
-								out_mde_praram->psendbuf[0] = 0xfa;
+								out_mde_praram->transmit_buff[0] = in_target_parame->slave_adress;
 								//单个写命令
-								out_mde_praram->psendbuf[1] = SINGLE_WRITER_ONLY;
+								out_mde_praram->transmit_buff[1] = in_target_parame->cmd;
 								//写入地址
-								out_mde_praram->psendbuf[2] = (unsigned char)(out_mde_praram->write_adress >> 8);
-								out_mde_praram->psendbuf[3] = (unsigned char)(out_mde_praram->write_adress);
+								out_mde_praram->transmit_buff[2] = (unsigned char)((in_target_parame->target_adress) >> 8);
+								out_mde_praram->transmit_buff[3] = (unsigned char)(in_target_parame->target_adress);
 								//写入数据
-								out_mde_praram->psendbuf[4] = (unsigned char)(out_mde_praram->write_dat >> 8);
-								out_mde_praram->psendbuf[5] = (unsigned char)(out_mde_praram->write_dat);
+								out_mde_praram->transmit_buff[4] = (unsigned char)((in_target_parame->len_or_dat) >> 8);
+								out_mde_praram->transmit_buff[5] = (unsigned char)(in_target_parame->len_or_dat);
+								
+								out_mde_praram->transmit_length = 6;
+								append_crc_to_message(out_mde_praram);
+								out_mde_praram->mmoo_runStutus = mmRunS_transmit_str;
 								break;
 		case CONTINUE_WRITE:
 								//从机地址
@@ -533,6 +621,17 @@ void mde_mrtu_master_cmd_stransmit(modbus_praram_t *out_mde_praram)
 	
 }
 
+//interface
+void mde_mrtu_master_set_stransmit(unsigned char in_control_cmd,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length_or_dat)
+{
+	get_dat2_app_t target_parame;
+	target_parame.cmd				= in_control_cmd;
+	target_parame.slave_adress		= in_slave_addr;
+	target_parame.target_adress		= in_reg_addr;
+	target_parame.len_or_dat		= in_reg_length_or_dat;
+
+	mde_mrtu_master_cmd_stransmit(&modbus_master_solid[0],&target_parame);
+}
 
 //------------------------------E N D-------------------------------------------
 

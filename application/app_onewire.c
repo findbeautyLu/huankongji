@@ -739,7 +739,8 @@ void app_onrwire_task1(void)
 	{
 		lastTick = GetSysTickMillisecond();
 		ptSysPara->debugcount++;
-		mde_mRtu_master_cmd0x03_transmit(0,0xfa,0x2430,0x0020);
+		//mde_mRtu_master_cmd0x03_transmit(0,0xfa,0x2430,0x0020);
+		mde_mrtu_master_set_stransmit(0x03,0xfa,0x2430,0x0020);
 	}
 }
 void APP_oneWire_task(void)

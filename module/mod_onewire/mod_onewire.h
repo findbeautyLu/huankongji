@@ -21,6 +21,53 @@
 #define max_solid    1
 
 /*============================ MACROFIED FUNCTIONS ===========================*/
+
+
+#define  READ_REG_START_ADRESS_0 				MRegaddr_NewairControlW		//第一队列
+#define  REG_S_ADRESS_0_OFFSET_1 				(READ_REG_START_ADRESS_0 + 1)
+#define  REG_S_ADRESS_0_OFFSET_2 				(READ_REG_START_ADRESS_0 + 2)
+#define  REG_S_ADRESS_0_OFFSET_3 				(READ_REG_START_ADRESS_0 + 3)
+#define  REG_S_ADRESS_0_OFFSET_4 				(READ_REG_START_ADRESS_0 + 4)
+#define  REG_S_ADRESS_0_OFFSET_5 				(READ_REG_START_ADRESS_0 + 5)
+#define  REG_S_ADRESS_0_OFFSET_6 				(READ_REG_START_ADRESS_0 + 6)
+#define  READ_REG_START_ADRESS_1 				MRegaddr_Aircod_FRE			//第二队列 更换地址接口
+#define  REG_S_ADRESS_1_OFFSET_1 				(READ_REG_START_ADRESS_1 + 1)
+#define  REG_S_ADRESS_1_OFFSET_2 				(READ_REG_START_ADRESS_1 + 2)
+#define  REG_S_ADRESS_1_OFFSET_3 				(READ_REG_START_ADRESS_1 + 3)
+#define  REG_S_ADRESS_1_OFFSET_4 				(READ_REG_START_ADRESS_1 + 4)
+#define  REG_S_ADRESS_1_OFFSET_5 				(READ_REG_START_ADRESS_1 + 5)
+#define  REG_S_ADRESS_1_OFFSET_6 				(READ_REG_START_ADRESS_1 + 6)
+#define  REG_S_ADRESS_1_OFFSET_7 				(READ_REG_START_ADRESS_1 + 7)
+#define  REG_S_ADRESS_1_OFFSET_8 				(READ_REG_START_ADRESS_1 + 8)
+#define  REG_S_ADRESS_1_OFFSET_9 				(READ_REG_START_ADRESS_1 + 9)
+#define  REG_S_ADRESS_1_OFFSET_a 				(READ_REG_START_ADRESS_1 + 10)
+#define  REG_S_ADRESS_1_OFFSET_b 				(READ_REG_START_ADRESS_1 + 11)
+#define  REG_S_ADRESS_1_OFFSET_c 				(READ_REG_START_ADRESS_1 + 12)
+#define  REG_S_ADRESS_1_OFFSET_d 				(READ_REG_START_ADRESS_1 + 13)
+#define  REG_S_ADRESS_1_OFFSET_e 				(READ_REG_START_ADRESS_1 + 14)
+#define  REG_S_ADRESS_1_OFFSET_f				(READ_REG_START_ADRESS_1 + 15)
+#define  REG_S_ADRESS_1_OFFSET_10 				(READ_REG_START_ADRESS_1 + 16)
+#define  REG_S_ADRESS_1_OFFSET_11				(READ_REG_START_ADRESS_1 + 17)
+#define  REG_S_ADRESS_1_OFFSET_12 				(READ_REG_START_ADRESS_1 + 18)
+#define  REG_S_ADRESS_1_OFFSET_13 				(READ_REG_START_ADRESS_1 + 19)
+#define  REG_S_ADRESS_1_OFFSET_14 				(READ_REG_START_ADRESS_1 + 20)
+#define  REG_S_ADRESS_1_OFFSET_15 				(READ_REG_START_ADRESS_1 + 21)
+#define  REG_S_ADRESS_1_OFFSET_16 				(READ_REG_START_ADRESS_1 + 22)
+#define  REG_S_ADRESS_1_OFFSET_17 				(READ_REG_START_ADRESS_1 + 23)
+#define  REG_S_ADRESS_1_OFFSET_18 				(READ_REG_START_ADRESS_1 + 24)
+#define  REG_S_ADRESS_1_OFFSET_19 				(READ_REG_START_ADRESS_1 + 25)
+#define  REG_S_ADRESS_1_OFFSET_1a 				(READ_REG_START_ADRESS_1 + 26)
+#define  REG_S_ADRESS_1_OFFSET_1b 				(READ_REG_START_ADRESS_1 + 27)
+#define  REG_S_ADRESS_1_OFFSET_1c 				(READ_REG_START_ADRESS_1 + 28)
+#define  REG_S_ADRESS_1_OFFSET_1d 				(READ_REG_START_ADRESS_1 + 29)
+#define  REG_S_ADRESS_1_OFFSET_1e 				(READ_REG_START_ADRESS_1 + 30)
+#define  REG_S_ADRESS_1_OFFSET_1f 				(READ_REG_START_ADRESS_1 + 31)
+
+//接口
+#define  READ_REG_NUMBER			39
+#define  MIN_REG_ADRESS				READ_REG_START_ADRESS_0	
+#define  MAX_REG_ADRESS				REG_S_ADRESS_1_OFFSET_1f
+
 /*============================ TYPES =========================================*/ 
 typedef enum 
 {
@@ -42,6 +89,12 @@ typedef enum
     mmRunS_receive_data,//7
     mmRunS_receive_end,//8
 }modbus_master_runState_def;
+	
+typedef struct
+{
+	unsigned int reg_adress;
+	unsigned int reg_dat;
+}modbus_dat_t;
 
 //有点意向把实例化的代码挪到app层，有点纠结
 typedef struct
@@ -133,13 +186,16 @@ void mde_mrtu_master_task(unsigned int systimecount);
 
 
 void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length);
+void mde_mrtu_master_set_stransmit(unsigned char in_control_cmd,unsigned char in_slave_addr,unsigned int in_reg_addr,unsigned int in_reg_length_or_dat);
 
 extern modbus_master_oper_def modbus_master_solid[max_solid];
 extern unsigned char modbus_master_tx[64];
+extern modbus_dat_t rx_onewire_dat[];
 
 extern unsigned int statecount[];
 
 
+extern unsigned int pull_reg_dat(unsigned int reg_adress);
 
 
 

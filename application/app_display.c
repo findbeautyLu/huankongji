@@ -44,14 +44,14 @@ void app_dis_runMode(void)
 
 	ReadDGUS(RTC,(u8 *)&rtc_time.year,8);
 
-	app_dis(REG_SCREEN_SAVER_TEMP,(ptSysPara->measure_temp/10));//-99~99
+	/*app_dis(REG_SCREEN_SAVER_TEMP,(ptSysPara->measure_temp/10));//-99~99
 
 
 	app_dis(REG_MASTER_CONTROL_DIS_MODE,ptSysPara->mode);//模式
 	app_dis(REG_MASTER_CONTROL_DIS_WINDSTATUS,ptSysPara->airmode + 8);//通风状态 
 	app_dis(REG_MASTER_CONTROL_DIS_WINDSPEDD,ptSysPara->windspeed + 4);//设定风速
 	app_dis(REG_MASTER_CONTROL_DIS_TEMPSET,ptSysPara->temp_set/10);//设定温度
-	app_dis(REG_MASTER_CONTROL_DIS_HUMIDITYSET,ptSysPara->humidity_set);//设定湿度
+	app_dis(REG_MASTER_CONTROL_DIS_HUMIDITYSET,ptSysPara->humidity_set);//设定湿度*/
 	
 	//输出及故障显示
 
