@@ -187,6 +187,35 @@ void keyscan_2(INT16U *out_key_number)
 	*out_key_number = keyline;
 }
 
+void keyscan_3(INT16U *out_key_number)
+{
+	uint8_t i;
+	INT16U keyline = 0;
+	INT16U keyadress[] = {	REG_KEY_SET_YEAR_UP ,
+							REG_KEY_SET_YEAR_DOWN ,
+							REG_KEY_SET_MONTH_UP ,
+							REG_KEY_SET_MONTH_DOWN ,
+							REG_KEY_SET_DAY_UP,
+							REG_KEY_SET_DAY_DOWN,
+							REG_KEY_SET_HOUR_UP,
+							REG_KEY_SET_HOUR_DOWN,
+							REG_KEY_SET_MINTUE_UP,
+							REG_KEY_SET_MINTUE_DOWN,
+							REG_KEY_SET_SURE_DOWN
+	 						};
+	
+	for(i = 0; i < (sizeof(keyadress)/sizeof(keyadress[0])); i++)
+	{
+		if(getkey(keyadress[i],2))
+		{
+			keyline |= (KeyAloneBit0 << i);
+			break;
+		}
+	}
+
+	*out_key_number = keyline;
+}
+
 //bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP] ={keyscan_1};//keyscan_2
 
 

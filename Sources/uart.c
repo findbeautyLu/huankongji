@@ -38,7 +38,6 @@ uint8_t xdata Uart4_Rx[UART4_MAX_LEN];
 uint16_t uart5_rx_count=0;
 uint8_t xdata Uart5_Rx[UART5_MAX_LEN];
 
-extern uint16_t statecount;
 /*****************************************************************************
 ´®¿Ú2ÅäÖÃ*/
 void Uart2Init(void)

@@ -143,14 +143,6 @@ void mod_oneWire_task(void)
 	uart_receive_scan();  
 }
 
-
-
-
-//new start 20201021
-
-	
-
-
 //modbus操作结构体
 //-----------------------------------------------------------------------------
 
@@ -217,7 +209,6 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned 
         }
         case mmRunS_transmit_stop:
         {
-        	//statecount = mmRunS_transmit_end;
             if(mix_mm_oper->pull_transmit_complete())
             {
                 mix_mm_oper->restart_busFree_timer();
@@ -228,7 +219,7 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned 
         }
         case mmRunS_transmit_end:
         {
-            if(mix_mm_oper->pull_busFree(25)) //标准3.5T，使用2.5T的结束符，放宽检测条件
+            if(mix_mm_oper->pull_busFree(50)) //标准3.5T，使用2.5T的结束符，放宽检测条件
             {
                 mix_mm_oper->phy_into_receive();
                 mix_mm_oper->mmoo_runStutus = mmRunS_receive_wait;//转入接收等待，设置超时
@@ -302,7 +293,8 @@ static void modbus_master_oop_task(modbus_master_oper_def* mix_mm_oper,unsigned 
 modbus_master_oper_def modbus_master_solid[max_solid];
 
 unsigned char modbus_master_tx[64];
-uint16_t statecount = 0;
+uint16_t statecount[5] = {0,0,0,0,0};
+
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -323,10 +315,23 @@ unsigned char bsp_pull_uart5_txd_cmp(void)
 		return 0;
 	}
 }
+
+static void cmd_03_service(unsigned int reg_adress,unsigned int dat)
+{
+	switch(reg_adress)
+	{
+		case MRegaddr_Aircod_FRE: break;
+		case 2: break;
+		default: break;
+	}
+}
 static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_mm_oper)
 {
+	unsigned char i,j;
     unsigned char rd_length;
-
+	unsigned char crc_value[2];
+	unsigned int reg_adress;
+	unsigned int reg_dat;
     rd_length = mix_mm_oper->rev_index;
     if(rd_length < 6)
     {
@@ -334,17 +339,20 @@ static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_
     }
     else
     { 	
-    	//FA 返回 00 暂时屏蔽 通用地址
+    	//FA 返回 00 暂时屏蔽 通用地址 本机是发送FA返回00
         if(/*(mix_mm_oper->transmit_buff[0]== mix_mm_oper->receive_buff[0]) && */(mix_mm_oper->transmit_buff[1]== mix_mm_oper->receive_buff[1]))  //address and command is ok
         {
-            unsigned char crc_value[2];
+            
             Crc16CalculateOfByte(&mix_mm_oper->receive_buff[0],(rd_length-2),&crc_value[0]);
+			statecount[5] = rd_length;
+			statecount[2] = crc_value[1];
+			statecount[1] = crc_value[0];
             if((crc_value[1] == mix_mm_oper->receive_buff[rd_length-2]) && (crc_value[0] == mix_mm_oper->receive_buff[rd_length-1]))//crc is ok
             {
-            	
+            	statecount[4] += 2;
                 if(0x03 == mix_mm_oper->receive_buff[1])
                 {
-                	statecount += 2;
+                	statecount[0] += 2;	
                   // mix_mm_oper->readReg_addr = pbc_arrayToInt16u_bigEndian(&mix_mm_oper->receive_buff[2]);
                   // mix_mm_oper->readReg_length = pbc_arrayToInt16u_bigEndian(&mix_mm_oper->receive_buff[4]);
 
@@ -354,6 +362,19 @@ static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_
                   // mix_mm_oper->transmit_length = 3;
 
                   // mix_mm_oper->mRtu_status = mRtuS_read;
+
+				  //rx[3]开始地址，寄存器地址为tx[2][3].实长度为接收长度len-5
+				  
+				  	reg_adress = (mix_mm_oper->transmit_buff[2] << 8) + mix_mm_oper->transmit_buff[3];
+					for(i = 0,j = 3; i < rd_length-5; i++)
+					{
+						reg_dat = (mix_mm_oper->receive_buff[j] << 8) + mix_mm_oper->receive_buff[j+1];//3,4 5,6
+						cmd_03_service(reg_adress + i,reg_dat);
+						j += 2;
+					}
+				  
+				  
+				  
                 }
                 else if(0x06 == mix_mm_oper->receive_buff[1])
                 {
@@ -384,6 +405,7 @@ static unsigned char modbus_master_receive_protocol(modbus_master_oper_def* mix_
                 }
                 return(1);
             }
+			//statecount = 55;
         }
     }
     return(0);
@@ -413,8 +435,6 @@ void mde_mrtu_master_task(unsigned int systimecount)
 	{
         for(i = 0;i < max_solid;i ++)
         {	
-        	//modbus_master_solid[0].push_transmit_str(modbus_master_solid[0].transmit_buff,modbus_master_solid[0].transmit_length);
-        	//Uart5SendStr(modbus_master_solid[0].transmit_buff,modbus_master_solid[0].transmit_length);
             modbus_master_oop_task(&modbus_master_solid[0],systimecount);
         }
 	}
@@ -448,7 +468,7 @@ void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in
     modbus_master_solid[in_solidNum].mmoo_runStutus = mmRunS_transmit_str;
 }
 
-unsigned char mde_mrtu_master_cmd_stransmit(modbus_praram_t *out_mde_praram)
+void mde_mrtu_master_cmd_stransmit(modbus_praram_t *out_mde_praram)
 {
 	switch(out_mde_praram->cmd)
 	{

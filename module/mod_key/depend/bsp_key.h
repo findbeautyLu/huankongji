@@ -4,7 +4,7 @@
 //------------------------------E N D-------------------------------------------
 #include ".\SnailDataTypedef.h"
 
-#define MAX_KEY_GROUP					2
+#define MAX_KEY_GROUP					3
 
 typedef struct
 {
@@ -75,6 +75,18 @@ typedef struct
 #define REG_KEY_SET_OTHER				0x5717
 #define REG_KEY_SET_BACK				0x5718
 
+//时间设置界面
+#define REG_KEY_SET_YEAR_UP				0x5720	//+
+#define REG_KEY_SET_YEAR_DOWN			0x5721
+#define REG_KEY_SET_MONTH_UP			0x5722
+#define REG_KEY_SET_MONTH_DOWN			0x5723
+#define REG_KEY_SET_DAY_UP				0x5724
+#define REG_KEY_SET_DAY_DOWN			0x5725
+#define REG_KEY_SET_HOUR_UP				0x5726
+#define REG_KEY_SET_HOUR_DOWN			0x5727
+#define REG_KEY_SET_MINTUE_UP			0x5728
+#define REG_KEY_SET_MINTUE_DOWN			0x5729
+#define REG_KEY_SET_SURE_DOWN			0x572A
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //function
 //名称: bsp_getKey 
@@ -105,6 +117,7 @@ INT16U* bsp_key_init(void);
 
 void keyscan_1(INT16U *out_key_number);
 void keyscan_2(INT16U *out_key_number);
+void keyscan_3(INT16U *out_key_number);
 
 extern bsp_keyscan_function_t get_key2_bsp_array[MAX_KEY_GROUP];
 #endif

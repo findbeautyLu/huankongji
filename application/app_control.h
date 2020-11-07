@@ -87,6 +87,8 @@
 #define FILTER_PAGE_39				39
 #define TIME_PAGE_41				41
 #define FACTORY_PAGE_43				43
+#define AUTO_PAGE_45				45
+
 #define FAULT_PAGE_46				46
 #define ABOUT_PAGE_47				47
 #define OTHER_PAGE_49				49

@@ -361,141 +361,10 @@ void app_dis_filter(void)
 
 }
 
-void app_dis_timeset(void)
+void app_dis_timeset(uint16_t *adress_index, uint16_t *dat_number)
 {
-	SysPara_t *ptSysPara;	
-	dis_timeset_t month ={0, 0, 0};
-	dis_timeset_t day ={0, 0, 0};
-	dis_timeset_t hour ={0, 0, 0};
-	dis_timeset_t minute ={0, 0, 0};
-	ptSysPara =  controler_getSysParaPt();
-
-	month.now = ptSysPara->set_time.month;
-	day.now = ptSysPara->set_time.day;
-	hour.now = ptSysPara->set_time.hour;
-	minute.now = ptSysPara->set_time.minute;
-	
-	//最高位+1还需做处理
-	//0~2050
-	if(0 == ptSysPara->set_time.year)
-	{
-		app_dis(REG_MORE_YEARS_UP_ADRESS,2050);
-	}
-	else
-	{
-		app_dis(REG_MORE_YEARS_UP_ADRESS,ptSysPara->set_time.year - 1);
-	}
-	
-	app_dis(REG_MORE_YEARS_ADRESS,(ptSysPara->set_time.year));
-
-	if(50 == ptSysPara->set_time.year)
-	{
-		app_dis(REG_MORE_YEARS_DOWN_ADRESS,0);
-	}
-	else
-	{
-		app_dis(REG_MORE_YEARS_DOWN_ADRESS,(ptSysPara->set_time.year + 1));
-	}
-	
-	//月
-	if(1 == month.now)//已选中 月 上方位置 1上方应为12
-	{
-		month.up = 12;
-	}
-	else
-	{
-		month.up = month.now - 1;
-	}
-
-	if(12 == month.now)
-	{
-		month.down = 1;
-	}
-	else
-	{
-		month.down = month.now + 1;
-	}
-	app_dis(REG_MORE_MONTH_UP_TEN_ADRESS,month.up/10);
-	app_dis(REG_MORE_MONTH_UP_ADRESS,month.up%10);
-	app_dis(REG_MORE_MONTH_TEN_ADRESS,month.now/10);
-	app_dis(REG_MORE_MONTH_ADRESS,month.now%10);
-	app_dis(REG_MORE_MONTH_DOWN_TEN_ADRESS,month.down/10);
-	app_dis(REG_MORE_MONTH_DOWN_ADRESS,month.down%10);
-
-	//日 1~31
-	if(1 == day.now)//已选中 月 上方位置 1上方应为12
-	{
-		day.up = 12;
-	}
-	else
-	{
-		day.up = day.now - 1;
-	}
-
-	if(31 == day.now)
-	{
-		day.down = 1;
-	}
-	else
-	{
-		day.down = day.now + 1;
-	}
-	app_dis(REG_MORE_DAY_UP_TEN_ADRESS,day.up/10);
-	app_dis(REG_MORE_DAY_UP_ADRESS,day.up%10);
-	app_dis(REG_MORE_DAY_TEN_ADRESS,day.now/10);
-	app_dis(REG_MORE_DAY_ADRESS,day.now%10);
-	app_dis(REG_MORE_DAY_DOWN_TEN_ADRESS,day.down/10);
-	app_dis(REG_MORE_DAY_DOWN_ADRESS,day.down%10);
-	
-	//小时0~23
-	if(0 == hour.now)//已选中 月 上方位置 1上方应为12
-	{
-		hour.up = 23;
-	}
-	else
-	{
-		hour.up = hour.now - 1;
-	}
-
-	if(23 == day.now)
-	{
-		hour.down = 0;
-	}
-	else
-	{
-		hour.down = hour.now + 1;
-	}
-	app_dis(REG_MORE_HOURS_UP_TEN_ADRESS,hour.up/10);
-	app_dis(REG_MORE_HOURS_UP_ADRESS,hour.up%10);
-	app_dis(REG_MORE_HOURS_TEN_ADRESS,hour.now/10);
-	app_dis(REG_MORE_HOURS_ADRESS,hour.now%10);
-	app_dis(REG_MORE_HOURS_DOWN_TEN_ADRESS,hour.down/10);
-	app_dis(REG_MORE_HOURS_DOWN_ADRESS,hour.down%10);
-	
-	//0~59
-	if(0 == minute.now)//已选中 月 上方位置 1上方应为12
-	{
-		minute.up = 59;
-	}
-	else
-	{
-		minute.up = minute.now - 1;
-	}
-
-	if(59 == minute.now)
-	{
-		minute.down = 0;
-	}
-	else
-	{
-		minute.down = minute.now + 1;
-	}
-	app_dis(REG_MORE_MINUTE_UP_TEN_ADRESS,minute.up/10);
-	app_dis(REG_MORE_MINUTE_UP_ADRESS,minute.up%10);
-	app_dis(REG_MORE_MINUTE_TEN_ADRESS,minute.now/10);
-	app_dis(REG_MORE_MINUTE_ADRESS,minute.now%10);
-	app_dis(REG_MORE_MINUTE_DOWN_TEN_ADRESS,minute.down/10);
-	app_dis(REG_MORE_MINUTE_DOWN_ADRESS,minute.down%10);
+	*adress_index = 1;
+	*dat_number = 5;
 }
 
 void app_dis_factory(void)
@@ -521,8 +390,40 @@ void app_dis_other(void)
 {
 
 }
+
+ 
+const uint16_t dis_page_adress_offset[DIS_NUMBER][3] =
+{	//页码								地址								偏移
+	REG_DIS_PAGENUMBER_PAGE_29,			REG_DIS_NUMBER_ADRESS,			REG_DIS_NUMBER_OFFSET,
+	REG_DIS_PAGENUMBER_PAGE_41,			REG_DIS_SETTIME_YEAR_ADRESS,	REG_DIS_SETTIME_OFFSET,
+	REG_DIS_PAGENUMBER_PAGE_41,			REG_DIS_SETTIME_MONTH_ADRESS,	REG_DIS_SETTIME_OFFSET,
+	REG_DIS_PAGENUMBER_PAGE_41,			REG_DIS_SETTIME_DAY_ADRESS,		REG_DIS_SETTIME_OFFSET,
+	REG_DIS_PAGENUMBER_PAGE_41,			REG_DIS_SETTIME_HOUR_ADRESS,	REG_DIS_SETTIME_OFFSET,
+	REG_DIS_PAGENUMBER_PAGE_41,			REG_DIS_SETTIME_MINTUE_ADRESS,	REG_DIS_SETTIME_OFFSET
+	//在建立一个获取写入数据的数组，基本显示数据这块就完成了，
+	//显示数组的索引和这边的索引应一一对应，哪怕是强制赋值获取sys里面的状态
+};
+
+//定义后初始化0，定时从sys里面的元素直接获得需要的元素，直接赋值，不是规则的数据，无法通过指针访问
+uint16_t dis_dis_data[DIS_NUMBER] =
+{
+	0, 0
+};
+
+void app_dis_message(uint16_t adress_index, uint16_t dat_number)
+{
+	uint16_t i = 0;
+	for(i = adress_index; i < dat_number; i++)
+	{
+		app_dis(dis_page_adress_offset[i][1],dis_dis_data[i]+dis_page_adress_offset[i][2]);
+	}
+}
+
 void app_display_updata(systemRunStatus_t sysRunStatus)
 {
+	uint16_t adress_index = 0;
+	uint16_t dat_number = 0;
+	
     switch(sysRunStatus)
     {               
        case SYS_STATUS_POWER_OFF:           app_dis_powOffMode();      break;
@@ -534,74 +435,65 @@ void app_display_updata(systemRunStatus_t sysRunStatus)
 	   case SYS_STATUS_TIMING_WEEK_ADD: 	app_dis_week_choose();		break;
 	   case SYS_STATUS_WIFI:				app_dis_wifi();				break;
 	   case SYS_STATUS_FILTER:				app_dis_filter();			break;
-	   case SYS_STATUS_TIME:				app_dis_timeset();			break;
+	   case SYS_STATUS_TIME:				app_dis_timeset(&adress_index,&dat_number);			break;
 	   case SYS_STATUS_FACTORY:				app_dis_factory();			break;
 	   case SYS_STATUS_FAULT:				app_dis_fault();			break;
 	   case SYS_STATUS_ABOUT:				app_dis_about();			break;
 	   case SYS_STATUS_OTHER:				app_dis_other();			break;
        default:break;
     }      
+
+	app_dis_message(adress_index,dat_number);
 	
 }
-
-const uint16_t dis_page_adress_offset[DIS_NUMBER][3] =
-{
-	REG_DIS_PAGENUMBER_PAGE_29,		REG_DIS_NUMBER_ADRESS,	REG_DIS_NUMBER_OFFSET
-	//在建立一个获取写入数据的数组，基本显示数据这块就完成了，
-	//显示数组的索引和这边的索引应一一对应，哪怕是强制赋值获取sys里面的状态
-};
-
-//定义后初始化0，定时从sys里面的元素直接获得需要的元素，直接赋值，不是规则的数据，无法通过指针访问
-uint16_t dis_dis_data[DIS_NUMBER] =
-{
-	0, 0
-};
 
 void app_display_scanTask(void)
 {         
     SysPara_t *ptSysPara;  
     static unsigned char initFlag = false;
 	uint16_t i = 0;
-	
-	uint8_t timebuf[2] ={0,0};
-	unsigned int value_temp = 0;
-	
 	ptSysPara =  controler_getSysParaPt();
 
     if(initFlag == false)
     {
 		initFlag = true;
         ptSysPara->updataflag = true;
+		
+		dis_dis_data[0] = ptSysPara->temp_set/10;
+		dis_dis_data[1] = ptSysPara->set_time.year;
+		dis_dis_data[2] = ptSysPara->set_time.month;
+		dis_dis_data[3] = ptSysPara->set_time.day;
+		dis_dis_data[4] = ptSysPara->set_time.hour;
+		dis_dis_data[5] = ptSysPara->set_time.minute;
+		for(; i < DIS_NUMBER; i++)
+		{
+			app_dis(dis_page_adress_offset[i][1],dis_dis_data[i]+dis_page_adress_offset[i][2]);
+		}
     }
 	
     if(ptSysPara->updataflag)
     {
-        ptSysPara->updataflag = false;
+        ptSysPara->updataflag--;
         app_display_updata(ptSysPara->sys_runstatus); 
 
 		dis_dis_data[0] = ptSysPara->temp_set/10;
+		dis_dis_data[1] = ptSysPara->set_time.year;
+		dis_dis_data[2] = ptSysPara->set_time.month;
+		dis_dis_data[3] = ptSysPara->set_time.day;
+		dis_dis_data[4] = ptSysPara->set_time.hour;
+		dis_dis_data[5] = ptSysPara->set_time.minute;
 		//每次进来都要从数据中获得最新数据，需不需要更新后面决定
-		for(; i < 10; i++)
+
+		
+		/*for(; i < 10; i++)
 		{
 			if(ptSysPara->page_number == dis_page_adress_offset[i][0])
 			{
 				//更新数据
 				app_dis(dis_page_adress_offset[i][1],dis_dis_data[i]+dis_page_adress_offset[i][2]);
 			}
-		}
-    }
-
-	value_temp = dis_dis_data[0];
-	timebuf[0] = (unsigned char)(value_temp>>8);
-	timebuf[1] = (unsigned char)(value_temp);
-	WriteDGUS(0x5124,timebuf,2);
-
-	value_temp = ptSysPara->page_number;
-	timebuf[0] = (unsigned char)(value_temp>>8);
-	timebuf[1] = (unsigned char)(value_temp);
-	WriteDGUS(0x5125,timebuf,2);
-
-	
+		}*/
+    }	
 }
 //------------------------------E N D-------------------------------------------
 

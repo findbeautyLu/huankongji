@@ -734,11 +734,12 @@ void app_onrwire_task1(void)
 	
 	mde_mrtu_master_task(GetSysTickMillisecond());
 	mod_oneWire_task();
+	
 	if((GetSysTickMillisecond() - lastTick) >= 2000)
 	{
 		lastTick = GetSysTickMillisecond();
 		ptSysPara->debugcount++;
-		mde_mRtu_master_cmd0x03_transmit(0,0xfa,0x2430,0x0003);
+		mde_mRtu_master_cmd0x03_transmit(0,0xfa,0x2430,0x0020);
 	}
 }
 void APP_oneWire_task(void)

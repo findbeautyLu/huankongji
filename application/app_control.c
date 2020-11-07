@@ -73,20 +73,19 @@ void app_con_gotoFac(void)
 	s_sysPara.week_type_line[7] 		= 0;	
 	s_sysPara.week_type_column			= 0;
 	s_sysPara.debugdata					= 0;
+	
 	s_sysPara.set_time.year				= 2020;
-	s_sysPara.set_time.month			= 9;
-	s_sysPara.set_time.day				= 3;
-	s_sysPara.set_time.hour				= 19;
-	s_sysPara.set_time.minute			= 30;
+	s_sysPara.set_time.month			= 11;
+	s_sysPara.set_time.day				= 11;
+	s_sysPara.set_time.hour				= 11;
+	s_sysPara.set_time.minute			= 11;
+	
 	s_sysPara.dynamic_circular			= 79;
 	s_sysPara.fanset_param.motor_type   = 0;
 	s_sysPara.fanset_param.low_param	= 0;
 	s_sysPara.fanset_param.mid_param	= 0;
 	s_sysPara.fanset_param.high_param	= 0;
 	s_sysPara.poweronflag				= 0;
-	keynumber_1.key_sign.trigger_sign_lock		= 0;
-	keynumber_1.key_sign.trigger_sign_timecount	= 0;
-	keynumber_1.key_sign.trigger_sign			= 0;
 	s_sysPara.next_screen_flag			= 0;
 
 	
@@ -162,7 +161,7 @@ void app_page_switch(void)
 			case FILTER_PAGE_39: ptSysPara->sys_runstatus = SYS_STATUS_FILTER;							break;
 			case TIME_PAGE_41: ptSysPara->sys_runstatus = SYS_STATUS_TIME;								break;
 			case FACTORY_PAGE_43: ptSysPara->sys_runstatus = SYS_STATUS_FACTORY;						break;
-			//case FAULT_PAGE_46: ptSysPara->sys_runstatus = SYS_STATUS_FAULT;							break;
+			case AUTO_PAGE_45: ptSysPara->sys_runstatus = SYS_STATUS_AUTO;						break;
 			case ABOUT_PAGE_47: ptSysPara->sys_runstatus = SYS_STATUS_ABOUT;							break;
 			case OTHER_PAGE_49: ptSysPara->sys_runstatus = SYS_STATUS_OTHER;							break;
 			default: ptSysPara->sys_runstatus = SYS_STATUS_RUN_MODE;									break;	
@@ -312,7 +311,7 @@ void app_circular_switch(void)
 	}
 	else
 	{
-		if(period > 1000)
+		if(period > 200)
 		{
 			ptSysPara->updataflag = 1;
 			lastSystemMsTime = GetSysTickMillisecond(); 

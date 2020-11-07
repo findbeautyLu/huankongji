@@ -328,15 +328,55 @@
 #define KEY_SET_TIMING_UP						(KEY_SET_TIMING * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_FILTER_UP						(KEY_SET_FILTER * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_TIME_UP							(KEY_SET_TIME * KEY_TYPE_NUMBER + KEY_UP)
-
 #define KEY_SET_HIGHSET_UP						(KEY_SET_HIGHSET * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_AUTO_UP							(KEY_SET_AUTO * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_ABOUT_UP						(KEY_SET_ABOUT * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_OTHER_UP						(KEY_SET_OTHER * KEY_TYPE_NUMBER + KEY_UP)
 #define KEY_SET_BACK_UP							(KEY_SET_BACK * KEY_TYPE_NUMBER + KEY_UP)
 
+#define KEY_SET_YEAR_UP				32	//+
+#define KEY_SET_YEAR_DOWN			33
+#define KEY_SET_MONTH_UP			34
+#define KEY_SET_MONTH_DOWN			35
+#define KEY_SET_DAY_UP				36
+#define KEY_SET_DAY_DOWN			37
+#define KEY_SET_HOUR_UP				38
+#define KEY_SET_HOUR_DOWN			39
+#define KEY_SET_MINTUE_UP			40
+#define KEY_SET_MINTUE_DOWN			41
+#define KEY_SET_SURE_DOWN			42
 
+#define KEY_SET_YEAR_ADD_CONTINUE				(KEY_SET_YEAR_UP * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_YEAR_ADD_UP						(KEY_SET_YEAR_UP * KEY_TYPE_NUMBER + KEY_UP)
 
+#define KEY_SET_YEAR_SUB_CONTINUE				(KEY_SET_YEAR_DOWN * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_YEAR_SUB_UP						(KEY_SET_YEAR_DOWN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_MONTH_ADD_CONTINUE				(KEY_SET_MONTH_UP * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_MONTH_ADD_UP					(KEY_SET_MONTH_UP * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_MONTH_SUB_CONTINUE				(KEY_SET_MONTH_DOWN * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_MONTH_SUB_UP					(KEY_SET_MONTH_DOWN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_DAY_ADD_CONTINUE				(KEY_SET_DAY_UP * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_DAY_ADD_UP						(KEY_SET_DAY_UP * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_DAY_SUB_CONTINUE				(KEY_SET_DAY_DOWN * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_DAY_SUB_UP						(KEY_SET_DAY_DOWN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_HOUR_ADD_CONTINUE				(KEY_SET_HOUR_UP * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_HOUR_ADD_UP						(KEY_SET_HOUR_UP * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_HOUR_SUB_CONTINUE				(KEY_SET_HOUR_DOWN * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_HOUR_SUB_UP						(KEY_SET_HOUR_DOWN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_MINTUE_ADD_CONTINUE				(KEY_SET_MINTUE_UP * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_MINTUE_ADD_UP					(KEY_SET_MINTUE_UP * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_MINTUE_SUB_CONTINUE				(KEY_SET_MINTUE_DOWN * KEY_TYPE_NUMBER + CONTINUE)
+#define KEY_SET_MINTUE_SUB_UP					(KEY_SET_MINTUE_DOWN * KEY_TYPE_NUMBER + KEY_UP)
+
+#define KEY_SET_SURE_UP							(KEY_SET_SURE_DOWN * KEY_TYPE_NUMBER + KEY_UP)
 
 
 //------------------------------E N D-------------------------------------------
@@ -1529,6 +1569,23 @@ void app_main_control_key_service(unsigned int keynumber)
 				ptSysPara->page_number = 32;
 				break;
 
+		case KEY_TEMP_ADD_FIRST_DOWN:
+				ptSysPara->debugdata = 1;
+				break;
+
+		case KEY_TEMP_ADD_LONG:
+				ptSysPara->debugdata = 10;
+				break;
+
+		case KEY_TEMP_ADD_CONTINUE:
+				ptSysPara->debugdata++;
+				break;
+
+		case KEY_TEMP_ADD_UP:
+				ptSysPara->debugdata = 100;
+				break;
+		
+
 		case KEY_POWERON_STATE:
 				break;
 		case KEY_POWERON_UP:
@@ -1614,7 +1671,15 @@ void app_filter_key_service(unsigned int keynumber)
 void app_settime_key_service(unsigned int keynumber)
 {
 	SysPara_t *ptSysPara;  
+	uint8_t offset = 0;
+	uint8_t year = 0;
+	uint8_t month = 0;
+	uint8_t day = 0;
+	uint8_t hour = 0;
+	uint8_t minute = 0;
+	
 	ptSysPara =  controler_getSysParaPt();
+
 
 	switch(keynumber)
 	{
@@ -1623,9 +1688,40 @@ void app_settime_key_service(unsigned int keynumber)
 		//日+-
 		//小时+-
 		//分+-
+		case KEY_SET_YEAR_ADD_CONTINUE		:  keyOperation(DDR_ADD,DATA_LOOP,1,YEAR_MAX,YEAR_MIN,&ptSysPara->set_time.year);break;
+		case KEY_SET_YEAR_ADD_UP			:  keyOperation(DDR_ADD,DATA_LOOP,1,YEAR_MAX,YEAR_MIN,&ptSysPara->set_time.year);break;
+		case KEY_SET_YEAR_SUB_CONTINUE		:  keyOperation(DDR_DEC,DATA_LOOP,1,YEAR_MAX,YEAR_MIN,&ptSysPara->set_time.year);break;
+		case KEY_SET_YEAR_SUB_UP			:  keyOperation(DDR_DEC,DATA_LOOP,1,YEAR_MAX,YEAR_MIN,&ptSysPara->set_time.year);break;
+		case KEY_SET_MONTH_ADD_CONTINUE		:  keyOperation(DDR_ADD,DATA_LOOP,1,MONTH_MAX,MONTH_MIN,&ptSysPara->set_time.month);break;
+		case KEY_SET_MONTH_ADD_UP			:  keyOperation(DDR_ADD,DATA_LOOP,1,MONTH_MAX,MONTH_MIN,&ptSysPara->set_time.month);break;
+		case KEY_SET_MONTH_SUB_CONTINUE		:  keyOperation(DDR_DEC,DATA_LOOP,1,MONTH_MAX,MONTH_MIN,&ptSysPara->set_time.month);break;
+		case KEY_SET_MONTH_SUB_UP			:  keyOperation(DDR_DEC,DATA_LOOP,1,MONTH_MAX,MONTH_MIN,&ptSysPara->set_time.month);break;
+		case KEY_SET_DAY_ADD_CONTINUE		:  keyOperation(DDR_ADD,DATA_LOOP,1,DAY_MAX,DAY_MIN,&ptSysPara->set_time.day);break;
+		case KEY_SET_DAY_ADD_UP				:  keyOperation(DDR_ADD,DATA_LOOP,1,DAY_MAX,DAY_MIN,&ptSysPara->set_time.day);break;
+		case KEY_SET_DAY_SUB_CONTINUE		:  keyOperation(DDR_DEC,DATA_LOOP,1,DAY_MAX,DAY_MIN,&ptSysPara->set_time.day);break;
+		case KEY_SET_DAY_SUB_UP				:  keyOperation(DDR_DEC,DATA_LOOP,1,DAY_MAX,DAY_MIN,&ptSysPara->set_time.day);break;
+		case KEY_SET_HOUR_ADD_CONTINUE		:  keyOperation(DDR_ADD,DATA_LOOP,1,HOURS_MAX,HOURS_MIN,&ptSysPara->set_time.hour);break;
+		case KEY_SET_HOUR_ADD_UP			:  keyOperation(DDR_ADD,DATA_LOOP,1,HOURS_MAX,HOURS_MIN,&ptSysPara->set_time.hour);break;
+		case KEY_SET_HOUR_SUB_CONTINUE		:  keyOperation(DDR_DEC,DATA_LOOP,1,HOURS_MAX,HOURS_MIN,&ptSysPara->set_time.hour);break;
+		case KEY_SET_HOUR_SUB_UP			:  keyOperation(DDR_DEC,DATA_LOOP,1,HOURS_MAX,HOURS_MIN,&ptSysPara->set_time.hour);break;
+		case KEY_SET_MINTUE_ADD_CONTINUE	:  keyOperation(DDR_ADD,DATA_LOOP,1,MINUTE_MAX,MINUTE_MIN,&ptSysPara->set_time.minute);break;
+		case KEY_SET_MINTUE_ADD_UP			:  keyOperation(DDR_ADD,DATA_LOOP,1,MINUTE_MAX,MINUTE_MIN,&ptSysPara->set_time.minute);break;
+		case KEY_SET_MINTUE_SUB_CONTINUE	:  keyOperation(DDR_DEC,DATA_LOOP,1,MINUTE_MAX,MINUTE_MIN,&ptSysPara->set_time.minute);break;
+		case KEY_SET_MINTUE_SUB_UP			:  keyOperation(DDR_DEC,DATA_LOOP,1,MINUTE_MAX,MINUTE_MIN,&ptSysPara->set_time.minute);break;
+		case KEY_SET_SURE_UP				:  
+											offset = (uint8_t)(ptSysPara->set_time.year-2000);
+											year   = dec_to_bcd(offset);//偏移2000，
+											month  = dec_to_bcd((uint8_t)ptSysPara->set_time.month);//12转0x12 10转0x10
+											day    = dec_to_bcd((uint8_t)ptSysPara->set_time.day);//
+											hour   = dec_to_bcd((uint8_t)ptSysPara->set_time.hour);//
+											minute = dec_to_bcd((uint8_t)ptSysPara->set_time.minute);//
+											set_rtc(year,month,day,hour,minute);
+											break;
 		case KEY_SET_BACK_UP: ptSysPara->page_number = 32; break;
 		default: break;
 	}
+
+		
 }
 
 void app_factory_key_service(unsigned int keynumber)
@@ -1691,14 +1787,14 @@ void app_key_service(unsigned int runstate,unsigned int keynumber)
 	{
 		case SYS_STATUS_RUN_MODE: app_main_control_key_service(keynumber); break;
 		case SYS_STATUS_SETTING: app_setting_key_service(keynumber); break;
-		case SYS_STATUS_WIFI:
-		case SYS_STATUS_TIMING_WEEK:
-		case SYS_STATUS_FILTER:
-		case SYS_STATUS_TIME:
-		case SYS_STATUS_FACTORY:
-		case SYS_STATUS_AUTO:
-		case SYS_STATUS_ABOUT:
-		case SYS_STATUS_OTHER:
+		case SYS_STATUS_WIFI: app_wifi_key_service(keynumber); break;
+		case SYS_STATUS_TIMING_WEEK: app_timecontrol_key_service(keynumber); break;
+		case SYS_STATUS_FILTER: app_filter_key_service(keynumber); break;
+		case SYS_STATUS_TIME: app_settime_key_service(keynumber); break;
+		case SYS_STATUS_FACTORY: app_factory_key_service(keynumber); break;
+		case SYS_STATUS_AUTO: app_auto_key_service(keynumber); break;
+		case SYS_STATUS_ABOUT: app_about_key_service(keynumber); break;
+		case SYS_STATUS_OTHER: app_other_key_service(keynumber); break;
 		default: break;
 
 	}
@@ -1706,46 +1802,24 @@ void app_key_service(unsigned int runstate,unsigned int keynumber)
 
 void app_key_update(systemRunStatus_t _in_sysRunStatus)
 {
-    /*switch(_in_sysRunStatus)
-    {               
-		case SYS_STATUS_POWER_OFF:        							;     				break;
-		case SYS_STATUS_SCREEN_SAVER:								;	 	 			break;
-		case SYS_STATUS_RUN_MODE:           app_key_main_control();
-											app_key_fanset();
-											break;
-		case SYS_STATUS_SETTING:         	app_key_setting_choose();     				break;     
-		case SYS_STATUS_TIMING_WEEK: 		app_key_timing_page_week();	  				break;
-		case SYS_STATUS_TIMING_INTERVAL:	app_key_timing_page_time_interval();     	break;
-		case SYS_STATUS_TIMING_WEEK_ADD:    app_key_week_choose();						break;
-		case SYS_STATUS_TIMING_TIMECONTROL_ADD: app_key_timemessage_choose();           break;
-		case SYS_STATUS_WIFI:				app_key_wifi();								break;
-		case SYS_STATUS_FILTER:				app_key_filter();							break;
-		case SYS_STATUS_TIME:				app_key_timeset();							break;
-		case SYS_STATUS_FACTORY:			app_key_factory();							break;
-		case SYS_STATUS_FAULT:				app_key_fault();							break;
-		case SYS_STATUS_ABOUT:				app_key_about();							break;
-		case SYS_STATUS_OTHER:				app_key_other();							break;
-		default:break;
-    }       */
-	//临时//清除故障
-	if(PUSH_DOWN & mod_keyOperation(KEY_RESET,0xffff,0xffff))
-	{
-		//APP_oneWire_send_485_data(MREGADDRESS_SYS_FAULT_RESET_BYTE,0x003f);
-	}
+
 }
 
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //****************************按键任务*****************************************
 void app_key_scanTask(void)
 {      
-    SysPara_t *ptSysPara;  
+    SysPara_t *ptSysPara;
+	static uint16_t lastSystemMsTime = 0;
+	static uint16_t period = 0;
+
+	
+	
 	uint8_t i = 0;
 	uint8_t timebuf[2] ={0,0};
 
 	uint16_t key_trigger = 0;
 	static uint16_t keycount = 0;
-	//static uint16_t time = 0;
-	//static unsigned int first_key_del = 0;
 	static unsigned int debug[2] ={0,0};
 	unsigned int value_temp = 0;
 	unsigned char keytype_size = sizeof(key_sign_1_t);
@@ -1754,95 +1828,25 @@ void app_key_scanTask(void)
 	static key_sign_1_t key_sign_new[MAX_KEY_GROUP];
 	
 	ptSysPara =  controler_getSysParaPt();
+	period = GetSysTickMillisecond() - lastSystemMsTime;
 
 	//keycount++;
-	//mod_key_scanTask(GetSysTickMillisecond());	 
 
-	//new
-	//keytype_state = mde_getkey_event(&key_sign_new);//若需要时间精准，理论上丢1ms的扫描就好了
+
 
 	if(keytype_state = mde_getkey_event(&key_sign_new))
 	{
 		for(i = 0; i < MAX_KEY_GROUP; i++)
 		{
-			
 			if(key_sign_new[i].key_down_sign != 0)
 			{
-				ptSysPara->debugdata = key_sign_new[i].key_down_sign;
 				app_key_service(ptSysPara->sys_runstatus,key_sign_new[i].key_down_sign);
 				break;
 			}
 		}
+		ptSysPara->updataflag = 5;
 	}
-	
-	if(keytype_state)
-	{//有按键按下	
-		/*switch(key_sign_new[0].key_down_sign)
-		{
-			case KEY_HOT_SWITCH_FIRST_DOWN:
-					debug[0] = 10;
-					break;
 
-			case KEY_HOT_SWITCH_LONG:
-					debug[0] = 20;
-					break;
-
-			case KEY_HOT_SWITCH_CONTINUE:
-					if(debug[0] < 30)
-					{
-						debug[0] = 30;
-					}
-					else
-					{
-						debug[0]++;
-					}
-					break;
-
-			case KEY_HOT_SWITCH_UP:
-					debug[0] = 100;
-					break;
-
-			case KEY_SETTING_FIRST_DOWN:
-					debug[1] = 10;
-					break;
-
-			case KEY_SETTING_LONG:
-					debug[1] = 20;
-					break;
-
-			case KEY_SETTING_CONTINUE:
-					if(debug[1] < 30)
-					{
-						debug[1] = 30;
-					}
-					else
-					{
-						debug[1]++;
-					}
-					break;
-
-			case KEY_SETTING_UP:
-					debug[1] = 101;
-					//ptSysPara->page_number = 32;
-					break;
-
-			case KEY_POWERON_STATE:
-					ptSysPara->page_number = 1;
-					break;
-			case KEY_POWERON_UP:
-					ptSysPara->page_number = 1;
-					break;
-			case KEY_GREEN_CHANGE_UP://切换屏保页
-					ptSysPara->next_screen_flag = BN_TRUE;
-					break;
-
-			case KEY_GOTO_MAIN_CONTROL_UP:
-					ptSysPara->page_number = 29;
-					break;
-			default: break;
-		}*/
-		
-	}
 
 	//end
 	/*if(mod_key_scantask1(&ptSysPara->key_fanset_param))
@@ -1917,31 +1921,27 @@ void app_key_scanTask(void)
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512c,timebuf,2);
 
-	value_temp = tempBuff[5];
+	value_temp = statecount[5];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512D,timebuf,2);
 
-	value_temp = tempBuff[6];
+	value_temp = statecount[2];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512E,timebuf,2);
 
-	if(keytype_state == 5)
-	{
-		keycount++;
-	}
-	value_temp = keycount;//tempBuff[7];
+	value_temp = statecount[1];//tempBuff[7];
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x512F,timebuf,2);
 
-	value_temp = statecount;//modbus_master_solid[0].transmit_length;
+	value_temp = statecount[0];//modbus_master_solid[0].transmit_length;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5130,timebuf,2);
 	
-	value_temp = key_sign_new[0].key_down_sign;
+	value_temp = statecount[4];//key_sign_new[0].key_down_sign;
 	timebuf[0] = (unsigned char)(value_temp>>8);
 	timebuf[1] = (unsigned char)(value_temp);
 	WriteDGUS(0x5131,timebuf,2);

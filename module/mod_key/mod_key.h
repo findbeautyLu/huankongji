@@ -72,11 +72,6 @@ typedef struct
 	unsigned int continue_time;//长按后联机时间
 }key_time_t;
 
-extern INT16U keynumber;
-extern key_sign_t keynumber_1;
-extern INT16U debug_keynumber;
-extern key_time_t keynumber_44_timeparam;
-
 //++++++++++++++++++++++++++++++start+++++++++++++++++++++++++++++++++++++++++++
 //Event
 //名称: mod_key_getEvent

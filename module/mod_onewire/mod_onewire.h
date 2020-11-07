@@ -137,9 +137,7 @@ void mde_mRtu_master_cmd0x03_transmit(unsigned char in_solidNum,unsigned char in
 extern modbus_master_oper_def modbus_master_solid[max_solid];
 extern unsigned char modbus_master_tx[64];
 
-extern unsigned int statecount;
-
-
+extern unsigned int statecount[];
 
 
 

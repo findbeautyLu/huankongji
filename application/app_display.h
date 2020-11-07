@@ -241,7 +241,15 @@
 #define REG_DIS_NUMBER_ADRESS							0x6000
 #define REG_DIS_NUMBER_OFFSET							0
 
+#define REG_DIS_SETTIME_YEAR_ADRESS						0x6010
+#define REG_DIS_SETTIME_MONTH_ADRESS					0x6012
+#define REG_DIS_SETTIME_DAY_ADRESS						0x6014
+#define REG_DIS_SETTIME_HOUR_ADRESS						0x6016
+#define REG_DIS_SETTIME_MINTUE_ADRESS					0x6018
+#define REG_DIS_SETTIME_OFFSET							0		//数字均不偏移
+
 #define REG_DIS_PAGENUMBER_PAGE_29						25//页面切换还未做，临时测试下实例程序
+#define REG_DIS_PAGENUMBER_PAGE_41						41
 
 
 typedef enum
